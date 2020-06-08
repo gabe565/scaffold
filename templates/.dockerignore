@@ -1,0 +1,24 @@
+{{- if eq .AdminGen "Nova" -}}
+nova-components/**/node_modules/
+nova-components/**/vendor/
+{{- end }}
+.github/
+.dockerignore
+.editorconfig
+.env
+.env.example
+.eslintrc
+.git/
+.gitattributes
+.gitignore
+*.md
+docker-compose.yml
+bootstrap/cache/*
+docker/
+!docker/app/rootfs/
+node_modules/
+phpcs.xml
+phpunit.xml
+tests/
+vendor/
+storage/app/public

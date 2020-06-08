@@ -1,0 +1,71 @@
+version: "2.4"
+
+services:
+  app:
+    build:
+      args:
+        NODE_ENV: development
+        INSTALL_XDEBUG: "true"
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: {{ .AppSlug }}-app
+    env_file:
+      - .env
+    image: clevyr/{{ .AppSlug }}/app
+    ports:
+      - 80:80
+    restart: unless-stopped
+    volumes:
+      - .:/app:cached
+
+  worker:
+    command: ["s6-svscan", "/etc/s6/worker"]
+    container_name: {{ .AppSlug }}-worker
+    env_file:
+      - .env
+    image: clevyr/{{ .AppSlug }}/app
+    restart: unless-stopped
+    volumes:
+      - .:/app:cached
+
+  {{ if eq .Database "PostgreSQL" -}}
+  database:
+    container_name: {{ .AppSlug }}-database
+    environment:
+      POSTGRES_USER: "$DB_USERNAME"
+      POSTGRES_PASSWORD: "$DB_PASSWORD"
+      POSTGRES_DB: "$DB_DATABASE"
+    image: postgres:12-alpine
+    ports:
+      - 127.0.0.1:5432:5432
+    restart: unless-stopped
+    volumes:
+      - database:/var/lib/postgresql/data
+  {{- else if eq .Database "MariaDB" -}}
+  database:
+    container_name: {{ .AppSlug }}-database
+    environment:
+      MYSQL_DATABASE: "$DB_DATABASE"
+      MYSQL_USER: "$DB_USER"
+      MYSQL_PASSWORD: "$DB_PASSWORD"
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+    image: mariadb:10
+    ports:
+      - 127.0.0.1:3306:3306
+    restart: unless-stopped
+    volumes:
+      - database:/var/lib/mysql
+  {{- end }}
+
+  hot:
+    build: docker/hot
+    container_name: {{ .AppSlug }}-hot
+    env_file:
+        - .env
+    image: clevyr/{{ .AppSlug }}/hot-reloader
+    restart: unless-stopped
+    volumes:
+      - .:/app:cached
+
+volumes:
+  database:
