@@ -10,7 +10,7 @@ import (
 
 var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
 
-func Ask() (appConfig AppConfig, err error) {
+func askQuestions() (appConfig AppConfig, err error) {
 	// App Name
 	err = survey.AskOne(&survey.Input{Message: "What is the application name?"}, &appConfig.AppName, survey.WithValidator(survey.Required))
 	if err != nil {

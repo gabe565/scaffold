@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
-	"os"
 )
 
 type AppConfig struct {
@@ -17,15 +16,18 @@ type AppConfig struct {
 }
 
 func main() {
-	appConfig, err := Ask()
+	appConfig, err := askQuestions()
+
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
-		os.Exit(0)
+		return
 	} else if err != nil {
 		panic(err)
 	}
 
 	appConfig.AppKey = generateAppKey()
 
-	generateTemplate(appConfig)
+	if err := generateTemplate(appConfig); err != nil {
+		panic(err)
+	}
 }
