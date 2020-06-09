@@ -2,47 +2,79 @@ package main
 
 import (
 	"github.com/Masterminds/sprig"
+	"github.com/markbates/pkger"
+	"io/ioutil"
 	"os"
 	"path"
-	"path/filepath"
 	"strings"
 	"text/template"
 )
 
-var templatesDir = "templates"
-var outputDir = "out"
+const templateDir = "/templates"
 
-func generateTemplate(appConfig AppConfig) {
-	err := filepath.Walk(templatesDir, func(inputPath string, info os.FileInfo, inErr error) (err error) {
-		if inErr != nil {
-			panic(inErr)
+func generateTemplate(appConfig AppConfig) (err error) {
+	functions := template.FuncMap(sprig.FuncMap())
+
+	err = pkger.Walk(templateDir, func(filepath string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
 		}
 
-		if info != nil && info.Mode().IsRegular() {
-			var tmpl *template.Template
-			tmpl, err = template.New(path.Base(inputPath)).Funcs(template.FuncMap(sprig.FuncMap())).ParseFiles(inputPath)
+		if info.Mode().IsRegular() {
+			contents, err := readFile(filepath)
 			if err != nil {
-				panic(err)
+				return err
 			}
-			outputPath := strings.Replace(inputPath, templatesDir, outputDir, 1)
-			err = os.MkdirAll(path.Dir(outputPath), os.ModePerm)
-			file, err := os.Create(outputPath)
+
+			outputPath := buildOutputPath(filepath, templateDir)
+			tmpl, err := template.New(outputPath).Funcs(functions).Parse(contents)
 			if err != nil {
-				panic(err)
+				return err
 			}
-			err = tmpl.Execute(file, appConfig)
+
+			if err = os.MkdirAll(path.Dir(outputPath), os.ModePerm); err != nil {
+				return err
+			}
+
+			f, err := os.Create(outputPath)
 			if err != nil {
-				panic(err)
+				return err
 			}
-			err = file.Close()
-			if err != nil {
-				panic(err)
+
+			if err = tmpl.Execute(f, appConfig); err != nil {
+				_ = f.Close()
+				return err
 			}
+
+			return f.Close()
 		}
-		return
+
+		return nil
 	})
 
+	return
+}
+
+func readFile(filename string) (string, error) {
+	f, err := pkger.Open(filename)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
+
+	b, err := ioutil.ReadAll(f)
+	if err != nil {
+		f.Close()
+		return "", err
+	}
+
+	if err = f.Close(); err != nil {
+		return "", err
+	}
+
+	return string(b), err
+}
+
+func buildOutputPath(filepath string, templateDir string) string {
+	templateDirIndex := strings.Index(filepath, templateDir) + len(templateDir) + 1
+	return filepath[templateDirIndex:]
 }
