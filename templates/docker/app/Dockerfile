@@ -1,4 +1,4 @@
-{{- range $module, $enabled := .Modules -}}
+{{ range $module, $enabled := .Modules -}}
 ARG INSTALL_{{ upper $module }}={{ $enabled }}
 {{ end }}
 # Backend Builder

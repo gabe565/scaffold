@@ -1,7 +1,7 @@
-{{- if eq .AdminGen "Nova" -}}
+{{ if eq .AdminGen "Nova" -}}
 nova-components/**/node_modules/
 nova-components/**/vendor/
-{{- end }}
+{{ end -}}
 .github/
 .dockerignore
 .editorconfig
