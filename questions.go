@@ -29,35 +29,29 @@ func askQuestions() (appConfig AppConfig, err error) {
 	}
 
 	// Enabled Modules
-	defaultModules := modules.Default
+	shownModules := modules.All
 	switch appConfig.Database {
 	case "PostgreSQL":
-		defaultModules = append(defaultModules, "pgsql")
+		shownModules.Modules["pgsql"].Enabled = true
 		break
 	case "MariaDB":
-		defaultModules = append(defaultModules, "mysql")
+		shownModules.Modules["mysql"].Enabled = true
 		break
 	}
 	var enabledModules []string
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose which PHP modules to enable:",
-		Options: modules.All,
-		Default: defaultModules,
+		Options: shownModules.ToOptionsSlice(),
+		Default: shownModules.ToDefaultSlice(),
 	}, &enabledModules)
 	if err != nil {
 		return
 	}
 
-	appConfig.Modules = make(map[string]bool)
-	for _, module := range modules.All {
-		enabled := false
-		for _, enabledModule := range enabledModules {
-			if module == enabledModule {
-				enabled = true
-			}
-		}
-		appConfig.Modules[module] = enabled
+	for _, module := range enabledModules {
+		shownModules.Modules[module].Enabled = true
 	}
+	appConfig.Modules = shownModules
 
 	// Admin Gen
 	err = survey.AskOne(&survey.Select{

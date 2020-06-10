@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
+	"github.com/clevyr/installer/modules"
 )
 
 type AppConfig struct {
@@ -10,7 +11,7 @@ type AppConfig struct {
 	AppSlug string
 	AppKey string
 	Database string
-	Modules map[string]bool
+	Modules modules.PHPModules
 	AdminGen string
 	MaxUploadSize string
 }
