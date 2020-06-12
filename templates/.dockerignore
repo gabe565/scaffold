@@ -17,7 +17,6 @@ bootstrap/cache/*
 docker/
 !docker/app/rootfs/
 node_modules/
-phpcs.xml
 phpunit.xml
 tests/
 vendor/

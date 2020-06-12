@@ -1,5 +1,5 @@
-{{ range $module, $enabled := .Modules -}}
-ARG INSTALL_{{ upper $module }}={{ $enabled }}
+{{ range $key, $module := .Modules.Modules -}}
+ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{ end }}
 # Backend Builder
 FROM clevyr/prestissimo as php-builder
@@ -37,6 +37,23 @@ FROM node:lts-alpine as node-builder
 WORKDIR /app
 
 COPY artisan package.json package-lock.json webpack.mix.js ./
+
+RUN set -x \
+    && apk add --no-cache \
+        autoconf \
+        automake \
+        bash \
+        g++ \
+        libc6-compat \
+        libjpeg-turbo \
+        libjpeg-turbo-dev \
+        libpng \
+        libpng-dev \
+        libtool \
+        libwebp \
+        libwebp-dev \
+        make \
+        nasm
 
 RUN set -x \
     && npm ci

@@ -16,7 +16,7 @@ services:
       - 80:80
     restart: unless-stopped
     volumes:
-      - .:/app:cached
+      - .:/app
 
   worker:
     command: ["s6-svscan", "/etc/s6/worker"]
@@ -26,7 +26,7 @@ services:
     image: clevyr/{{ .AppSlug }}/app
     restart: unless-stopped
     volumes:
-      - .:/app:cached
+      - .:/app
 
   {{ if eq .Database "PostgreSQL" -}}
   database:
@@ -65,7 +65,7 @@ services:
     image: clevyr/{{ .AppSlug }}/hot-reloader
     restart: unless-stopped
     volumes:
-      - .:/app:cached
+      - .:/app
 
 volumes:
   database:
