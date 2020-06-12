@@ -1,0 +1,11 @@
+*.md
+.dockerignore
+.git
+.gitignore
+.idea
+Dockerfile
+docker-compose.yml
+installer
+out
+pkger.go
+vendor

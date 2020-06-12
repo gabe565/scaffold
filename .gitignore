@@ -1,3 +1,5 @@
 .idea
+installer
 out
+pkged.go
 vendor
