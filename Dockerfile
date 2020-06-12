@@ -24,4 +24,4 @@ WORKDIR /app
 ENV PATH="/app:$PATH"
 
 COPY --from=builder /app/installer .
-ENTRYPOINT ["installer"]
+CMD ["installer"]
