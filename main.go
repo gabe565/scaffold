@@ -2,6 +2,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/clevyr/installer/phpmodules"
@@ -18,6 +19,9 @@ type AppConfig struct {
 }
 
 func main() {
+	context := flag.String("C", ".", "Run as if the application was started in the given path.")
+	flag.Parse()
+
 	appConfig := AppConfig{}
 	err := askQuestions(&appConfig)
 
@@ -30,7 +34,7 @@ func main() {
 
 	appConfig.AppKey = generateAppKey()
 
-	if err := generateTemplate(appConfig); err != nil {
+	if err := generateTemplate(appConfig, *context); err != nil {
 		panic(err)
 	}
 }
