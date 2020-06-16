@@ -3,14 +3,14 @@ package main
 import (
 	"errors"
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/clevyr/installer/modules"
+	"github.com/clevyr/installer/phpmodules"
 	"github.com/iancoleman/strcase"
 	"regexp"
 )
 
 var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
 
-func askQuestions() (appConfig AppConfig, err error) {
+func askQuestions(appConfig *AppConfig) (err error) {
 	// App Name
 	err = survey.AskOne(&survey.Input{Message: "What is the application name?"}, &appConfig.AppName, survey.WithValidator(survey.Required))
 	if err != nil {
@@ -29,29 +29,16 @@ func askQuestions() (appConfig AppConfig, err error) {
 	}
 
 	// Enabled Modules
-	shownModules := modules.All
-	switch appConfig.Database {
-	case "PostgreSQL":
-		shownModules.Modules["pgsql"].Enabled = true
-		break
-	case "MariaDB":
-		shownModules.Modules["mysql"].Enabled = true
-		break
-	}
-	var enabledModules []string
+	appConfig.Modules = phpmodules.Defaults
+	appConfig.Modules.EnableSelectedDatabase(appConfig.Database)
 	err = survey.AskOne(&survey.MultiSelect{
-		Message: "Choose which PHP modules to enable:",
-		Options: shownModules.ToOptionsSlice(),
-		Default: shownModules.ToDefaultSlice(),
-	}, &enabledModules)
+		Message: "Choose which PHP phpmodules to enable:",
+		Options: appConfig.Modules.ToOptionsSlice(),
+		Default: appConfig.Modules.ToDefaultSlice(),
+	}, &appConfig.Modules)
 	if err != nil {
 		return
 	}
-
-	for _, module := range enabledModules {
-		shownModules.Modules[module].Enabled = true
-	}
-	appConfig.Modules = shownModules
 
 	// Admin Gen
 	err = survey.AskOne(&survey.Select{

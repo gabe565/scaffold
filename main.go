@@ -4,21 +4,22 @@ package main
 import (
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
-	"github.com/clevyr/installer/modules"
+	"github.com/clevyr/installer/phpmodules"
 )
 
 type AppConfig struct {
-	AppName string
-	AppSlug string
-	AppKey string
-	Database string
-	Modules modules.PHPModules
-	AdminGen string
+	AppName       string
+	AppSlug       string
+	AppKey        string
+	Database      string
+	Modules       phpmodules.ModuleMap
+	AdminGen      string
 	MaxUploadSize string
 }
 
 func main() {
-	appConfig, err := askQuestions()
+	appConfig := AppConfig{}
+	err := askQuestions(&appConfig)
 
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
