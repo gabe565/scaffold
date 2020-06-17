@@ -10,7 +10,6 @@ import (
 
 type AppConfig struct {
 	AppName       string
-	AppSlug       string
 	AppKey        string
 	Database      string
 	Modules       phpmodules.ModuleMap

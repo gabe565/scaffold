@@ -1,3 +1,4 @@
+{{ $appSlug := kebabcase .AppName }}
 version: "2.4"
 
 services:
@@ -8,10 +9,10 @@ services:
         INSTALL_XDEBUG: "true"
       context: .
       dockerfile: docker/app/Dockerfile
-    container_name: {{ .AppSlug }}-app
+    container_name: {{ $appSlug }}-app
     env_file:
       - .env
-    image: clevyr/{{ .AppSlug }}/app
+    image: clevyr/{{ $appSlug }}/app
     ports:
       - 80:80
     restart: unless-stopped
@@ -20,17 +21,17 @@ services:
 
   worker:
     command: ["s6-svscan", "/etc/s6/worker"]
-    container_name: {{ .AppSlug }}-worker
+    container_name: {{ $appSlug }}-worker
     env_file:
       - .env
-    image: clevyr/{{ .AppSlug }}/app
+    image: clevyr/{{ $appSlug }}/app
     restart: unless-stopped
     volumes:
       - .:/app
 
   {{ if eq .Database "PostgreSQL" -}}
   database:
-    container_name: {{ .AppSlug }}-database
+    container_name: {{ $appSlug }}-database
     environment:
       POSTGRES_USER: "$DB_USERNAME"
       POSTGRES_PASSWORD: "$DB_PASSWORD"
@@ -43,7 +44,7 @@ services:
       - database:/var/lib/postgresql/data
   {{- else if eq .Database "MariaDB" -}}
   database:
-    container_name: {{ .AppSlug }}-database
+    container_name: {{ $appSlug }}-database
     environment:
       MYSQL_DATABASE: "$DB_DATABASE"
       MYSQL_USER: "$DB_USER"
@@ -59,10 +60,10 @@ services:
 
   hot:
     build: docker/hot
-    container_name: {{ .AppSlug }}-hot
+    container_name: {{ $appSlug }}-hot
     env_file:
         - .env
-    image: clevyr/{{ .AppSlug }}/hot-reloader
+    image: clevyr/{{ $appSlug }}/hot-reloader
     restart: unless-stopped
     volumes:
       - .:/app

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/clevyr/installer/phpmodules"
-	"github.com/iancoleman/strcase"
 	"regexp"
 )
 
@@ -16,7 +15,6 @@ func askQuestions(appConfig *AppConfig) (err error) {
 	if err != nil {
 		return
 	}
-	appConfig.AppSlug = strcase.ToKebab(appConfig.AppName)
 
 	// Database
 	err = survey.AskOne(&survey.Select{
