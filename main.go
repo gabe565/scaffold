@@ -47,7 +47,10 @@ func main() {
 		panic(err)
 	}
 
-	appConfig.AppKey = generateAppKey()
+	appConfig.AppKey, err = generateAppKey()
+	if err != nil {
+		panic(err)
+	}
 
 	err = generateTemplate(appConfig)
 	if err != nil {

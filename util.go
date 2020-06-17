@@ -4,14 +4,14 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	"log"
 )
 
-func generateAppKey() string {
+func generateAppKey() (result string, err error) {
 	randomBytes := make([]byte, 32)
-	_, err := rand.Read(randomBytes)
+	_, err = rand.Read(randomBytes)
 	if err != nil {
-		log.Panicln(err)
+		return
 	}
-	return fmt.Sprintf("base64:%s", base64.StdEncoding.EncodeToString(randomBytes))
+	result = fmt.Sprintf("base64:%s", base64.StdEncoding.EncodeToString(randomBytes))
+	return
 }
