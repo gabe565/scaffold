@@ -11,23 +11,31 @@ var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
 
 func askQuestions(appConfig *AppConfig) (err error) {
 	// App Name
-	err = survey.AskOne(&survey.Input{Message: "What is the application name?"}, &appConfig.AppName, survey.WithValidator(survey.Required))
+	err = survey.AskOne(&survey.Input{
+		Message: "What is the application name?",
+		Default: appConfig.AppName,
+	}, &appConfig.AppName, survey.WithValidator(survey.Required))
 	if err != nil {
 		return
 	}
 
 	// Database
+	if appConfig.Database == "" {
+		appConfig.Database = "PostgreSQL"
+	}
 	err = survey.AskOne(&survey.Select{
 		Message: "Choose which main database server to configure:",
 		Options: []string{"PostgreSQL", "MariaDB"},
-		Default: "PostgreSQL",
+		Default: appConfig.Database,
 	}, &appConfig.Database, survey.WithValidator(survey.Required))
 	if err != nil {
 		return
 	}
 
 	// Enabled Modules
-	appConfig.Modules = phpmodules.Defaults
+	if appConfig.Modules == nil {
+		appConfig.Modules = phpmodules.Defaults
+	}
 	appConfig.Modules.EnableSelectedDatabase(appConfig.Database)
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose which PHP phpmodules to enable:",
@@ -39,20 +47,26 @@ func askQuestions(appConfig *AppConfig) (err error) {
 	}
 
 	// Admin Gen
+	if appConfig.AdminGen == "" {
+		appConfig.AdminGen = "None"
+	}
 	err = survey.AskOne(&survey.Select{
 		Message: "Choose which admin generator to include:",
 		Options: []string{"None", "Nova", "Backpack"},
-		Default: "None",
+		Default: appConfig.AdminGen,
 	}, &appConfig.AdminGen)
 	if err != nil {
 		return
 	}
 
 	// Max Upload Size
+	if appConfig.MaxUploadSize == "" {
+		appConfig.MaxUploadSize = "64m"
+	}
 	err = survey.AskOne(
 		&survey.Input{
 			Message: "What is the maximum upload size that should be allowed?",
-			Default: "64m",
+			Default: appConfig.MaxUploadSize,
 			Help: "Configures the maximum allowed upload size. " +
 				"Supports the suffixes \"k\" (kilobytes), \"m\" (megabytes) and \"g\" (gigabytes).",
 		},

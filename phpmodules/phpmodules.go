@@ -6,8 +6,8 @@ import (
 )
 
 type Module struct {
-	Enabled bool
-	Hidden bool
+	Enabled bool `json:",omitempty"`
+	Hidden  bool `json:",omitempty"`
 }
 
 func (module *Module) WriteAnswer(name string, value interface{}) error {

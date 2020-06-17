@@ -2,6 +2,7 @@
 nova-components/**/node_modules/
 nova-components/**/vendor/
 {{ end -}}
+.clevyr-installer-config
 .github/
 .dockerignore
 .editorconfig

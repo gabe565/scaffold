@@ -39,6 +39,7 @@ func main() {
 	}
 
 	appConfig := AppConfig{}
+	_ = readAppConfig(&appConfig)
 	err = askQuestions(&appConfig)
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
@@ -53,6 +54,11 @@ func main() {
 	}
 
 	err = generateTemplate(appConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	err = writeAppConfig(appConfig)
 	if err != nil {
 		panic(err)
 	}
