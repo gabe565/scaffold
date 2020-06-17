@@ -18,11 +18,13 @@ type AppConfig struct {
 }
 
 func main() {
+	var err error
+
 	context := flag.String("C", ".", "Run as if the application was started in the given path.")
 	flag.Parse()
 
 	appConfig := AppConfig{}
-	err := askQuestions(&appConfig)
+	err = askQuestions(&appConfig)
 
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
@@ -33,7 +35,8 @@ func main() {
 
 	appConfig.AppKey = generateAppKey()
 
-	if err := generateTemplate(appConfig, *context); err != nil {
+	err = generateTemplate(appConfig, *context)
+	if err != nil {
 		panic(err)
 	}
 }
