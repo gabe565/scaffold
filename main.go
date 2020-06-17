@@ -5,19 +5,10 @@ import (
 	"flag"
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
-	"github.com/clevyr/installer/phpmodules"
+	"github.com/clevyr/installer/appconfig"
 	"os"
 	"path"
 )
-
-type AppConfig struct {
-	AppName       string
-	AppKey        string
-	Database      string
-	Modules       phpmodules.ModuleMap
-	AdminGen      string
-	MaxUploadSize string
-}
 
 func main() {
 	var err error
@@ -38,8 +29,8 @@ func main() {
 		}
 	}
 
-	appConfig := AppConfig{}
-	_ = readAppConfig(&appConfig)
+	appConfig := appconfig.Defaults
+	_ = appConfig.ImportFromFile()
 	err = askQuestions(&appConfig)
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
@@ -48,7 +39,7 @@ func main() {
 		panic(err)
 	}
 
-	appConfig.AppKey, err = generateAppKey()
+	err = appConfig.GenerateAppKey()
 	if err != nil {
 		panic(err)
 	}
@@ -58,7 +49,7 @@ func main() {
 		panic(err)
 	}
 
-	err = writeAppConfig(appConfig)
+	err = appConfig.ExportToFile()
 	if err != nil {
 		panic(err)
 	}

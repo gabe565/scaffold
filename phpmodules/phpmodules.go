@@ -57,20 +57,18 @@ func (modules *ModuleMap) EnableSelectedDatabase(database string) {
 	}
 }
 
-var (
-	Defaults = ModuleMap{
-		"bcmath": {},
-		"calendar": {},
-		"exif": {},
-		"gd": {},
-		"imagick": {},
-		"mosquitto": {},
-		"mysql": {},
-		"opcache": {Enabled: true},
-		"pgsql": {},
-		"redis": {Enabled: true},
-		"sqlsrv": {},
-		"xdebug": {Hidden: true},
-		"zip": {},
-	}
-)
+var Defaults = ModuleMap{
+	"bcmath":    {},
+	"calendar":  {},
+	"exif":      {},
+	"gd":        {},
+	"imagick":   {},
+	"mosquitto": {},
+	"mysql":     {},
+	"opcache":   {Enabled: true},
+	"pgsql":     {},
+	"redis":     {Enabled: true},
+	"sqlsrv":    {},
+	"xdebug":    {Hidden: true},
+	"zip":       {},
+}

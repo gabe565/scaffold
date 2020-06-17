@@ -1,26 +1,46 @@
-package main
+package appconfig
 
 import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/clevyr/installer/phpmodules"
 	"io/ioutil"
 )
 
+type AppConfig struct {
+	AppName       string
+	AppKey        string
+	Database      string
+	Modules       phpmodules.ModuleMap
+	AdminGen      string
+	MaxUploadSize string
+}
+
+var Defaults = AppConfig{
+	AdminGen:      "None",
+	Database:      "PostgreSQL",
+	Modules:       phpmodules.Defaults,
+	MaxUploadSize: "64m",
+}
+
 const configFilePath = ".clevyr-installer-config"
 
-func generateAppKey() (result string, err error) {
+func (appConfig *AppConfig) GenerateAppKey() (err error) {
+	if appConfig.AppKey != "" {
+		return
+	}
 	randomBytes := make([]byte, 32)
 	_, err = rand.Read(randomBytes)
 	if err != nil {
 		return
 	}
-	result = fmt.Sprintf("base64:%s", base64.StdEncoding.EncodeToString(randomBytes))
+	appConfig.AppKey = fmt.Sprintf("base64:%s", base64.StdEncoding.EncodeToString(randomBytes))
 	return
 }
 
-func writeAppConfig(appConfig AppConfig) (err error) {
+func (appConfig AppConfig) ExportToFile() (err error) {
 	var appConfigJson []byte
 	appConfigJson, err = json.MarshalIndent(appConfig, "", "\t")
 	if err != nil {
@@ -30,7 +50,7 @@ func writeAppConfig(appConfig AppConfig) (err error) {
 	return
 }
 
-func readAppConfig(appConfig *AppConfig) error {
+func (appConfig *AppConfig) ImportFromFile() error {
 	appConfigJson, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
 		return err

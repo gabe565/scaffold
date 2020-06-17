@@ -3,13 +3,13 @@ package main
 import (
 	"errors"
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/clevyr/installer/phpmodules"
+	"github.com/clevyr/installer/appconfig"
 	"regexp"
 )
 
 var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
 
-func askQuestions(appConfig *AppConfig) (err error) {
+func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	// App Name
 	err = survey.AskOne(&survey.Input{
 		Message: "What is the application name?",
@@ -20,9 +20,6 @@ func askQuestions(appConfig *AppConfig) (err error) {
 	}
 
 	// Database
-	if appConfig.Database == "" {
-		appConfig.Database = "PostgreSQL"
-	}
 	err = survey.AskOne(&survey.Select{
 		Message: "Choose which main database server to configure:",
 		Options: []string{"PostgreSQL", "MariaDB"},
@@ -33,9 +30,6 @@ func askQuestions(appConfig *AppConfig) (err error) {
 	}
 
 	// Enabled Modules
-	if appConfig.Modules == nil {
-		appConfig.Modules = phpmodules.Defaults
-	}
 	appConfig.Modules.EnableSelectedDatabase(appConfig.Database)
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose which PHP phpmodules to enable:",
@@ -47,9 +41,6 @@ func askQuestions(appConfig *AppConfig) (err error) {
 	}
 
 	// Admin Gen
-	if appConfig.AdminGen == "" {
-		appConfig.AdminGen = "None"
-	}
 	err = survey.AskOne(&survey.Select{
 		Message: "Choose which admin generator to include:",
 		Options: []string{"None", "Nova", "Backpack"},
@@ -60,9 +51,6 @@ func askQuestions(appConfig *AppConfig) (err error) {
 	}
 
 	// Max Upload Size
-	if appConfig.MaxUploadSize == "" {
-		appConfig.MaxUploadSize = "64m"
-	}
 	err = survey.AskOne(
 		&survey.Input{
 			Message: "What is the maximum upload size that should be allowed?",

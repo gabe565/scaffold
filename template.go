@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/Masterminds/sprig"
+	"github.com/clevyr/installer/appconfig"
 	"github.com/markbates/pkger"
 	"io/ioutil"
 	"os"
@@ -12,7 +13,7 @@ import (
 
 const templateDir = "/templates"
 
-func generateTemplate(appConfig AppConfig) (err error) {
+func generateTemplate(appConfig appconfig.AppConfig) (err error) {
 	functions := template.FuncMap(sprig.FuncMap())
 
 	err = pkger.Walk(templateDir, func(filepath string, info os.FileInfo, err error) error {
