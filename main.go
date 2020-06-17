@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/clevyr/installer/phpmodules"
+	"os"
+	"path"
 )
 
 type AppConfig struct {
@@ -20,12 +22,24 @@ type AppConfig struct {
 func main() {
 	var err error
 
-	context := flag.String("C", ".", "Run as if the application was started in the given path.")
+	var context string
+	flag.StringVar(&context, "C", ".", "Run as if the application was started in the given path.")
 	flag.Parse()
+
+	context = path.Clean(context)
+	if context != "." {
+		err = os.MkdirAll(context, os.ModePerm)
+		if err != nil {
+			panic(err)
+		}
+		err = os.Chdir(context)
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	appConfig := AppConfig{}
 	err = askQuestions(&appConfig)
-
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
 		return
@@ -35,7 +49,7 @@ func main() {
 
 	appConfig.AppKey = generateAppKey()
 
-	err = generateTemplate(appConfig, *context)
+	err = generateTemplate(appConfig)
 	if err != nil {
 		panic(err)
 	}

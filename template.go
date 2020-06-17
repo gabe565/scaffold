@@ -12,7 +12,7 @@ import (
 
 const templateDir = "/templates"
 
-func generateTemplate(appConfig AppConfig, outputPrefix string) (err error) {
+func generateTemplate(appConfig AppConfig) (err error) {
 	functions := template.FuncMap(sprig.FuncMap())
 
 	err = pkger.Walk(templateDir, func(filepath string, info os.FileInfo, err error) error {
@@ -26,7 +26,7 @@ func generateTemplate(appConfig AppConfig, outputPrefix string) (err error) {
 				return err
 			}
 
-			outputPath := buildOutputPath(filepath, templateDir, outputPrefix)
+			outputPath := buildOutputPath(filepath, templateDir)
 			tmpl, err := template.New(outputPath).Funcs(functions).Parse(contents)
 			if err != nil {
 				return err
@@ -74,7 +74,7 @@ func readFile(filename string) (string, error) {
 	return string(b), err
 }
 
-func buildOutputPath(filepath string, templateDir string, outputPrefix string) string {
+func buildOutputPath(filepath string, templateDir string) string {
 	templateDirIndex := strings.Index(filepath, templateDir) + len(templateDir) + 1
-	return path.Join(outputPrefix, filepath[templateDirIndex:])
+	return filepath[templateDirIndex:]
 }
