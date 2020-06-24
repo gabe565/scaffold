@@ -1,4 +1,5 @@
 .idea
+dist
 installer
 out
 pkged.go
