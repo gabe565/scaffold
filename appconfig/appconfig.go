@@ -15,13 +15,15 @@ type AppConfig struct {
 	Database      string
 	Modules       phpmodules.ModuleMap
 	AdminGen      string
+	MailDev       bool
 	MaxUploadSize string
 }
 
 var Defaults = AppConfig{
-	AdminGen:      "None",
 	Database:      "PostgreSQL",
 	Modules:       phpmodules.Defaults,
+	AdminGen:      "None",
+	MailDev:       true,
 	MaxUploadSize: "64m",
 }
 

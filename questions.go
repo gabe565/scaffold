@@ -50,6 +50,16 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		return
 	}
 
+	// MailDev
+	err = survey.AskOne(&survey.Confirm{
+		Message: "Use MailDev as local mail backend?",
+		Default: appConfig.MailDev,
+		Help: "If enabled, MailDev will listen on http://localhost:1080 and Laravel will be configured accordingly.",
+	}, &appConfig.MailDev)
+	if err != nil {
+		return
+	}
+
 	// Max Upload Size
 	err = survey.AskOne(
 		&survey.Input{
