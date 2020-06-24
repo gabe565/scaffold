@@ -6,9 +6,8 @@ FROM clevyr/prestissimo as php-builder
 
 WORKDIR /app
 
-COPY composer.json composer.lock {{ if eq .AdminGen "Nova" }}auth.json{{ end -}} ./
+COPY composer.json composer.lock{{ if eq .AdminGen "Nova" }} auth.json{{ end }} ./
 {{- if eq .AdminGen "Nova" }}
-COPY nova/ nova/
 COPY nova-components/ nova-components/
 {{- end }}
 
