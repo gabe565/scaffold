@@ -54,7 +54,7 @@ jobs:
       run: go generate -v .
 
     - name: Build
-      run: go build -v -ldflags='-w -s' .
+      run: go build -v -ldflags='-w -s' -o scaffold .
       env:
         GOOS: ${{ matrix.os }}
         GOARCH: ${{ matrix.arch }}
@@ -62,12 +62,12 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: installer-${{ matrix.os }}-${{ matrix.arch }}
-        path: installer
+        name: scaffold-${{ matrix.os }}-${{ matrix.arch }}
+        path: scaffold
 
     - name: Archive Build
       if: startsWith(github.ref, 'refs/tags/v')
-      run: tar -czvf installer.tar.gz installer
+      run: tar -czvf scaffold.tar.gz scaffold
 
     - name: Get Release Upload URL
       id: upload-url
@@ -85,8 +85,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.upload-url.outputs.url }}
-        asset_path: installer.tar.gz
-        asset_name: installer-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
+        asset_path: scaffold.tar.gz
+        asset_name: scaffold-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
         asset_content_type: application/x-gzip
 
 
