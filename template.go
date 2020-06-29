@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/Masterminds/sprig"
-	"github.com/clevyr/installer/appconfig"
+	"github.com/clevyr/scaffold/appconfig"
 	"github.com/markbates/pkger"
 	"io/ioutil"
 	"os"

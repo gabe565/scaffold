@@ -1,4 +1,4 @@
-module github.com/clevyr/installer
+module github.com/clevyr/scaffold
 
 go 1.14
 

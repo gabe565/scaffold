@@ -23,5 +23,5 @@ WORKDIR /app
 
 ENV PATH="/app:$PATH"
 
-COPY --from=builder /app/installer .
-CMD ["installer"]
+COPY --from=builder /app/scaffold .
+CMD ["scaffold"]

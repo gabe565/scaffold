@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/clevyr/installer/phpmodules"
+	"github.com/clevyr/scaffold/phpmodules"
 	"io/ioutil"
 )
 

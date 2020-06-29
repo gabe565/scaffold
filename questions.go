@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/clevyr/installer/appconfig"
+	"github.com/clevyr/scaffold/appconfig"
 	"regexp"
 )
 

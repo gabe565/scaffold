@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/AlecAivazis/survey/v2/terminal"
-	"github.com/clevyr/installer/appconfig"
+	"github.com/clevyr/scaffold/appconfig"
 	"os"
 	"path"
 )
