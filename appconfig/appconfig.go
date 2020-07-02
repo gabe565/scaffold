@@ -14,6 +14,7 @@ type AppConfig struct {
 	Database      string
 	PhpModules    modulemap.ModuleMap
 	AdminGen      string
+	ComposerDeps  modulemap.ModuleMap
 	MailDev       bool
 	MaxUploadSize string
 }
@@ -22,6 +23,7 @@ var Defaults = AppConfig{
 	Database:      "PostgreSQL",
 	PhpModules:    defaults.PhpModules,
 	AdminGen:      "None",
+	ComposerDeps:  defaults.ComposerDeps,
 	MailDev:       true,
 	MaxUploadSize: "64m",
 }
@@ -51,6 +53,21 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 	case "MariaDB":
 		if mysqlModule, ok := (*appConfig).PhpModules["mysql"]; ok {
 			mysqlModule.Enabled = true
+		}
+		break
+	}
+}
+
+func (appConfig *AppConfig) EnableSelectedAdminGen() {
+	switch appConfig.AdminGen {
+	case "Nova":
+		if module, ok := (*appConfig).ComposerDeps["laravel/nova"]; ok {
+			module.Enabled = true
+		}
+		break
+	case "Backpack":
+		if module, ok := (*appConfig).ComposerDeps["backpack/crud"]; ok {
+			module.Enabled = true
 		}
 		break
 	}

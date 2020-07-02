@@ -14,6 +14,8 @@ import (
 const templateDir = "/templates"
 
 func generateTemplate(appConfig appconfig.AppConfig) (err error) {
+	println("Templating and scaffolding")
+
 	functions := template.FuncMap(sprig.FuncMap())
 
 	err = pkger.Walk(templateDir, func(filepath string, info os.FileInfo, err error) error {

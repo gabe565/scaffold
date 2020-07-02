@@ -53,4 +53,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	err = composerRequire(appConfig)
+	if err != nil {
+		panic(err)
+	}
 }

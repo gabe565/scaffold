@@ -50,6 +50,17 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		return
 	}
 
+	// Composer
+	appConfig.EnableSelectedAdminGen()
+	err = survey.AskOne(&survey.MultiSelect{
+		Message: "Choose Composer dependencies to preinstall:",
+		Options: appConfig.ComposerDeps.ToOptionsSlice(),
+		Default: appConfig.ComposerDeps.ToDefaultSlice(),
+	}, &appConfig.ComposerDeps)
+	if err != nil {
+		return
+	}
+
 	// MailDev
 	err = survey.AskOne(&survey.Confirm{
 		Message: "Use MailDev as local mail backend?",
