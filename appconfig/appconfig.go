@@ -57,7 +57,7 @@ func (appConfig *AppConfig) ImportFromFile() error {
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal(appConfigJson, &appConfig)
+	err = json.Unmarshal(appConfigJson, appConfig)
 	if err != nil {
 		return err
 	}
