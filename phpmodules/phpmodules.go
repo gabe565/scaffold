@@ -46,6 +46,18 @@ func (modules ModuleMap) WriteAnswer(name string, value interface{}) error {
 	return nil
 }
 
+func (modules ModuleMap) UnmarshalJSON(data []byte) (err error) {
+	tmp := make(map[string]*Module)
+	err = json.Unmarshal(data, &tmp)
+	for key, loadedModule := range tmp {
+		if defaultModule, ok := modules[key]; ok {
+			defaultModule.Enabled = loadedModule.Enabled
+			defaultModule.Version = loadedModule.Version
+		}
+	}
+	return
+}
+
 func (modules ModuleMap) EnableSelectedDatabase(database string) {
 	switch database {
 	case "PostgreSQL":
