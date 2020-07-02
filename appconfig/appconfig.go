@@ -3,17 +3,16 @@ package appconfig
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
-	"github.com/clevyr/scaffold/phpmodules"
-	"io/ioutil"
+	"github.com/clevyr/scaffold/appconfig/defaults"
+	"github.com/clevyr/scaffold/modulemap"
 )
 
 type AppConfig struct {
 	AppName       string
 	AppKey        string
 	Database      string
-	Modules       phpmodules.ModuleMap
+	PhpModules    modulemap.ModuleMap
 	AdminGen      string
 	MailDev       bool
 	MaxUploadSize string
@@ -21,7 +20,7 @@ type AppConfig struct {
 
 var Defaults = AppConfig{
 	Database:      "PostgreSQL",
-	Modules:       phpmodules.Defaults,
+	PhpModules:    defaults.PhpModules,
 	AdminGen:      "None",
 	MailDev:       true,
 	MaxUploadSize: "64m",
@@ -42,25 +41,17 @@ func (appConfig *AppConfig) GenerateAppKey() (err error) {
 	return
 }
 
-func (appConfig AppConfig) ExportToFile() (err error) {
-	var appConfigJson []byte
-	appConfigJson, err = json.MarshalIndent(appConfig, "", "\t")
-	if err != nil {
-		return
+func (appConfig *AppConfig) EnableSelectedDatabase() {
+	switch appConfig.Database {
+	case "PostgreSQL":
+		if pgsqlModule, ok := (*appConfig).PhpModules["pgsql"]; ok {
+			pgsqlModule.Enabled = true
+		}
+		break
+	case "MariaDB":
+		if mysqlModule, ok := (*appConfig).PhpModules["mysql"]; ok {
+			mysqlModule.Enabled = true
+		}
+		break
 	}
-	err = ioutil.WriteFile(configFilePath, appConfigJson, 0644)
-	return
-}
-
-func (appConfig *AppConfig) ImportFromFile() error {
-	appConfigJson, err := ioutil.ReadFile(configFilePath)
-	if err != nil {
-		return err
-	}
-	err = json.Unmarshal(appConfigJson, appConfig)
-	if err != nil {
-		return err
-	}
-	fmt.Printf("Loaded previous config from \"%s\"\n", configFilePath)
-	return nil
 }

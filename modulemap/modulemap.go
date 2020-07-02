@@ -1,13 +1,15 @@
-package phpmodules
+package modulemap
 
 import (
+	"encoding/json"
 	"github.com/AlecAivazis/survey/v2/core"
 	"sort"
 )
 
 type Module struct {
-	Enabled bool `json:",omitempty"`
-	Hidden  bool `json:",omitempty"`
+	Enabled bool   `json:",omitempty"`
+	Hidden  bool   `json:"-"`
+	Version string `json:",omitempty"`
 }
 
 func (module *Module) WriteAnswer(name string, value interface{}) error {
@@ -56,31 +58,4 @@ func (modules ModuleMap) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 	return
-}
-
-func (modules ModuleMap) EnableSelectedDatabase(database string) {
-	switch database {
-	case "PostgreSQL":
-		modules["pgsql"].Enabled = true
-		break
-	case "MariaDB":
-		modules["mysql"].Enabled = true
-		break
-	}
-}
-
-var Defaults = ModuleMap{
-	"bcmath":    {},
-	"calendar":  {},
-	"exif":      {},
-	"gd":        {},
-	"imagick":   {},
-	"mosquitto": {},
-	"mysql":     {},
-	"opcache":   {Enabled: true},
-	"pgsql":     {},
-	"redis":     {Enabled: true},
-	"sqlsrv":    {},
-	"xdebug":    {Hidden: true},
-	"zip":       {},
 }

@@ -29,13 +29,13 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		return
 	}
 
-	// Enabled Modules
-	appConfig.Modules.EnableSelectedDatabase(appConfig.Database)
+	// Enabled PhpModules
+	appConfig.EnableSelectedDatabase()
 	err = survey.AskOne(&survey.MultiSelect{
-		Message: "Choose which PHP phpmodules to enable:",
-		Options: appConfig.Modules.ToOptionsSlice(),
-		Default: appConfig.Modules.ToDefaultSlice(),
-	}, &appConfig.Modules)
+		Message: "Choose which PHP modules to enable:",
+		Options: appConfig.PhpModules.ToOptionsSlice(),
+		Default: appConfig.PhpModules.ToDefaultSlice(),
+	}, &appConfig.PhpModules)
 	if err != nil {
 		return
 	}
