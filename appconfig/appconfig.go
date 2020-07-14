@@ -9,7 +9,9 @@ import (
 )
 
 type AppConfig struct {
+	InitLaravel   bool `json:"-"`
 	AppName       string
+	AppSlug       string `json:"-"`
 	AppKey        string
 	Database      string
 	PhpModules    modulemap.ModuleMap

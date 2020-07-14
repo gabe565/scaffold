@@ -2,8 +2,11 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/clevyr/scaffold/appconfig"
+	"github.com/huandu/xstrings"
+	"os"
 	"regexp"
 )
 
@@ -12,11 +15,27 @@ var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
 func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	// App Name
 	err = survey.AskOne(&survey.Input{
-		Message: "What is the application name?",
+		Message: "Enter the application name that should be shown to the user.",
 		Default: appConfig.AppName,
+		Help: "Enter the application's name space-separated and capitalized. A slug will be generated to match.",
 	}, &appConfig.AppName, survey.WithValidator(survey.Required))
 	if err != nil {
 		return
+	}
+	appConfig.AppSlug = xstrings.ToKebabCase(appConfig.AppName)
+
+	// Laravel Install
+	_, err = os.Stat("composer.json")
+	if os.IsNotExist(err) {
+		wd, _ := os.Getwd()
+
+		err = survey.AskOne(&survey.Confirm{
+			Message: fmt.Sprintf("composer.json not found in the current directory. Initialize a Laravel app in \"%s/%s\"?", wd, appConfig.AppSlug),
+			Default: true,
+		}, &appConfig.InitLaravel)
+		if err != nil {
+			return
+		}
 	}
 
 	// Database

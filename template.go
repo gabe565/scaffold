@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/Masterminds/sprig"
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/markbates/pkger"
 	"io/ioutil"
@@ -16,7 +15,9 @@ const templateDir = "/templates"
 func generateTemplate(appConfig appconfig.AppConfig) (err error) {
 	println("Templating and scaffolding")
 
-	functions := template.FuncMap(sprig.FuncMap())
+	functions := template.FuncMap{
+		"upper": strings.ToUpper,
+	}
 
 	err = pkger.Walk(templateDir, func(filepath string, info os.FileInfo, err error) error {
 		if err != nil {

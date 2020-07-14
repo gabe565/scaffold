@@ -3,9 +3,9 @@ package defaults
 import "github.com/clevyr/scaffold/modulemap"
 
 var ComposerDeps = modulemap.ModuleMap{
-	"backpack/crud": {Hidden: true},
+	"backpack/crud": {},
 	"clevyr/backpack-page-builder": {},
-	"laravel/nova": {Hidden: true},
-	"nunomaduro/larastan": {Enabled: true},
+	"laravel/nova": {},
+	"nunomaduro/larastan": {Enabled: true, Hidden: true},
 	"superbalist/laravel-google-cloud-storage": {Enabled: true},
 }

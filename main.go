@@ -44,11 +44,16 @@ func main() {
 		panic(err)
 	}
 
-	err = appConfig.ExportToFile()
+	err = initLaravel(appConfig)
 	if err != nil {
 		panic(err)
 	}
 
+	err = appConfig.ExportToFile()
+	if err != nil {
+		panic(err)
+	}
+	
 	err = generateTemplate(appConfig)
 	if err != nil {
 		panic(err)
