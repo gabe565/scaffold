@@ -22,7 +22,7 @@ changelog:
     exclude:
     - '^:pencil:'
 brews:
-  - github:
+  - tap:
       owner: clevyr
       name: homebrew-tap
     folder: Formula
