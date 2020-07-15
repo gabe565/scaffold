@@ -16,3 +16,10 @@ scaffold
 
 You will be asked some questions to determine the setup the templates, then config will be generated and output. Your responses will be saved to `.clevyr-scaffold-config` so that they can be loaded as default values if the scaffold is run in the future.
 
+## Updating
+
+To update to the latest version of the stack, run:
+```sh
+brew update
+brew upgrade clevyr/tap/scaffold
+```
