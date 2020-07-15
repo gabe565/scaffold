@@ -15,7 +15,16 @@ func main() {
 
 	var context string
 	flag.StringVar(&context, "C", ".", "Run as if the application was started in the given path.")
+
+	var versionFlag bool
+	flag.BoolVar(&versionFlag, "v", false, "Prints the current versionFlag.")
+
 	flag.Parse()
+
+	if versionFlag {
+		printVersion()
+		return
+	}
 
 	context = path.Clean(context)
 	if context != "." {
