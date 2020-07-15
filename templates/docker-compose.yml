@@ -1,7 +1,22 @@
 version: "2.4"
 
+x-app: &app
+  environment:
+    DB_HOST: database
+    BROADCAST_DRIVER: redis
+    CACHE_DRIVER: redis
+    QUEUE_CONNECTION: redis
+    REDIS_HOST: redis
+  env_file:
+    - .env
+  image: clevyr/{{ .AppSlug }}/app
+  restart: unless-stopped
+  volumes:
+    - .:/app:cached
+
 services:
   app:
+    <<: *app
     build:
       args:
         NODE_ENV: development
@@ -9,24 +24,13 @@ services:
       context: .
       dockerfile: docker/app/Dockerfile
     container_name: {{ .AppSlug }}-app
-    env_file:
-      - .env
-    image: clevyr/{{ .AppSlug }}/app
     ports:
       - 80:80
-    restart: unless-stopped
-    volumes:
-      - .:/app
 
   worker:
+    <<: *app
     command: ["s6-svscan", "/etc/s6/worker"]
     container_name: {{ .AppSlug }}-worker
-    env_file:
-      - .env
-    image: clevyr/{{ .AppSlug }}/app
-    restart: unless-stopped
-    volumes:
-      - .:/app
 
   {{ if eq .Database "PostgreSQL" -}}
   database:
@@ -66,6 +70,12 @@ services:
     restart: unless-stopped
     volumes:
       - .:/app
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 127.0.0.1:6379:6379
+    restart: unless-stopped
 
   {{- if .MailDev }}
 
