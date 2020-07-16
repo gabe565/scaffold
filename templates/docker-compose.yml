@@ -1,14 +1,11 @@
 version: "2.4"
 
 x-app: &app
-  environment:
-    DB_HOST: database
-    BROADCAST_DRIVER: redis
-    CACHE_DRIVER: redis
-    QUEUE_CONNECTION: redis
-    REDIS_HOST: redis
   env_file:
     - .env
+  environment:
+    DB_HOST: database
+    REDIS_HOST: redis
   image: clevyr/{{ .AppSlug }}/app
   restart: unless-stopped
   volumes:
