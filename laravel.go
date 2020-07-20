@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/clevyr/scaffold/appconfig"
+	"github.com/clevyr/scaffold/iexec"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -24,7 +25,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 
 		fmt.Printf("Running \"composer %s\"\n", strings.Join(flags, " "))
 
-		err = interactiveCommand("composer", flags...)
+		err = iexec.Command("composer", flags...)
 		if err != nil {
 			return
 		}

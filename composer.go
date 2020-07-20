@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/clevyr/scaffold/appconfig"
+	"github.com/clevyr/scaffold/iexec"
 	"strings"
 )
 
@@ -30,12 +31,12 @@ func composerRequire(appConfig appconfig.AppConfig) (err error) {
 
 	if len(devDependencies) > 0 {
 		fmt.Printf("Running \"composer require --dev %s\"\n", strings.Join(devDependencies, " "))
-		err = interactiveCommand("composer", append([]string{"require", "--ignore-platform-reqs", "--dev"}, devDependencies...)...)
+		err = iexec.Command("composer", append([]string{"require", "--ignore-platform-reqs", "--dev"}, devDependencies...)...)
 	}
 
 	if len(dependencies) > 0 {
 		fmt.Printf("Running \"composer require %s\"\n", strings.Join(dependencies, " "))
-		err = interactiveCommand("composer", append([]string{"require", "--ignore-platform-reqs"}, dependencies...)...)
+		err = iexec.Command("composer", append([]string{"require", "--ignore-platform-reqs"}, dependencies...)...)
 	}
 
 	return
