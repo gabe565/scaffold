@@ -8,14 +8,29 @@ import (
 
 func composerRequire(appConfig appconfig.AppConfig) (err error) {
 	dependencies := make([]string, 0, len(appConfig.ComposerDeps))
+	devDependencies := make([]string, 0, len(appConfig.ComposerDeps))
+
 	for name, module := range appConfig.ComposerDeps {
 		if module.Enabled {
-			if module.Version != "" {
-				dependencies = append(dependencies, fmt.Sprintf("%s:\"%s\"", name, module.Version))
+			var appParam string
+
+			if module.Version == "" {
+				appParam = name
 			} else {
-				dependencies = append(dependencies, name)
+				appParam = fmt.Sprintf("%s:\"%s\"", name, module.Version)
+			}
+
+			if module.Dev {
+				devDependencies = append(devDependencies, appParam)
+			} else {
+				dependencies = append(dependencies, appParam)
 			}
 		}
+	}
+
+	if len(devDependencies) > 0 {
+		fmt.Printf("Running \"composer require --dev %s\"\n", strings.Join(devDependencies, " "))
+		err = interactiveCommand("composer", append([]string{"require", "--ignore-platform-reqs", "--dev"}, devDependencies...)...)
 	}
 
 	if len(dependencies) > 0 {

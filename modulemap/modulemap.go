@@ -7,6 +7,7 @@ import (
 )
 
 type Module struct {
+	Dev     bool   `json:"-"`
 	Enabled bool   `json:",omitempty"`
 	Hidden  bool   `json:"-"`
 	Version string `json:",omitempty"`
