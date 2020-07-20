@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/clevyr/scaffold/appconfig"
-	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -22,15 +20,8 @@ func composerRequire(appConfig appconfig.AppConfig) (err error) {
 
 	if len(dependencies) > 0 {
 		fmt.Printf("Running \"composer require %s\"\n", strings.Join(dependencies, " "))
-
-		cmd := exec.Command("composer", append([]string{"require", "--ignore-platform-reqs"}, dependencies...)...)
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		err = cmd.Run()
-		if err != nil {
-			return
-		}
+		err = interactiveCommand("composer", append([]string{"require", "--ignore-platform-reqs"}, dependencies...)...)
 	}
+
 	return
 }

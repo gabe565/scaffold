@@ -6,7 +6,6 @@ import (
 	"github.com/clevyr/scaffold/appconfig"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -25,11 +24,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 
 		fmt.Printf("Running \"composer %s\"\n", strings.Join(flags, " "))
 
-		cmd := exec.Command("composer", flags...)
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		err = cmd.Run()
+		err = interactiveCommand("composer", flags...)
 		if err != nil {
 			return
 		}
