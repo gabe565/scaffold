@@ -39,9 +39,9 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 
 		if appConfig.AdminGen == "Nova" {
 			composer["repositories"] = []map[string]string{
-				map[string]string{
+				{
 					"type": "composer",
-					"url": "https://nova.laravel.com",
+					"url":  "https://nova.laravel.com",
 				},
 			}
 		}
