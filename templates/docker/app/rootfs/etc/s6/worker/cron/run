@@ -1,4 +1,4 @@
 #!/bin/sh
 set -x
 
-exec s6-setuidgid "${PUID:-www-data}" crond -f
+exec crond -f

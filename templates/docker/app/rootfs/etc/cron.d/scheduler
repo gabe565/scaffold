@@ -1,1 +1,1 @@
-* * * * * php /app/artisan schedule:run -n | grep -v 'No scheduled commands are ready to run.'
+* * * * * s6-setuidgid "${PUID:-www-data}" php /app/artisan schedule:run -n | grep -v 'No scheduled commands are ready to run.'
