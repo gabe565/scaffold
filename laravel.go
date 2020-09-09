@@ -21,7 +21,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			return
 		}
 
-		flags := []string{"create-project", "laravel/laravel", ".", "--no-install", "--no-plugins", "--no-scripts"}
+		flags := []string{"create-project", "laravel/laravel:^7.0", ".", "--no-install", "--no-plugins", "--no-scripts"}
 
 		fmt.Printf("Running \"composer %s\"\n", strings.Join(flags, " "))
 
