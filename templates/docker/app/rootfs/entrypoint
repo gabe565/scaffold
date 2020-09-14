@@ -16,7 +16,7 @@ fi
 if [ -L public/storage ]; then
     rm public/storage
 fi
-php artisan storage:link
+ln -s ../storage/app/public public/storage
 
 if [ "$TELESCOPE_ENABLED" = "true" ]; then
     php artisan vendor:publish --tag=telescope-assets --force
