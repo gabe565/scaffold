@@ -7,8 +7,8 @@ import (
 )
 
 func composerRequire(appConfig appconfig.AppConfig) (err error) {
-	param := []string{"require", "--ignore-platform-reqs"}
-	devParam := []string{"require", "--ignore-platform-reqs", "--dev"}
+	param := []string{"require"}
+	devParam := []string{"require", "--dev"}
 
 	for name, module := range appConfig.ComposerDeps {
 		if module.Enabled {
