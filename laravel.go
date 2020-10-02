@@ -7,7 +7,6 @@ import (
 	"github.com/clevyr/scaffold/iexec"
 	"io/ioutil"
 	"os"
-	"strings"
 )
 
 func initLaravel(appConfig appconfig.AppConfig) (err error) {
@@ -22,8 +21,6 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		}
 
 		flags := []string{"create-project", "laravel/laravel:^7.0", ".", "--no-install", "--no-plugins", "--no-scripts"}
-
-		fmt.Printf("Running \"composer %s\"\n", strings.Join(flags, " "))
 
 		err = iexec.Command("composer", flags...)
 		if err != nil {

@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/clevyr/scaffold/iexec"
-	"strings"
 )
 
 func composerRequire(appConfig appconfig.AppConfig) (err error) {
-	dependencies := make([]string, 0, len(appConfig.ComposerDeps))
-	devDependencies := make([]string, 0, len(appConfig.ComposerDeps))
+	param := []string{"require", "--ignore-platform-reqs"}
+	devParam := []string{"require", "--ignore-platform-reqs", "--dev"}
 
 	for name, module := range appConfig.ComposerDeps {
 		if module.Enabled {
@@ -18,25 +17,23 @@ func composerRequire(appConfig appconfig.AppConfig) (err error) {
 			if module.Version == "" {
 				appParam = name
 			} else {
-				appParam = fmt.Sprintf("%s:\"%s\"", name, module.Version)
+				appParam = fmt.Sprintf("%s:%s", name, module.Version)
 			}
 
 			if module.Dev {
-				devDependencies = append(devDependencies, appParam)
+				devParam = append(devParam, appParam)
 			} else {
-				dependencies = append(dependencies, appParam)
+				param = append(param, appParam)
 			}
 		}
 	}
 
-	if len(devDependencies) > 0 {
-		fmt.Printf("Running \"composer require --dev %s\"\n", strings.Join(devDependencies, " "))
-		err = iexec.Command("composer", append([]string{"require", "--ignore-platform-reqs", "--dev"}, devDependencies...)...)
+	if len(devParam) > 0 {
+		err = iexec.Command("composer", devParam...)
 	}
 
-	if len(dependencies) > 0 {
-		fmt.Printf("Running \"composer require %s\"\n", strings.Join(dependencies, " "))
-		err = iexec.Command("composer", append([]string{"require", "--ignore-platform-reqs"}, dependencies...)...)
+	if len(param) > 0 {
+		err = iexec.Command("composer", param...)
 	}
 
 	return
