@@ -51,12 +51,10 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 		if pgsqlModule, ok := (*appConfig).PhpModules["pgsql"]; ok {
 			pgsqlModule.Enabled = true
 		}
-		break
 	case "MariaDB":
 		if mysqlModule, ok := (*appConfig).PhpModules["mysql"]; ok {
 			mysqlModule.Enabled = true
 		}
-		break
 	}
 }
 
@@ -66,11 +64,9 @@ func (appConfig *AppConfig) EnableSelectedAdminGen() {
 		if module, ok := (*appConfig).ComposerDeps["laravel/nova"]; ok {
 			module.Enabled = true
 		}
-		break
 	case "Backpack":
 		if module, ok := (*appConfig).ComposerDeps["backpack/crud"]; ok {
 			module.Enabled = true
 		}
-		break
 	}
 }
