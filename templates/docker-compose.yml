@@ -20,18 +20,24 @@ services:
         INSTALL_XDEBUG: "true"
       context: .
       dockerfile: docker/app/Dockerfile
-    container_name: {{ .AppSlug }}-app
     ports:
       - 80:80
 
   worker:
     <<: *app
     command: ["s6-svscan", "/etc/s6/worker"]
-    container_name: {{ .AppSlug }}-worker
+
+  proxy:
+    image: clevyr/caddy
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    volumes:
+      - ~/.config/caddy:/data
 
   {{ if eq .Database "PostgreSQL" -}}
   database:
-    container_name: {{ .AppSlug }}-database
     environment:
       POSTGRES_USER: "$DB_USERNAME"
       POSTGRES_PASSWORD: "$DB_PASSWORD"
@@ -44,7 +50,6 @@ services:
       - database:/var/lib/postgresql/data
   {{- else if eq .Database "MariaDB" -}}
   database:
-    container_name: {{ .AppSlug }}-database
     environment:
       MYSQL_DATABASE: "$DB_DATABASE"
       MYSQL_USER: "$DB_USER"
@@ -60,7 +65,6 @@ services:
 
   hot:
     build: docker/hot
-    container_name: {{ .AppSlug }}-hot
     env_file:
         - .env
     image: clevyr/{{ .AppSlug }}/hot-reloader
@@ -77,10 +81,7 @@ services:
   {{- if .MailDev }}
 
   maildev:
-    container_name: {{ .AppSlug }}-maildev
     image: maildev/maildev
-    ports:
-      - 127.0.0.1:1080:80
     restart: unless-stopped
   {{- end }}
 
