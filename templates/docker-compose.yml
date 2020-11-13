@@ -6,6 +6,7 @@ x-app: &app
   environment:
     DB_HOST: database
     HTTPS: "true"
+    MAIL_HOST: maildev
     REDIS_HOST: redis
   image: clevyr/{{ .AppSlug }}/app
   restart: unless-stopped
@@ -79,6 +80,8 @@ services:
 
   maildev:
     image: maildev/maildev
+    ports:
+      - 127.0.0.1:25:25
     restart: unless-stopped
 
 volumes:
