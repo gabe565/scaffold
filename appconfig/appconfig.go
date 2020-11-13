@@ -17,7 +17,6 @@ type AppConfig struct {
 	PhpModules    modulemap.ModuleMap
 	AdminGen      string
 	ComposerDeps  modulemap.ModuleMap
-	MailDev       bool
 	MaxUploadSize string
 }
 
@@ -26,7 +25,6 @@ var Defaults = AppConfig{
 	PhpModules:    defaults.PhpModules,
 	AdminGen:      "None",
 	ComposerDeps:  defaults.ComposerDeps,
-	MailDev:       true,
 	MaxUploadSize: "64m",
 }
 
