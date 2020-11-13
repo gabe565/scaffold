@@ -5,23 +5,22 @@ x-app: &app
     - .env
   environment:
     DB_HOST: database
+    HTTPS: "true"
     REDIS_HOST: redis
   image: clevyr/{{ .AppSlug }}/app
   restart: unless-stopped
   volumes:
-    - .:/app:cached
+    - .:/app
 
 services:
   app:
     <<: *app
     build:
       args:
-        NODE_ENV: development
         INSTALL_XDEBUG: "true"
+        NODE_ENV: development
       context: .
       dockerfile: docker/app/Dockerfile
-    ports:
-      - 80:80
 
   worker:
     <<: *app
