@@ -9,6 +9,7 @@ import (
 func Command(name string, arg ...string) (err error) {
 	cmd := exec.Command(name, arg...)
 	fmt.Printf("+ %s\n", cmd)
+	cmd.Env = os.Environ()
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

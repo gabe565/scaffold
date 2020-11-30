@@ -48,6 +48,11 @@ func main() {
 		panic(err)
 	}
 
+	err = os.Setenv("COMPOSER_MEMORY_LIMIT", "-1")
+	if err != nil {
+		panic(err)
+	}
+
 	err = appConfig.GenerateAppKey()
 	if err != nil {
 		panic(err)
