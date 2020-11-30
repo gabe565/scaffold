@@ -34,3 +34,10 @@ brews:
       owner: clevyr
       name: homebrew-tap
     folder: Formula
+dockers:
+  - dockerfile: Dockerfile.goreleaser
+    image_templates:
+      - clevyr/{{ .ProjectName }}:latest
+      - clevyr/{{ .ProjectName }}:{{ .Version }}
+      - clevyr/{{ .ProjectName }}:{{ .Major }}
+      - clevyr/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}
