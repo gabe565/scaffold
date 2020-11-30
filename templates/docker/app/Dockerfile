@@ -1,8 +1,9 @@
+ARG PHP_VERSION=7.4
 {{ range $key, $module := .PhpModules -}}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{ end }}
 # Backend Builder
-FROM clevyr/prestissimo as php-builder
+FROM clevyr/prestissimo:$PHP_VERSION as php-builder
 
 WORKDIR /app
 
@@ -72,7 +73,7 @@ RUN set -x \
     fi
 
 # Final Image
-FROM clevyr/laravel-base-image-builder:7.4
+FROM clevyr/php:$PHP_VERSION
 
 WORKDIR /app
 VOLUME /app
