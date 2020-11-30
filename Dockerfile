@@ -17,7 +17,7 @@ RUN set -x \
     && go generate \
     && go build -ldflags="-w -s"
 
-FROM alpine
+FROM clevyr/prestissimo:7.4
 
 WORKDIR /app
 
