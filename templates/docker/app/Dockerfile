@@ -3,7 +3,7 @@ ARG PHP_VERSION=7.4
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{ end }}
 # Backend Builder
-FROM clevyr/prestissimo:$PHP_VERSION as php-builder
+FROM composer:2 as php-builder
 
 WORKDIR /app
 
@@ -36,8 +36,6 @@ FROM node:lts-alpine as node-builder
 
 WORKDIR /app
 
-COPY artisan package.json package-lock.json webpack.mix.js ./
-
 RUN set -x \
     && apk add --no-cache \
         autoconf \
@@ -54,6 +52,8 @@ RUN set -x \
         libwebp-dev \
         make \
         nasm
+
+COPY artisan package.json package-lock.json webpack.mix.js ./
 
 RUN set -x \
     && npm ci
