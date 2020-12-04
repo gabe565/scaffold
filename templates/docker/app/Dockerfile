@@ -76,7 +76,6 @@ RUN set -x \
 FROM clevyr/php:$PHP_VERSION
 
 WORKDIR /app
-VOLUME /app
 
 COPY --chown=root docker/app/rootfs /
 
