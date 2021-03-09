@@ -17,9 +17,11 @@ RUN set -x \
     && go generate \
     && go build -ldflags="-w -s"
 
-FROM clevyr/prestissimo:7.4
+FROM composer:2
 
 WORKDIR /app
+
+RUN apk add --no-cache npm
 
 ENV PATH="/app:$PATH"
 

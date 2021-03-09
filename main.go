@@ -77,4 +77,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	err = npmInstall()
+	if err != nil {
+		panic(err)
+	}
 }
