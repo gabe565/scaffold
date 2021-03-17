@@ -44,3 +44,4 @@ dockers:
       - clevyr/{{ .ProjectName }}:{{ .Version }}
       - clevyr/{{ .ProjectName }}:{{ .Major }}
       - clevyr/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}
+    use_buildx: true
