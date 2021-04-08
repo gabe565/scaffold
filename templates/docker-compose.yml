@@ -6,7 +6,7 @@ x-app: &app
   environment:
     DB_HOST: database
     HTTPS: "true"
-    MAIL_HOST: maildev
+    MAIL_HOST: mail
     REDIS_HOST: redis
   image: clevyr/{{ .AppSlug }}/app
   restart: unless-stopped
@@ -78,8 +78,12 @@ services:
       - 127.0.0.1:6379:6379
     restart: unless-stopped
 
-  maildev:
-    image: maildev/maildev
+  mail:
+    environment:
+      MH_API_BIND_ADDR: :80
+      MH_UI_BIND_ADDR: :80
+      MH_SMTP_BIND_ADDR: :25
+    image: mailhog/mailhog
     ports:
       - 127.0.0.1:25:25
     restart: unless-stopped
