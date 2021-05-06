@@ -6,6 +6,7 @@ cd /app
 if [ "$APP_ENV" != "local" ]; then
     php artisan config:cache
 else
+    composer install --ignore-platform-reqs --no-interaction --no-progress
     php artisan config:clear
     {{- if eq .AdminGen "Nova" }}
     php artisan nova:publish
@@ -21,13 +22,6 @@ ln -s ../storage/app/public public/storage
 if [ "$TELESCOPE_ENABLED" = "true" ]; then
     php artisan vendor:publish --tag=telescope-assets --force
 fi
-
-set +x
-until PGPASSWORD="$DB_PASSWORD" psql -h"$DB_HOST" -U"$DB_USERNAME" "$DB_DATABASE" -c '\q' 2>/dev/null; do
-  echo "Waiting for Postgres" >&2
-  sleep 2
-done
-set -x
 
 if [ "$DB_FRESH_ON_START" = "true" ]; then
     php artisan migrate:fresh
