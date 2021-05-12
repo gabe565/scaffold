@@ -52,6 +52,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+
   readme:
     name: Update DockerHub Description
     runs-on: ubuntu-latest
