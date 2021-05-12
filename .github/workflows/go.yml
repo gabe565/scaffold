@@ -41,6 +41,9 @@ jobs:
       - name: Install pkger
         run: go get github.com/markbates/pkger/cmd/pkger
 
+      - name: Upgrade UPX
+        run: brew install upx
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
