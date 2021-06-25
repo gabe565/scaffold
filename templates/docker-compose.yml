@@ -79,11 +79,7 @@ services:
     restart: unless-stopped
 
   mail:
-    environment:
-      MH_API_BIND_ADDR: :80
-      MH_UI_BIND_ADDR: :80
-      MH_SMTP_BIND_ADDR: :25
-    image: mailhog/mailhog
+    image: clevyr/mailhog
     ports:
       - 127.0.0.1:25:25
     restart: unless-stopped
