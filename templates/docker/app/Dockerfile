@@ -2,6 +2,10 @@ ARG PHP_VERSION=8.0
 {{ range $key, $module := .PhpModules -}}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{ end }}
+
+ARG PHP_UPLOAD_MAX_FILESIZE {{ .MaxUploadSize }}
+ARG PHP_POST_MAX_SIZE {{ .MaxUploadSize }}
+
 # Backend Builder
 FROM composer:2 as php-builder
 
