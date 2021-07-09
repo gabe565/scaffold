@@ -7,5 +7,5 @@ var ComposerDeps = modulemap.ModuleMap{
 	"clevyr/backpack-page-builder": {},
 	"laravel/nova": {},
 	"nunomaduro/larastan": {Dev: true, Enabled: true, Hidden: true},
-	"superbalist/laravel-google-cloud-storage": {Enabled: true},
+	"superbalist/laravel-google-cloud-storage": {},
 }
