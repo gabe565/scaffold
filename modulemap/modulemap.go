@@ -42,6 +42,11 @@ func (modules ModuleMap) ToDefaultSlice() []string {
 }
 
 func (modules ModuleMap) WriteAnswer(name string, value interface{}) error {
+	// Set all to false to prevent defaults from staying enabled
+	for _, module := range modules {
+		module.Enabled = false
+	}
+
 	options := value.([]core.OptionAnswer)
 	for _, option := range options {
 		modules[option.Value].Enabled = true
