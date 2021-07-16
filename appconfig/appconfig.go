@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+
 	"github.com/clevyr/scaffold/appconfig/defaults"
 	"github.com/clevyr/scaffold/modulemap"
 )
@@ -23,7 +24,7 @@ type AppConfig struct {
 var Defaults = AppConfig{
 	Database:      "PostgreSQL",
 	PhpModules:    defaults.PhpModules,
-	AdminGen:      "None",
+	AdminGen:      "Nova",
 	ComposerDeps:  defaults.ComposerDeps,
 	MaxUploadSize: "64m",
 }

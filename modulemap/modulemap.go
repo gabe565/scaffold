@@ -2,15 +2,17 @@ package modulemap
 
 import (
 	"encoding/json"
-	"github.com/AlecAivazis/survey/v2/core"
 	"sort"
+
+	"github.com/AlecAivazis/survey/v2/core"
 )
 
 type Module struct {
-	Dev     bool   `json:"-"`
-	Enabled bool   `json:",omitempty"`
-	Hidden  bool   `json:"-"`
-	Version string `json:",omitempty"`
+	Dev             bool       `json:"-"`
+	Enabled         bool       `json:",omitempty"`
+	Hidden          bool       `json:"-"`
+	Version         string     `json:",omitempty"`
+	PostInstallCmds [][]string `json:",omitempty"`
 }
 
 func (module *Module) WriteAnswer(name string, value interface{}) error {
