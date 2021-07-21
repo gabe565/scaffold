@@ -19,6 +19,8 @@ var ComposerDeps = module.ModuleSlice{
 				"app/Providers/TelescopeServiceProvider.php",
 			},
 			{"php", "artisan", "telescope:install"},
+			{"mkdir", "-p", "public/vendor/telescope"},
+			{"sh", "-c", "cp vendor/laravel/telescope/public/* public/vendor/telescope"},
 		},
 	}, {
 		Name:    "joelbutcher/socialstream",
