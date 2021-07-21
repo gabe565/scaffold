@@ -17,7 +17,7 @@ type AppConfig struct {
 	Database      string
 	PhpModules    modulemap.ModuleMap
 	AdminGen      string
-	ComposerDeps  modulemap.ModuleMap
+	ComposerDeps  modulemap.ModuleSlice
 	MaxUploadSize string
 }
 
@@ -60,12 +60,18 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 func (appConfig *AppConfig) EnableSelectedAdminGen() {
 	switch appConfig.AdminGen {
 	case "Nova":
-		if module, ok := (*appConfig).ComposerDeps["laravel/nova"]; ok {
-			module.Enabled = true
+		for _, module := range (*appConfig).ComposerDeps {
+			if module.Name == "laravel/nova" {
+				module.Enabled = true
+				break
+			}
 		}
 	case "Backpack":
-		if module, ok := (*appConfig).ComposerDeps["backpack/crud"]; ok {
-			module.Enabled = true
+		for _, module := range (*appConfig).ComposerDeps {
+			if module.Name == "backpack/crud" {
+				module.Enabled = true
+				break
+			}
 		}
 	}
 }

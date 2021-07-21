@@ -12,14 +12,14 @@ func composerRequire(appConfig appconfig.AppConfig) (err error) {
 	var param, devParam []string
 	var postInstallCmds [][]string
 
-	for name, module := range appConfig.ComposerDeps {
-		if module.Enabled && !composerInstalled(name) {
+	for _, module := range appConfig.ComposerDeps {
+		if module.Enabled && !composerInstalled(module.Name) {
 			var appParam string
 
 			if module.Version == "" {
-				appParam = name
+				appParam = module.Name
 			} else {
-				appParam = fmt.Sprintf("%s:%s", name, module.Version)
+				appParam = fmt.Sprintf("%s:%s", module.Name, module.Version)
 			}
 
 			if module.Dev {

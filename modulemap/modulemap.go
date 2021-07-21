@@ -8,6 +8,7 @@ import (
 )
 
 type Module struct {
+	Name            string     `json:",omitempty"`
 	Dev             bool       `json:"-"`
 	Enabled         bool       `json:",omitempty"`
 	Hidden          bool       `json:"-"`
@@ -20,7 +21,26 @@ func (module *Module) WriteAnswer(name string, value interface{}) error {
 	return nil
 }
 
+func (modules ModuleSlice) WriteAnswer(name string, value interface{}) error {
+	for _, module := range modules {
+		module.Enabled = false
+	}
+
+	options := value.([]core.OptionAnswer)
+	for _, option := range options {
+		for _, module := range modules {
+			if module.Name == option.Value {
+				module.Enabled = true
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 type ModuleMap map[string]*Module
+type ModuleSlice []*Module
 
 func (modules ModuleMap) ToOptionsSlice() []string {
 	result := make([]string, 0, len(modules))

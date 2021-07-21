@@ -2,14 +2,15 @@ package defaults
 
 import "github.com/clevyr/scaffold/modulemap"
 
-var ComposerDeps = modulemap.ModuleMap{
-	"laravel/jetstream": {
+var ComposerDeps = []*modulemap.Module{
+	{
+		Name:    "laravel/jetstream",
 		Enabled: true,
 		PostInstallCmds: [][]string{
 			{"php", "artisan", "jetstream:install", "inertia", "--teams"},
 		},
-	},
-	"laravel/telescope": {
+	}, {
+		Name:    "laravel/telescope",
 		Enabled: true,
 		PostInstallCmds: [][]string{
 			{
@@ -19,21 +20,28 @@ var ComposerDeps = modulemap.ModuleMap{
 			},
 			{"php", "artisan", "telescope:install"},
 		},
-	},
-	"joelbutcher/socialstream": {
+	}, {
+		Name:    "joelbutcher/socialstream",
 		Enabled: true,
 		PostInstallCmds: [][]string{
 			{"php", "artisan", "socialstream:install"},
 		},
-	},
-	"laravel/nova": {
+	}, {
+		Name: "laravel/nova",
 		PostInstallCmds: [][]string{
 			{"mkdir", "-p", "nova-components"},
 			{"php", "artisan", "nova:install"},
 		},
+	}, {
+		Name: "backpack/crud",
+	}, {
+		Name: "clevyr/backpack-page-builder",
+	}, {
+		Name: "superbalist/laravel-google-cloud-storage",
+	}, {
+		Name:    "nunomaduro/larastan",
+		Dev:     true,
+		Enabled: true,
+		Hidden:  true,
 	},
-	"backpack/crud":                            {},
-	"clevyr/backpack-page-builder":             {},
-	"superbalist/laravel-google-cloud-storage": {},
-	"nunomaduro/larastan":                      {Dev: true, Enabled: true, Hidden: true},
 }
