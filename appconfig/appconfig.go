@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/clevyr/scaffold/appconfig/defaults"
-	"github.com/clevyr/scaffold/modulemap"
+	"github.com/clevyr/scaffold/module"
 )
 
 type AppConfig struct {
@@ -15,9 +15,9 @@ type AppConfig struct {
 	AppSlug       string `json:"-"`
 	AppKey        string
 	Database      string
-	PhpModules    modulemap.ModuleMap
+	PhpModules    module.ModuleMap
 	AdminGen      string
-	ComposerDeps  modulemap.ModuleSlice
+	ComposerDeps  module.ModuleSlice
 	MaxUploadSize string
 }
 

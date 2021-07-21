@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"regexp"
-	"sort"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/clevyr/scaffold/appconfig"
@@ -74,25 +73,10 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	// Composer
 	appConfig.EnableSelectedAdminGen()
 
-	composerOptions := make([]string, 0, len(appConfig.ComposerDeps))
-	composerDefaults := make([]string, 0, len(appConfig.ComposerDeps))
-
-	for _, module := range appConfig.ComposerDeps {
-		if !module.Hidden {
-			composerOptions = append(composerOptions, module.Name)
-		}
-
-		if module.Enabled {
-			composerDefaults = append(composerDefaults, module.Name)
-		}
-	}
-
-	sort.Strings(composerOptions)
-
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose Composer dependencies to preinstall:",
-		Options: composerOptions,
-		Default: composerDefaults,
+		Options: appConfig.ComposerDeps.ToOptionsSlice(),
+		Default: appConfig.ComposerDeps.ToDefaultSlice(),
 	}, &appConfig.ComposerDeps)
 	if err != nil {
 		return

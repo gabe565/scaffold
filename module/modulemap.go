@@ -1,4 +1,4 @@
-package modulemap
+package module
 
 import (
 	"encoding/json"
@@ -7,40 +7,7 @@ import (
 	"github.com/AlecAivazis/survey/v2/core"
 )
 
-type Module struct {
-	Name            string     `json:",omitempty"`
-	Dev             bool       `json:"-"`
-	Enabled         bool       `json:",omitempty"`
-	Hidden          bool       `json:"-"`
-	Version         string     `json:",omitempty"`
-	PostInstallCmds [][]string `json:",omitempty"`
-}
-
-func (module *Module) WriteAnswer(name string, value interface{}) error {
-	module.Enabled = value.(bool)
-	return nil
-}
-
-func (modules ModuleSlice) WriteAnswer(name string, value interface{}) error {
-	for _, module := range modules {
-		module.Enabled = false
-	}
-
-	options := value.([]core.OptionAnswer)
-	for _, option := range options {
-		for _, module := range modules {
-			if module.Name == option.Value {
-				module.Enabled = true
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
 type ModuleMap map[string]*Module
-type ModuleSlice []*Module
 
 func (modules ModuleMap) ToOptionsSlice() []string {
 	result := make([]string, 0, len(modules))

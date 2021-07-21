@@ -1,8 +1,8 @@
 package defaults
 
-import "github.com/clevyr/scaffold/modulemap"
+import "github.com/clevyr/scaffold/module"
 
-var ComposerDeps = []*modulemap.Module{
+var ComposerDeps = module.ModuleSlice{
 	{
 		Name:    "laravel/jetstream",
 		Enabled: true,
