@@ -1,22 +1,11 @@
-package modulemap
+package module
 
 import (
 	"encoding/json"
-	"github.com/AlecAivazis/survey/v2/core"
 	"sort"
+
+	"github.com/AlecAivazis/survey/v2/core"
 )
-
-type Module struct {
-	Dev     bool   `json:"-"`
-	Enabled bool   `json:",omitempty"`
-	Hidden  bool   `json:"-"`
-	Version string `json:",omitempty"`
-}
-
-func (module *Module) WriteAnswer(name string, value interface{}) error {
-	module.Enabled = value.(bool)
-	return nil
-}
 
 type ModuleMap map[string]*Module
 

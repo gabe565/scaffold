@@ -4,8 +4,9 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+
 	"github.com/clevyr/scaffold/appconfig/defaults"
-	"github.com/clevyr/scaffold/modulemap"
+	"github.com/clevyr/scaffold/module"
 )
 
 type AppConfig struct {
@@ -14,16 +15,16 @@ type AppConfig struct {
 	AppSlug       string `json:"-"`
 	AppKey        string
 	Database      string
-	PhpModules    modulemap.ModuleMap
+	PhpModules    module.ModuleMap
 	AdminGen      string
-	ComposerDeps  modulemap.ModuleMap
+	ComposerDeps  module.ModuleSlice
 	MaxUploadSize string
 }
 
 var Defaults = AppConfig{
 	Database:      "PostgreSQL",
 	PhpModules:    defaults.PhpModules,
-	AdminGen:      "None",
+	AdminGen:      "Nova",
 	ComposerDeps:  defaults.ComposerDeps,
 	MaxUploadSize: "64m",
 }
@@ -59,12 +60,18 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 func (appConfig *AppConfig) EnableSelectedAdminGen() {
 	switch appConfig.AdminGen {
 	case "Nova":
-		if module, ok := (*appConfig).ComposerDeps["laravel/nova"]; ok {
-			module.Enabled = true
+		for _, module := range (*appConfig).ComposerDeps {
+			if module.Name == "laravel/nova" {
+				module.Enabled = true
+				break
+			}
 		}
 	case "Backpack":
-		if module, ok := (*appConfig).ComposerDeps["backpack/crud"]; ok {
-			module.Enabled = true
+		for _, module := range (*appConfig).ComposerDeps {
+			if module.Name == "backpack/crud" {
+				module.Enabled = true
+				break
+			}
 		}
 	}
 }

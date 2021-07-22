@@ -3,11 +3,12 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
+	"regexp"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/huandu/xstrings"
-	"os"
-	"regexp"
 )
 
 var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
@@ -17,7 +18,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	err = survey.AskOne(&survey.Input{
 		Message: "Enter the application name that should be shown to the user.",
 		Default: appConfig.AppName,
-		Help: "Enter the application's name space-separated and capitalized. A slug will be generated to match.",
+		Help:    "Enter the application's name space-separated and capitalized. A slug will be generated to match.",
 	}, &appConfig.AppName, survey.WithValidator(survey.Required))
 	if err != nil {
 		return
@@ -71,6 +72,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 
 	// Composer
 	appConfig.EnableSelectedAdminGen()
+
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose Composer dependencies to preinstall:",
 		Options: appConfig.ComposerDeps.ToOptionsSlice(),

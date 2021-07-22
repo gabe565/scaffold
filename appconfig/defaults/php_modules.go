@@ -1,8 +1,8 @@
 package defaults
 
-import "github.com/clevyr/scaffold/modulemap"
+import "github.com/clevyr/scaffold/module"
 
-var PhpModules = modulemap.ModuleMap{
+var PhpModules = module.ModuleMap{
 	"bcmath":    {},
 	"calendar":  {},
 	"exif":      {},

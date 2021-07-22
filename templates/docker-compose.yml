@@ -48,6 +48,14 @@ services:
     restart: unless-stopped
     volumes:
       - database:/var/lib/postgresql/data
+
+  database_test:
+    environment:
+        POSTGRES_USER: "$DB_USERNAME"
+        POSTGRES_PASSWORD: "$DB_PASSWORD"
+        POSTGRES_DB: "$DB_DATABASE"
+    image: postgres:12-alpine
+    restart: unless-stopped
   {{- else if eq .Database "MariaDB" -}}
   database:
     environment:
@@ -61,6 +69,15 @@ services:
     restart: unless-stopped
     volumes:
       - database:/var/lib/mysql
+
+  database_test:
+    environment:
+      MYSQL_DATABASE: "$DB_DATABASE"
+      MYSQL_USER: "$DB_USER"
+      MYSQL_PASSWORD: "$DB_PASSWORD"
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+    image: mariadb:10
+    restart: unless-stopped
   {{- end }}
 
   hot:
