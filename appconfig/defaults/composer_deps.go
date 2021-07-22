@@ -35,6 +35,12 @@ var ComposerDeps = module.ModuleSlice{
 			{"php", "artisan", "nova:install"},
 		},
 	}, {
+		Name:    "laravel/spark-paddle",
+		Enabled: true,
+		PostInstallCmds: [][]string{
+			{"php", "artisan", "spark:install"},
+		},
+	}, {
 		Name: "backpack/crud",
 	}, {
 		Name: "clevyr/backpack-page-builder",
