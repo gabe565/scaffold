@@ -13,6 +13,7 @@ var ComposerDeps = module.ModuleSlice{
 	}, {
 		Name:    "laravel/telescope",
 		Enabled: true,
+		Version: "4.6.0",
 		PostInstallCmds: [][]string{
 			{
 				"cp",
@@ -26,11 +27,13 @@ var ComposerDeps = module.ModuleSlice{
 	}, {
 		Name:    "joelbutcher/socialstream",
 		Enabled: true,
+		Version: "3.1.3",
 		PostInstallCmds: [][]string{
 			{"php", "artisan", "socialstream:install"},
 		},
 	}, {
-		Name: "laravel/nova",
+		Name:    "laravel/nova",
+		Version: "3.27.0",
 		PostInstallCmds: [][]string{
 			{"mkdir", "-p", "nova-components"},
 			{"php", "artisan", "nova:install"},
@@ -38,6 +41,7 @@ var ComposerDeps = module.ModuleSlice{
 	}, {
 		Name:    "laravel/spark-paddle",
 		Enabled: true,
+		Version: "1.1.5",
 		PostInstallCmds: [][]string{
 			{"php", "artisan", "spark:install"},
 		},
