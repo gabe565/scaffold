@@ -69,7 +69,7 @@ func main() {
 		panic(err)
 	}
 
-	err = generateTemplate(appConfig, "/templates/before")
+	err = generateTemplate(appConfig, "before")
 	if err != nil {
 		panic(err)
 	}
@@ -84,7 +84,7 @@ func main() {
 		panic(err)
 	}
 
-	err = generateTemplate(appConfig, "/templates/after")
+	err = generateTemplate(appConfig, "after")
 	if err != nil {
 		panic(err)
 	}

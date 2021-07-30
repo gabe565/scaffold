@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -11,8 +12,16 @@ import (
 	"github.com/markbates/pkger"
 )
 
+const templateRoot = "/templates"
+
+func init() {
+	// Include templates dir to fix dynamic paths not discovered by pkger
+	_ = pkger.Include(templateRoot)
+}
+
 func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err error) {
-	println("Templating and scaffolding")
+	fmt.Printf("Processing templates: %s\n", templateDir)
+	templateDir = path.Join(templateRoot, templateDir)
 
 	functions := template.FuncMap{
 		"upper": strings.ToUpper,
