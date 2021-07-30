@@ -1,18 +1,17 @@
 package main
 
 import (
-	"github.com/clevyr/scaffold/appconfig"
-	"github.com/markbates/pkger"
 	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 	"text/template"
+
+	"github.com/clevyr/scaffold/appconfig"
+	"github.com/markbates/pkger"
 )
 
-const templateDir = "/templates"
-
-func generateTemplate(appConfig appconfig.AppConfig) (err error) {
+func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err error) {
 	println("Templating and scaffolding")
 
 	functions := template.FuncMap{

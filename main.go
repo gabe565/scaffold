@@ -4,10 +4,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/AlecAivazis/survey/v2/terminal"
-	"github.com/clevyr/scaffold/appconfig"
 	"os"
 	"path"
+
+	"github.com/AlecAivazis/survey/v2/terminal"
+	"github.com/clevyr/scaffold/appconfig"
 )
 
 func main() {
@@ -67,13 +68,23 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
-	err = generateTemplate(appConfig)
+
+	err = generateTemplate(appConfig, "/templates/before")
 	if err != nil {
 		panic(err)
 	}
 
 	err = composerRequire(appConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	err = npmInstallDeps(appConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	err = generateTemplate(appConfig, "/templates/after")
 	if err != nil {
 		panic(err)
 	}

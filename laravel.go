@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/clevyr/scaffold/appconfig"
-	"github.com/clevyr/scaffold/iexec"
 	"io/ioutil"
 	"os"
+
+	"github.com/clevyr/scaffold/appconfig"
+	"github.com/clevyr/scaffold/iexec"
 )
 
 func initLaravel(appConfig appconfig.AppConfig) (err error) {
@@ -34,15 +35,30 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		}
 
 		composer["name"] = fmt.Sprintf("clevyr/%s", appConfig.AppSlug)
+		repositories := []map[string]string{}
 
-		if appConfig.AdminGen == "Nova" {
-			composer["repositories"] = []map[string]string{
-				{
+		for _, module := range appConfig.ComposerDeps {
+			if !module.Enabled {
+				continue
+			}
+
+			if module.Name == "laravel/spark-paddle" || module.Name == "laravel/spark-stripe" {
+				repositories = append(repositories, map[string]string{
 					"type": "composer",
-					"url":  "https://nova.laravel.com",
-				},
+					"url":  "https://spark.laravel.com",
+				})
+				break
 			}
 		}
+
+		if appConfig.AdminGen == "Nova" {
+			repositories = append(repositories, map[string]string{
+				"type": "composer",
+				"url":  "https://nova.laravel.com",
+			})
+		}
+
+		composer["repositories"] = repositories
 
 		err = saveComposerJson(composer)
 		if err != nil {
