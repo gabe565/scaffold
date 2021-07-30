@@ -82,6 +82,15 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		return
 	}
 
+	err = survey.AskOne(&survey.MultiSelect{
+		Message: "Choose NPM dependencies to preinstall:",
+		Options: appConfig.NpmDeps.ToOptionsSlice(),
+		Default: appConfig.NpmDeps.ToDefaultSlice(),
+	}, &appConfig.NpmDeps)
+	if err != nil {
+		return
+	}
+
 	// Max Upload Size
 	err = survey.AskOne(
 		&survey.Input{

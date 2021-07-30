@@ -79,6 +79,11 @@ func main() {
 		panic(err)
 	}
 
+	err = npmInstallDeps(appConfig)
+	if err != nil {
+		panic(err)
+	}
+
 	err = generateTemplate(appConfig, "/templates/after")
 	if err != nil {
 		panic(err)

@@ -18,6 +18,7 @@ type AppConfig struct {
 	PhpModules    module.ModuleMap
 	AdminGen      string
 	ComposerDeps  module.ModuleSlice
+	NpmDeps       module.ModuleSlice
 	MaxUploadSize string
 }
 
@@ -26,6 +27,7 @@ var Defaults = AppConfig{
 	PhpModules:    defaults.PhpModules,
 	AdminGen:      "Nova",
 	ComposerDeps:  defaults.ComposerDeps,
+	NpmDeps:       defaults.NpmDeps,
 	MaxUploadSize: "64m",
 }
 
