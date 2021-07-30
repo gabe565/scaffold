@@ -8,7 +8,7 @@ var ComposerDeps = module.ModuleSlice{
 		Enabled: true,
 		Version: "2.3.11",
 		PostInstallCmds: [][]string{
-			{"php", "artisan", "jetstream:install", "inertia"},
+			{"php", "artisan", "jetstream:install", "inertia", "--teams"},
 		},
 	}, {
 		Name:    "laravel/telescope",
