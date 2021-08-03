@@ -46,6 +46,12 @@ var ComposerDeps = module.ModuleSlice{
 			{"php", "artisan", "spark:install"},
 		},
 	}, {
+		Name:    "clevyr/nova-page-builder",
+		Enabled: true,
+		PostInstallCmds: [][]string{
+			{"php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"},
+		},
+	}, {
 		Name: "backpack/crud",
 	}, {
 		Name: "clevyr/backpack-page-builder",
