@@ -40,6 +40,10 @@ brews:
 dockers:
   - dockerfile: Dockerfile.goreleaser
     image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:latest
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Major }}
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}
       - clevyr/{{ .ProjectName }}:latest
       - clevyr/{{ .ProjectName }}:{{ .Version }}
       - clevyr/{{ .ProjectName }}:{{ .Major }}

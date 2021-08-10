@@ -37,11 +37,11 @@ The Docker repo is located at [clevyr/scaffold](https://hub.docker.com/r/clevyr/
 To scaffold a Laravel application, `cd` to the desired parent directory then run:
 
 ```sh
-docker run --rm -it -v "$PWD:/data" clevyr/scaffold
+docker run --rm -it -v "$PWD:/data" ghcr.io/clevyr/scaffold
 ```
 
 #### Upgrade
 
 ```sh
-docker pull clevyr/scaffold
+docker pull ghcr.io/clevyr/scaffold
 ```
