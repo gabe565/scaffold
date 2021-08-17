@@ -1,4 +1,7 @@
-FROM golang:1-alpine as builder
+ARG GO_VERSION=1
+ARG PHP_VERSION=8.0
+
+FROM golang:$GO_VERSION-alpine as builder
 
 WORKDIR /app
 
@@ -17,13 +20,10 @@ RUN set -x \
     && go generate \
     && go build -ldflags="-w -s"
 
-FROM composer:2
 
-WORKDIR /app
-
+FROM php:$PHP_VERSION-alpine
+WORKDIR /data
 RUN apk add --no-cache npm
-
-ENV PATH="/app:$PATH"
-
-COPY --from=builder /app/scaffold .
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=builder /app/scaffold /usr/local/bin
 CMD ["scaffold"]
