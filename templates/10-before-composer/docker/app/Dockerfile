@@ -70,11 +70,8 @@ ARG ENV=local
 
 RUN set -x \
     && if [ "$ENV" != "local" ]; then \
-        node_modules/webpack/bin/webpack.js \
-            --no-progress \
-            --hide-modules \
-            --config=node_modules/laravel-mix/setup/webpack.config.js; \
-    fi
+        npm run production \
+    ; fi
 
 # Final Image
 FROM clevyr/php:$PHP_VERSION
