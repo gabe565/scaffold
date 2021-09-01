@@ -22,6 +22,7 @@ services:
         NODE_ENV: development
       context: .
       dockerfile: docker/app/Dockerfile
+      target: local-image
 
   worker:
     <<: *app

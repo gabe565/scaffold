@@ -1,30 +1,27 @@
 ARG PHP_VERSION=8.0
-{{ range $key, $module := .PhpModules -}}
+{{- range $key, $module := .PhpModules }}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
-{{ end }}
-
+{{- end }}
 ARG PHP_UPLOAD_MAX_FILESIZE {{ .MaxUploadSize }}
 ARG PHP_POST_MAX_SIZE {{ .MaxUploadSize }}
 
-# Backend Builder
-FROM composer:2 as php-builder
 
+# Backend build
+FROM composer:2 as php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock{{ if eq .AdminGen "Nova" }} auth.json{{ end }} ./
 {{- if eq .AdminGen "Nova" }}
 COPY nova-components/ nova-components/
 {{- end }}
-
-RUN set -x \
-    && composer install \
+RUN composer install \
         --ignore-platform-reqs \
         --no-autoloader \
         --no-interaction \
         --no-progress \
         --no-suggest
 
-COPY . ./
+COPY . .
 RUN set -x \
     && export TELESCOPE_ENABLED=false \
     && composer dump-autoload \
@@ -35,9 +32,9 @@ RUN set -x \
     {{- end }}
     && php artisan vendor:publish --tag=public
 
-# Frontend Builder
-FROM node:lts-alpine as node-builder
 
+# Frontend build
+FROM node:lts-alpine as node-builder
 WORKDIR /app
 
 RUN set -x \
@@ -58,9 +55,7 @@ RUN set -x \
         nasm
 
 COPY artisan package.json package-lock.json webpack.mix.js ./
-
-RUN set -x \
-    && npm ci
+RUN npm ci
 
 COPY public/ public/
 COPY resources/ resources/
@@ -68,21 +63,21 @@ COPY resources/ resources/
 ARG NODE_ENV=production
 ARG ENV=local
 
-RUN set -x \
-    && if [ "$ENV" != "local" ]; then \
-        npm run production \
-    ; fi
+RUN npm run production
 
-# Final Image
-FROM clevyr/php:$PHP_VERSION
 
+# Local image
+FROM clevyr/php:$PHP_VERSION as local-image
 WORKDIR /app
 
 COPY --chown=root docker/app/rootfs /
-
 RUN crontab /etc/cron.d/scheduler
+
+CMD ["s6-svscan", "/etc/s6/app"]
+
+
+# Deployed image
+FROM local-image
 
 COPY --from=php-builder --chown=82:82 /app .
 COPY --from=node-builder --chown=82:82 /app/public public/
-
-CMD ["s6-svscan", "/etc/s6/app"]
