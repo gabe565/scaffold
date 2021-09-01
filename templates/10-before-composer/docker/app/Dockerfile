@@ -57,6 +57,7 @@ RUN set -x \
 COPY artisan package.json package-lock.json webpack.mix.js ./
 RUN npm ci
 
+COPY .eslintrc tailwind.config.js webpack.config.js .
 COPY public/ public/
 COPY resources/ resources/
 
