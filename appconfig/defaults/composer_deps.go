@@ -46,6 +46,16 @@ var ComposerDeps = module.ModuleSlice{
 			{"php", "artisan", "spark:install"},
 		},
 	}, {
+		Name:    "clevyr/nova-page-builder",
+		Enabled: true,
+		PostInstallCmds: [][]string{
+			{"php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"},
+		},
+	}, {
+		Name:    "ukfast/laravel-health-check",
+		Enabled: true,
+		Version: "1.13.0",
+	}, {
 		Name: "backpack/crud",
 	}, {
 		Name: "clevyr/backpack-page-builder",
