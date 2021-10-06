@@ -73,13 +73,19 @@ func readFile(filename string) (string, error) {
 		return "", err
 	}
 
-	b, err := ioutil.ReadAll(f)
+	defer f.Close()
+
+	stat, err := f.Stat()
 	if err != nil {
-		f.Close()
 		return "", err
 	}
 
-	if err = f.Close(); err != nil {
+	if stat.Size() == 0 {
+		return "", nil
+	}
+
+	b, err := ioutil.ReadAll(f)
+	if err != nil {
 		return "", err
 	}
 
