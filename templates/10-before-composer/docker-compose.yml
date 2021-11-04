@@ -29,7 +29,7 @@ services:
     command: ["s6-svscan", "/etc/s6/worker"]
 
   proxy:
-    image: clevyr/caddy
+    image: ghcr.io/clevyr/caddy
     ports:
       - 80:80
       - 443:443
@@ -97,7 +97,7 @@ services:
     restart: unless-stopped
 
   mail:
-    image: clevyr/mailhog
+    image: ghcr.io/clevyr/mailhog
     ports:
       - 127.0.0.1:25:25
     restart: unless-stopped

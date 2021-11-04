@@ -68,7 +68,7 @@ RUN npm run production
 
 
 # Local image
-FROM clevyr/php:$PHP_VERSION as local-image
+FROM ghcr.io/clevyr/php:$PHP_VERSION as local-image
 WORKDIR /app
 
 COPY --chown=root docker/app/rootfs /
