@@ -8,7 +8,7 @@ ARG PHP_POST_MAX_SIZE {{ .MaxUploadSize }}
 
 
 # Backend build
-FROM composer:2 as php-builder
+FROM composer:2.0 as php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock{{ if eq .AdminGen "Nova" }} auth.json{{ end }} ./
