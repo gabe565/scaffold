@@ -45,9 +45,6 @@ jobs:
           go-version: ^1.14
         id: go
 
-      - name: Install pkger
-        run: go get github.com/markbates/pkger/cmd/pkger
-
       - name: Upgrade UPX
         run: brew install upx
 

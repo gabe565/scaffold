@@ -1,49 +1,51 @@
 package main
 
 import (
+	"embed"
 	"fmt"
-	"io/ioutil"
+	"io/fs"
 	"os"
 	"path"
 	"strings"
 	"text/template"
 
 	"github.com/clevyr/scaffold/appconfig"
-	"github.com/markbates/pkger"
 )
 
-const templateRoot = "/templates"
-
-func init() {
-	// Include templates dir to fix dynamic paths not discovered by pkger
-	_ = pkger.Include(templateRoot)
-}
+//go:embed templates
+var templates embed.FS
 
 func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err error) {
 	fmt.Printf("Processing templates: %s\n", templateDir)
-	templateDir = path.Join(templateRoot, templateDir)
 
 	functions := template.FuncMap{
 		"upper": strings.ToUpper,
 	}
 
-	err = pkger.Walk(templateDir, func(filepath string, info os.FileInfo, err error) error {
+	err = fs.WalkDir(templates, path.Join("templates", templateDir), func(filepath string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 
+		contents, err := templates.Open(filepath)
+		if err != nil {
+			return err
+		}
+
+		info, err := contents.Stat()
+		if err != nil {
+			return err
+		}
+
+		basename := path.Base(filepath)
+
 		if info.Mode().IsRegular() {
-			contents, err := readFile(filepath)
+			tmpl, err := template.New(basename).Funcs(functions).ParseFS(templates, filepath)
 			if err != nil {
 				return err
 			}
 
 			outputPath := buildOutputPath(filepath, templateDir)
-			tmpl, err := template.New(outputPath).Funcs(functions).Parse(contents)
-			if err != nil {
-				return err
-			}
-
 			if err = os.MkdirAll(path.Dir(outputPath), os.ModePerm); err != nil {
 				return err
 			}
@@ -53,7 +55,7 @@ func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err er
 				return err
 			}
 
-			if err = tmpl.Execute(f, appConfig); err != nil {
+			if err = tmpl.ExecuteTemplate(f, basename, appConfig); err != nil {
 				_ = f.Close()
 				return err
 			}
@@ -65,31 +67,6 @@ func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err er
 	})
 
 	return
-}
-
-func readFile(filename string) (string, error) {
-	f, err := pkger.Open(filename)
-	if err != nil {
-		return "", err
-	}
-
-	defer f.Close()
-
-	stat, err := f.Stat()
-	if err != nil {
-		return "", err
-	}
-
-	if stat.Size() == 0 {
-		return "", nil
-	}
-
-	b, err := ioutil.ReadAll(f)
-	if err != nil {
-		return "", err
-	}
-
-	return string(b), err
 }
 
 func buildOutputPath(filepath string, templateDir string) string {

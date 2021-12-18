@@ -1,4 +1,3 @@
-//go:generate pkger
 package main
 
 import (

@@ -1,6 +1,5 @@
 .idea
 dist
 out
-pkged.go
 scaffold
 vendor

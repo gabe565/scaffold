@@ -5,11 +5,6 @@ FROM golang:$GO_VERSION-alpine as builder
 
 WORKDIR /app
 
-RUN set -x \
-    && apk add --no-cache \
-        git \
-    && go get github.com/markbates/pkger/cmd/pkger
-
 COPY go.mod go.sum .
 RUN go mod download
 
