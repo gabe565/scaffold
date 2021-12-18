@@ -1,4 +1,5 @@
 ARG PHP_VERSION=8.0
+ARG NODE_VERSION=16
 {{- range $key, $module := .PhpModules }}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{- end }}
@@ -34,7 +35,7 @@ RUN set -x \
 
 
 # Frontend build
-FROM node:lts-alpine as node-builder
+FROM node:$NODE_VERSION-alpine as node-builder
 WORKDIR /app
 
 RUN set -x \
