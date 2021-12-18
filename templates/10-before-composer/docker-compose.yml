@@ -52,9 +52,9 @@ services:
 
   database_test:
     environment:
-        POSTGRES_USER: "$DB_USERNAME"
-        POSTGRES_PASSWORD: "$DB_PASSWORD"
-        POSTGRES_DB: "$DB_DATABASE"
+      POSTGRES_USER: "$DB_USERNAME"
+      POSTGRES_PASSWORD: "$DB_PASSWORD"
+      POSTGRES_DB: "$DB_DATABASE"
     image: postgres:12-alpine
     restart: unless-stopped
   {{- else if eq .Database "MariaDB" -}}
@@ -79,12 +79,12 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
     image: mariadb:10
     restart: unless-stopped
-  {{- end }}
+  { { - end } }
 
   hot:
     build: docker/hot
     env_file:
-        - .env
+      - .env
     image: clevyr/{{ .AppSlug }}/hot-reloader
     restart: unless-stopped
     volumes:
