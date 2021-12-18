@@ -10,7 +10,7 @@ RUN set -x \
         git \
     && go get github.com/markbates/pkger/cmd/pkger
 
-COPY go.mod .
+COPY go.mod go.sum .
 RUN go mod download
 
 ARG GOOS=linux
