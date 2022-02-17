@@ -76,7 +76,7 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
     image: mariadb:10
     restart: unless-stopped
-  { { - end } }
+  {{- end }}
 
   hot:
     build: docker/hot
