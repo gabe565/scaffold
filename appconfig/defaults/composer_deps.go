@@ -33,6 +33,7 @@ var ComposerDeps = module.ModuleSlice{
 		},
 	}, {
 		Name:    "laravel/nova",
+		Enabled: true,
 		Version: "3.31.0",
 		PostInstallCmds: [][]string{
 			{"mkdir", "-p", "nova-components"},

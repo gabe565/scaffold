@@ -31,6 +31,16 @@ var Defaults = AppConfig{
 	MaxUploadSize: "64m",
 }
 
+func (ac AppConfig) HasComposerDep(name string) bool {
+	for _, module := range ac.ComposerDeps {
+		if module.Name == name && module.Enabled == true {
+			return true
+		}
+	}
+
+	return false
+}
+
 const configFilePath = ".clevyr-scaffold-config"
 
 func (appConfig *AppConfig) GenerateAppKey() (err error) {
