@@ -47,13 +47,13 @@ var ComposerDeps = module.ModuleSlice{
 		},
 	}, {
 		Name:    "clevyr/nova-page-builder",
-		Enabled: true,
+		Enabled: false,
 		PostInstallCmds: [][]string{
 			{"php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"},
 		},
 	}, {
 		Name:    "ukfast/laravel-health-check",
-		Enabled: true,
+		Enabled: false,
 		Version: "1.13.0",
 	}, {
 		Name: "backpack/crud",
