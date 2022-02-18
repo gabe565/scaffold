@@ -60,18 +60,20 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		return
 	}
 
-	// Admin Gen
+	// Jetstream Gen
 	err = survey.AskOne(&survey.Select{
-		Message: "Choose which admin generator to include:",
-		Options: []string{"None", "Nova", "Backpack"},
-		Default: appConfig.AdminGen,
-	}, &appConfig.AdminGen)
+		Message: "Do you want to use Jetstream with or without teams? 'Teams' are " +
+			"Jetstream's built-in single layer of tenancy. If you are unsure, " +
+			"then you likely don't need teams.",
+		Options: []string{"No Teams", "With Teams"},
+		Default: appConfig.JetstreamGen,
+	}, &appConfig.JetstreamGen)
 	if err != nil {
 		return
 	}
 
 	// Composer
-	appConfig.EnableSelectedAdminGen()
+	appConfig.EnableSelectedJetstreamGen()
 
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose Composer dependencies to preinstall:",

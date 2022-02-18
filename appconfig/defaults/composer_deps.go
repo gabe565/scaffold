@@ -56,10 +56,6 @@ var ComposerDeps = module.ModuleSlice{
 		Enabled: false,
 		Version: "1.13.0",
 	}, {
-		Name: "backpack/crud",
-	}, {
-		Name: "clevyr/backpack-page-builder",
-	}, {
 		Name: "superbalist/laravel-google-cloud-storage",
 	}, {
 		Name:    "nunomaduro/larastan",

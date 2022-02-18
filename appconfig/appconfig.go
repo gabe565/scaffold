@@ -16,7 +16,7 @@ type AppConfig struct {
 	AppKey        string
 	Database      string
 	PhpModules    module.ModuleMap
-	AdminGen      string
+	JetstreamGen  string
 	ComposerDeps  module.ModuleSlice
 	NpmDeps       module.ModuleSlice
 	MaxUploadSize string
@@ -25,7 +25,7 @@ type AppConfig struct {
 var Defaults = AppConfig{
 	Database:      "PostgreSQL",
 	PhpModules:    defaults.PhpModules,
-	AdminGen:      "Nova",
+	JetstreamGen:  "No Teams",
 	ComposerDeps:  defaults.ComposerDeps,
 	NpmDeps:       defaults.NpmDeps,
 	MaxUploadSize: "64m",
@@ -59,20 +59,15 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 	}
 }
 
-func (appConfig *AppConfig) EnableSelectedAdminGen() {
-	switch appConfig.AdminGen {
-	case "Nova":
-		for _, module := range (*appConfig).ComposerDeps {
-			if module.Name == "laravel/nova" {
-				module.Enabled = true
-				break
-			}
-		}
-	case "Backpack":
-		for _, module := range (*appConfig).ComposerDeps {
-			if module.Name == "backpack/crud" {
-				module.Enabled = true
-				break
+func (appConfig *AppConfig) EnableSelectedJetstreamGen() {
+	for _, module := range (*appConfig).ComposerDeps {
+		if module.Name == "laravel/jetstream" {
+			switch appConfig.JetstreamGen {
+			case "No Teams":
+				// Do nothing
+			case "With Teams":
+				// Append Jetstream's post install command with the '--teams' modifier
+				module.PostInstallCmds[0] = append(module.PostInstallCmds[0], "--teams")
 			}
 		}
 	}

@@ -37,6 +37,11 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		composer["name"] = fmt.Sprintf("clevyr/%s", appConfig.AppSlug)
 		repositories := []map[string]string{}
 
+		repositories = append(repositories, map[string]string{
+			"type": "composer",
+			"url":  "https://nova.laravel.com",
+		})
+
 		for _, module := range appConfig.ComposerDeps {
 			if !module.Enabled {
 				continue
@@ -49,13 +54,6 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 				})
 				break
 			}
-		}
-
-		if appConfig.AdminGen == "Nova" {
-			repositories = append(repositories, map[string]string{
-				"type": "composer",
-				"url":  "https://nova.laravel.com",
-			})
 		}
 
 		composer["repositories"] = repositories
