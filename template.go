@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"fmt"
 	"io/fs"
 	"os"
@@ -11,9 +10,6 @@ import (
 
 	"github.com/clevyr/scaffold/appconfig"
 )
-
-//go:embed templates
-var templates embed.FS
 
 func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err error) {
 	fmt.Printf("Processing templates: %s\n", templateDir)

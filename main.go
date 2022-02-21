@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
-	"path"
-
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/clevyr/scaffold/appconfig"
+	"os"
+	"path"
 )
+
+//go:generate go run internal/generators/template_embed.go
 
 func main() {
 	var err error
