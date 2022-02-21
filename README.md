@@ -6,17 +6,17 @@ When you run the scaffold, you will be asked some questions to determine the set
 generated and output. Your responses will be saved to `.clevyr-scaffold-config` so that they can be loaded as default
 values if the scaffold is run in that repository in the future.
 
-### Running Locally
+## Running Locally
 
 To install the command locally on your host, make sure you have [Homebrew](https://brew.sh/) first.
 
-#### Install
+### Install
 
 ```sh
 brew install clevyr/tap/scaffold
 ```
 
-#### Usage
+### Usage
 
 To scaffold a Laravel application, `cd` to the desired parent directory then run:
 
@@ -24,18 +24,18 @@ To scaffold a Laravel application, `cd` to the desired parent directory then run
 scaffold
 ```
 
-#### Upgrade
+### Upgrade
 
 ```sh
 brew update && brew upgrade clevyr/tap/scaffold
 ```
 
-### Running in Docker
+## Running in Docker
 
 The Docker repo is located at [clevyr/scaffold](https://hub.docker.com/r/clevyr/scaffold). Docker will pull the image
 the first time you run the command below.
 
-#### Usage
+### Usage
 
 To scaffold a Laravel application, `cd` to the desired parent directory then run:
 
@@ -43,7 +43,7 @@ To scaffold a Laravel application, `cd` to the desired parent directory then run
 docker run --rm -it -v "$PWD:/data" ghcr.io/clevyr/scaffold
 ```
 
-#### Upgrade
+### Upgrade
 
 ```sh
 docker pull ghcr.io/clevyr/scaffold
