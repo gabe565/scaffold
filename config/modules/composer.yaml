@@ -1,6 +1,7 @@
 laravel/jetstream:
   enabled: true
   version: "2.3.11"
+  priority: 100
   then:
     - run: ["php", "artisan", "jetstream:install", "inertia", "--teams"]
 

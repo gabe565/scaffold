@@ -19,6 +19,11 @@
         "version": {
           "type": "string"
         },
+        "priority": {
+          "type": "number",
+          "minimum": -127,
+          "maximum": 127
+        },
         "then": {
           "type": "array",
           "items": {

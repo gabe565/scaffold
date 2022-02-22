@@ -2,15 +2,17 @@ package module
 
 import (
 	"github.com/clevyr/scaffold/iexec"
+	"path/filepath"
 )
 
 type Module struct {
-	Name    string         `json:"name,omitempty"`
-	Dev     bool           `json:"dev,omitempty"`
-	Enabled bool           `json:"enabled,omitempty"`
-	Hidden  bool           `json:"hidden,omitempty"`
-	Version string         `json:"version,omitempty"`
-	Then    []ActionsUnion `json:"then,omitempty"`
+	Name     string         `json:"-"`
+	Dev      bool           `json:"dev,omitempty"`
+	Enabled  bool           `json:"enabled,omitempty"`
+	Hidden   bool           `json:"hidden,omitempty"`
+	Version  string         `json:"version,omitempty"`
+	Priority int8           `json:"priority,omitempty"`
+	Then     []ActionsUnion `json:"then,omitempty"`
 }
 
 func (module *Module) WriteAnswer(name string, value interface{}) error {

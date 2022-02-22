@@ -1,7 +1,7 @@
 package module
 
 import (
-	"encoding/json"
+	"gopkg.in/yaml.v3"
 	"sort"
 
 	"github.com/AlecAivazis/survey/v2/core"
@@ -43,14 +43,25 @@ func (modules ModuleMap) WriteAnswer(name string, value interface{}) error {
 	return nil
 }
 
-func (modules ModuleMap) UnmarshalJSON(data []byte) (err error) {
-	tmp := make(map[string]*Module)
-	err = json.Unmarshal(data, &tmp)
-	for key, loadedModule := range tmp {
-		if defaultModule, ok := modules[key]; ok {
-			defaultModule.Enabled = loadedModule.Enabled
-			defaultModule.Version = loadedModule.Version
-		}
+func (modules *ModuleMap) UnmarshalYAML(value *yaml.Node) error {
+	// Create raw type to decode data
+	type raw ModuleMap
+	err := value.Decode((*raw)(modules))
+	if err != nil {
+		return err
 	}
-	return
+
+	// Set names
+	for key, module := range *modules {
+		module.Name = key
+	}
+	return nil
+}
+
+func (modules ModuleMap) Slice() ModuleSlice {
+	result := make(ModuleSlice, 0, len(modules))
+	for _, module := range modules {
+		result = append(result, module)
+	}
+	return result
 }
