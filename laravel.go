@@ -37,12 +37,12 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		composer["name"] = fmt.Sprintf("clevyr/%s", appConfig.AppSlug)
 		repositories := []map[string]string{}
 
-		for _, module := range appConfig.ComposerDeps {
+		for name, module := range appConfig.ComposerDeps {
 			if !module.Enabled {
 				continue
 			}
 
-			if module.Name == "laravel/spark-paddle" || module.Name == "laravel/spark-stripe" {
+			if name == "laravel/spark-paddle" || name == "laravel/spark-stripe" {
 				repositories = append(repositories, map[string]string{
 					"type": "composer",
 					"url":  "https://spark.laravel.com",

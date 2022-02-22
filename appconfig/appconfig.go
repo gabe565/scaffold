@@ -4,8 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-
-	"github.com/clevyr/scaffold/appconfig/defaults"
+	"github.com/clevyr/scaffold/config/modules"
 	"github.com/clevyr/scaffold/module"
 )
 
@@ -17,17 +16,17 @@ type AppConfig struct {
 	Database      string
 	PhpModules    module.ModuleMap
 	AdminGen      string
-	ComposerDeps  module.ModuleSlice
-	NpmDeps       module.ModuleSlice
+	ComposerDeps  module.ModuleMap
+	NpmDeps       module.ModuleMap
 	MaxUploadSize string
 }
 
 var Defaults = AppConfig{
 	Database:      "PostgreSQL",
-	PhpModules:    defaults.PhpModules,
+	PhpModules:    modules.Php(),
 	AdminGen:      "Nova",
-	ComposerDeps:  defaults.ComposerDeps,
-	NpmDeps:       defaults.NpmDeps,
+	ComposerDeps:  modules.Composer(),
+	NpmDeps:       modules.Npm(),
 	MaxUploadSize: "64m",
 }
 
@@ -47,33 +46,27 @@ func (appConfig *AppConfig) GenerateAppKey() (err error) {
 }
 
 func (appConfig *AppConfig) EnableSelectedDatabase() {
+	var name string
 	switch appConfig.Database {
 	case "PostgreSQL":
-		if pgsqlModule, ok := (*appConfig).PhpModules["pgsql"]; ok {
-			pgsqlModule.Enabled = true
-		}
+		name = "pgsql"
 	case "MariaDB":
-		if mysqlModule, ok := (*appConfig).PhpModules["mysql"]; ok {
-			mysqlModule.Enabled = true
-		}
+		name = "mysql"
+	}
+	if m, ok := appConfig.PhpModules[name]; ok {
+		m.Enabled = true
 	}
 }
 
 func (appConfig *AppConfig) EnableSelectedAdminGen() {
+	var name string
 	switch appConfig.AdminGen {
 	case "Nova":
-		for _, module := range (*appConfig).ComposerDeps {
-			if module.Name == "laravel/nova" {
-				module.Enabled = true
-				break
-			}
-		}
+		name = "laravel/nova"
 	case "Backpack":
-		for _, module := range (*appConfig).ComposerDeps {
-			if module.Name == "backpack/crud" {
-				module.Enabled = true
-				break
-			}
-		}
+		name = "backpack/crud"
+	}
+	if m, ok := appConfig.ComposerDeps[name]; ok {
+		m.Enabled = true
 	}
 }

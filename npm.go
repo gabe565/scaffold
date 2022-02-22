@@ -14,26 +14,21 @@ func npmInstall() (err error) {
 
 func npmInstallDeps(appConfig appconfig.AppConfig) (err error) {
 	var param, devParam []string
-	var postInstallCmds [][]string
 
-	for _, module := range appConfig.NpmDeps {
+	for name, module := range appConfig.NpmDeps {
 		if module.Enabled {
 			var appParam string
 
 			if module.Version == "" {
-				appParam = module.Name
+				appParam = name
 			} else {
-				appParam = fmt.Sprintf("%s@%s", module.Name, module.Version)
+				appParam = fmt.Sprintf("%s@%s", name, module.Version)
 			}
 
 			if module.Dev {
 				devParam = append(devParam, appParam)
 			} else {
 				param = append(param, appParam)
-			}
-
-			if len(module.PostInstallCmds) > 0 {
-				postInstallCmds = append(postInstallCmds, module.PostInstallCmds...)
 			}
 		}
 	}
@@ -46,9 +41,12 @@ func npmInstallDeps(appConfig appconfig.AppConfig) (err error) {
 		err = iexec.Command("npm", append([]string{"install", "--save-dev"}, devParam...)...)
 	}
 
-	if len(postInstallCmds) > 0 {
-		for _, cmd := range postInstallCmds {
-			err = iexec.Command(cmd[0], cmd[1:]...)
+	for _, module := range appConfig.NpmDeps {
+		for _, then := range module.Then {
+			err = then.Activate()
+			if err != nil {
+				return err
+			}
 		}
 	}
 
