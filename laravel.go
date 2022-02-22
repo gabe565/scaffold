@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/clevyr/scaffold/iexec"
-	"io/ioutil"
 	"log"
 	"os"
 )
@@ -70,23 +69,37 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 }
 
 func loadComposerJson() (result map[string]interface{}, err error) {
-	appConfigJson, err := ioutil.ReadFile("composer.json")
+	f, err := os.Open("composer.json")
 	if err != nil {
+		return result, err
+	}
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+
+	if err = json.NewDecoder(f).Decode(&result); err != nil {
 		return
 	}
-	err = json.Unmarshal(appConfigJson, &result)
-	if err != nil {
-		return
-	}
-	return
+
+	return result, nil
 }
 
 func saveComposerJson(composer map[string]interface{}) (err error) {
-	var outJson []byte
-	outJson, err = json.MarshalIndent(composer, "", "    ")
-	if err != nil {
-		return
+	f, err := os.OpenFile("composer.json", os.O_WRONLY|os.O_TRUNC, 0644)
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+
+	encoder := json.NewEncoder(f)
+	encoder.SetIndent("", "    ")
+
+	if err = encoder.Encode(composer); err != nil {
+		return err
 	}
-	err = ioutil.WriteFile("composer.json", outJson, 0644)
-	return
+
+	if err = f.Close(); err != nil {
+		return err
+	}
+
+	return nil
 }
