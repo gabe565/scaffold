@@ -56,9 +56,12 @@ type CopyAction struct {
 }
 
 func (copy CopyAction) Activate() error {
-	err := iexec.Command("mkdir", "-p", filepath.Base(copy.Dst))
-	if err != nil {
-		return err
+	dir := filepath.Dir(copy.Dst)
+	if dir != "." {
+		err := iexec.Command("mkdir", "-p", filepath.Dir(copy.Dst))
+		if err != nil {
+			return err
+		}
 	}
 	return iexec.Command("cp", "-a", copy.Src, copy.Dst)
 }
