@@ -3,11 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
-
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/clevyr/scaffold/iexec"
+	"io/ioutil"
+	"log"
+	"os"
 )
 
 func initLaravel(appConfig appconfig.AppConfig) (err error) {
@@ -35,14 +35,13 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		}
 
 		composer["name"] = fmt.Sprintf("clevyr/%s", appConfig.AppSlug)
-		repositories := []map[string]string{}
+		var repositories []map[string]string
 
-		for name, module := range appConfig.ComposerDeps {
-			if !module.Enabled {
-				continue
-			}
-
-			if name == "laravel/spark-paddle" || name == "laravel/spark-stripe" {
+		// Conditionally add Spark repository
+		sparkModules := []string{"laravel/spark-paddle", "laravel/spark-stripe"}
+		for _, moduleName := range sparkModules {
+			if module, ok := appConfig.ComposerDeps[moduleName]; ok && module.Enabled {
+				log.Println("Add Spark repository")
 				repositories = append(repositories, map[string]string{
 					"type": "composer",
 					"url":  "https://spark.laravel.com",
@@ -51,7 +50,9 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			}
 		}
 
-		if appConfig.AdminGen == "Nova" {
+		// Conditionally add Nova repository
+		if module, ok := appConfig.ComposerDeps["laravel/nova"]; ok && module.Enabled {
+			log.Println("Add Nova repository")
 			repositories = append(repositories, map[string]string{
 				"type": "composer",
 				"url":  "https://nova.laravel.com",
