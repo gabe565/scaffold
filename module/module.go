@@ -22,10 +22,17 @@ func (module *Module) WriteAnswer(name string, value interface{}) error {
 
 // ActionsUnion Union class to hold different actions
 type ActionsUnion struct {
-	Run *RunAction `json:"run,omitempty"`
+	Run  *RunAction  `json:"run,omitempty"`
+	Copy *CopyAction `json:"copy,omitempty"`
 }
 
 func (then ActionsUnion) Activate() (err error) {
+	if then.Copy != nil {
+		err = then.Copy.Activate()
+		if err != nil {
+			return err
+		}
+	}
 	if then.Run != nil {
 		err = then.Run.Activate()
 		if err != nil {
@@ -40,4 +47,18 @@ type RunAction []string
 
 func (run RunAction) Activate() error {
 	return iexec.Command(run[0], run[1:]...)
+}
+
+// CopyAction Copies a file or directory when activated
+type CopyAction struct {
+	Src string `json:"src"`
+	Dst string `json:"dst"`
+}
+
+func (copy CopyAction) Activate() error {
+	err := iexec.Command("mkdir", "-p", filepath.Base(copy.Dst))
+	if err != nil {
+		return err
+	}
+	return iexec.Command("cp", "-a", copy.Src, copy.Dst)
 }

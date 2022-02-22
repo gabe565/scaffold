@@ -9,10 +9,14 @@ laravel/telescope:
   enabled: true
   version: "4.6.0"
   then:
-    - run: ["cp", "vendor/laravel/telescope/stubs/TelescopeServiceProvider.stub", "app/Providers/TelescopeServiceProvider.php"]
+    - copy:
+       src: "vendor/laravel/telescope/stubs/TelescopeServiceProvider.stub"
+       dst: "app/Providers/TelescopeServiceProvider.php"
     - run: ["php", "artisan", "telescope:install"]
     - run: ["mkdir", "-p", "public/vendor/telescope"]
-    - run: ["cp", "-a", "vendor/laravel/telescope/public/.", "public/vendor/telescope"]
+    - copy:
+        src: "vendor/laravel/telescope/public/."
+        dst: "public/vendor/telescope"
 
 joelbutcher/socialstream:
   enabled: true
