@@ -53,6 +53,10 @@ func (modules *Map) UnmarshalYAML(value *yaml.Node) error {
 
 	// Set names
 	for key, module := range *modules {
+		if module == nil {
+			module = &Module{}
+			(*modules)[key] = module
+		}
 		module.Name = key
 	}
 	return nil
