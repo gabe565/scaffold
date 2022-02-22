@@ -41,7 +41,12 @@ func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err er
 				return err
 			}
 
-			f, err := os.OpenFile(outputPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
+			mode, ok := templatesModes[filepath]
+			if !ok {
+				mode = 0644
+			}
+
+			f, err := os.OpenFile(outputPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.FileMode(mode))
 			if err != nil {
 				return err
 			}

@@ -11,3 +11,13 @@ import "embed"
 //go:embed "templates/10-before-composer/.nvmrc"
 //go:embed "templates/10-before-composer/nova-components/.gitkeep"
 var templates embed.FS
+
+var templatesModes = map[string]int32{
+  "templates/10-before-composer/docker/app/rootfs/entrypoint": 0755,
+  "templates/10-before-composer/docker/app/rootfs/etc/s6/app/nginx/run": 0755,
+  "templates/10-before-composer/docker/app/rootfs/etc/s6/app/php-fpm/run": 0755,
+  "templates/10-before-composer/docker/app/rootfs/etc/s6/worker/cron/run": 0755,
+  "templates/10-before-composer/docker/app/rootfs/etc/s6/worker/queue-runner/run": 0755,
+  "templates/10-before-composer/docker/app/rootfs/health-check": 0755,
+  "templates/10-before-composer/docker/hot/rootfs/entrypoint": 0755,
+}
