@@ -7,9 +7,9 @@ import (
 	"github.com/AlecAivazis/survey/v2/core"
 )
 
-type ModuleMap map[string]*Module
+type Map map[string]*Module
 
-func (modules ModuleMap) ToOptionsSlice() []string {
+func (modules Map) ToOptionsSlice() []string {
 	result := make([]string, 0, len(modules))
 	for i, module := range modules {
 		if !module.Hidden {
@@ -20,7 +20,7 @@ func (modules ModuleMap) ToOptionsSlice() []string {
 	return result
 }
 
-func (modules ModuleMap) ToDefaultSlice() []string {
+func (modules Map) ToDefaultSlice() []string {
 	result := make([]string, 0, len(modules))
 	for i, module := range modules {
 		if module.Enabled {
@@ -30,7 +30,7 @@ func (modules ModuleMap) ToDefaultSlice() []string {
 	return result
 }
 
-func (modules ModuleMap) WriteAnswer(name string, value interface{}) error {
+func (modules Map) WriteAnswer(name string, value interface{}) error {
 	// Set all to false to prevent defaults from staying enabled
 	for _, module := range modules {
 		module.Enabled = false
@@ -43,9 +43,9 @@ func (modules ModuleMap) WriteAnswer(name string, value interface{}) error {
 	return nil
 }
 
-func (modules *ModuleMap) UnmarshalYAML(value *yaml.Node) error {
+func (modules *Map) UnmarshalYAML(value *yaml.Node) error {
 	// Create raw type to decode data
-	type raw ModuleMap
+	type raw Map
 	err := value.Decode((*raw)(modules))
 	if err != nil {
 		return err
@@ -58,8 +58,8 @@ func (modules *ModuleMap) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
-func (modules ModuleMap) Slice() ModuleSlice {
-	result := make(ModuleSlice, 0, len(modules))
+func (modules Map) Slice() Slice {
+	result := make(Slice, 0, len(modules))
 	for _, module := range modules {
 		result = append(result, module)
 	}

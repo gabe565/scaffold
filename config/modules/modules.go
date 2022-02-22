@@ -15,13 +15,13 @@ var npm []byte
 //go:embed php.yaml
 var php []byte
 
-func unmarshalConfig(config []byte) (module.ModuleMap, error) {
-	var modules module.ModuleMap
+func unmarshalConfig(config []byte) (module.Map, error) {
+	var modules module.Map
 	err := yaml.Unmarshal(config, &modules)
 	return modules, err
 }
 
-func Composer() module.ModuleMap {
+func Composer() module.Map {
 	modules, err := unmarshalConfig(composer)
 	if err != nil {
 		panic(err)
@@ -29,7 +29,7 @@ func Composer() module.ModuleMap {
 	return modules
 }
 
-func Npm() module.ModuleMap {
+func Npm() module.Map {
 	modules, err := unmarshalConfig(npm)
 	if err != nil {
 		panic(err)
@@ -37,7 +37,7 @@ func Npm() module.ModuleMap {
 	return modules
 }
 
-func Php() module.ModuleMap {
+func Php() module.Map {
 	modules, err := unmarshalConfig(php)
 	if err != nil {
 		panic(err)

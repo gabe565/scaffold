@@ -14,10 +14,10 @@ type AppConfig struct {
 	AppSlug       string `json:"-"`
 	AppKey        string
 	Database      string
-	PhpModules    module.ModuleMap
+	PhpModules    module.Map
 	AdminGen      string
-	ComposerDeps  module.ModuleMap
-	NpmDeps       module.ModuleMap
+	ComposerDeps  module.Map
+	NpmDeps       module.Map
 	MaxUploadSize string
 }
 
