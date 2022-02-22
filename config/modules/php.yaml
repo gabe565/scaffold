@@ -1,0 +1,28 @@
+bcmath: {}
+
+calendar: {}
+
+exif: {}
+
+gd: {}
+
+imagick: {}
+
+mosquitto: {}
+
+mysql: {}
+
+opcache:
+  enabled: true
+
+pgsql: {}
+
+redis:
+  enabled: true
+
+sqlsrv: {}
+
+xdebug:
+  enabled: true
+
+zip: {}

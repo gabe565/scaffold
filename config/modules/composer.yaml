@@ -1,0 +1,53 @@
+laravel/jetstream:
+  enabled: true
+  version: "2.6.6"
+  priority: 100
+  then:
+    - run: ["php", "artisan", "jetstream:install", "inertia"]
+
+laravel/telescope:
+  enabled: true
+  version: "4.7.3"
+  then:
+    - copy:
+       src: "vendor/laravel/telescope/stubs/TelescopeServiceProvider.stub"
+       dst: "app/Providers/TelescopeServiceProvider.php"
+    - run: ["php", "artisan", "telescope:install"]
+    - run: ["mkdir", "-p", "public/vendor/telescope"]
+    - copy:
+        src: "vendor/laravel/telescope/public/."
+        dst: "public/vendor/telescope"
+
+joelbutcher/socialstream:
+  enabled: true
+  version: "3.4.0"
+  then:
+    - run: ["php", "artisan", "socialstream:install"]
+
+laravel/nova:
+  enabled: true
+  version: "3.31.0"
+  then:
+    - run: ["php", "artisan", "nova:install"]
+
+laravel/spark-paddle:
+  enabled: true
+  version: "1.2.2"
+  then:
+    - run: ["php", "artisan", "spark:install"]
+
+clevyr/nova-page-builder:
+  enabled: false
+  then:
+    - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"]
+
+ukfast/laravel-health-check:
+  enabled: false
+  version: "1.13.0"
+
+superbalist/laravel-google-cloud-storage: {}
+
+nunomaduro/larastan:
+  enabled: true
+  dev: true
+  hidden: true

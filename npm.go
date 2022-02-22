@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/clevyr/scaffold/iexec"
+	"sort"
 )
 
 func npmInstall() (err error) {
@@ -14,9 +14,11 @@ func npmInstall() (err error) {
 
 func npmInstallDeps(appConfig appconfig.AppConfig) (err error) {
 	var param, devParam []string
-	var postInstallCmds [][]string
 
-	for _, module := range appConfig.NpmDeps {
+	slice := appConfig.NpmDeps.Slice()
+	sort.Sort(&slice)
+
+	for _, module := range slice {
 		if module.Enabled {
 			var appParam string
 
@@ -31,10 +33,6 @@ func npmInstallDeps(appConfig appconfig.AppConfig) (err error) {
 			} else {
 				param = append(param, appParam)
 			}
-
-			if len(module.PostInstallCmds) > 0 {
-				postInstallCmds = append(postInstallCmds, module.PostInstallCmds...)
-			}
 		}
 	}
 
@@ -46,9 +44,12 @@ func npmInstallDeps(appConfig appconfig.AppConfig) (err error) {
 		err = iexec.Command("npm", append([]string{"install", "--save-dev"}, devParam...)...)
 	}
 
-	if len(postInstallCmds) > 0 {
-		for _, cmd := range postInstallCmds {
-			err = iexec.Command(cmd[0], cmd[1:]...)
+	for _, module := range slice {
+		for _, then := range module.Then {
+			err = then.Activate()
+			if err != nil {
+				return err
+			}
 		}
 	}
 

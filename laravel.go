@@ -3,11 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
-
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/clevyr/scaffold/iexec"
+	"log"
+	"os"
 )
 
 func initLaravel(appConfig appconfig.AppConfig) (err error) {
@@ -35,25 +34,28 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		}
 
 		composer["name"] = fmt.Sprintf("clevyr/%s", appConfig.AppSlug)
-		repositories := []map[string]string{}
+		var repositories []map[string]string
 
-		repositories = append(repositories, map[string]string{
-			"type": "composer",
-			"url":  "https://nova.laravel.com",
-		})
-
-		for _, module := range appConfig.ComposerDeps {
-			if !module.Enabled {
-				continue
-			}
-
-			if module.Name == "laravel/spark-paddle" || module.Name == "laravel/spark-stripe" {
+		// Conditionally add Spark repository
+		sparkModules := []string{"laravel/spark-paddle", "laravel/spark-stripe"}
+		for _, moduleName := range sparkModules {
+			if module, ok := appConfig.ComposerDeps[moduleName]; ok && module.Enabled {
+				log.Println("Add Spark repository")
 				repositories = append(repositories, map[string]string{
 					"type": "composer",
 					"url":  "https://spark.laravel.com",
 				})
 				break
 			}
+		}
+
+		// Conditionally add Nova repository
+		if module, ok := appConfig.ComposerDeps["laravel/nova"]; ok && module.Enabled {
+			log.Println("Add Nova repository")
+			repositories = append(repositories, map[string]string{
+				"type": "composer",
+				"url":  "https://nova.laravel.com",
+			})
 		}
 
 		composer["repositories"] = repositories
@@ -67,23 +69,37 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 }
 
 func loadComposerJson() (result map[string]interface{}, err error) {
-	appConfigJson, err := ioutil.ReadFile("composer.json")
+	f, err := os.Open("composer.json")
 	if err != nil {
+		return result, err
+	}
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+
+	if err = json.NewDecoder(f).Decode(&result); err != nil {
 		return
 	}
-	err = json.Unmarshal(appConfigJson, &result)
-	if err != nil {
-		return
-	}
-	return
+
+	return result, nil
 }
 
 func saveComposerJson(composer map[string]interface{}) (err error) {
-	var outJson []byte
-	outJson, err = json.MarshalIndent(composer, "", "    ")
-	if err != nil {
-		return
+	f, err := os.OpenFile("composer.json", os.O_WRONLY|os.O_TRUNC, 0644)
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(f)
+
+	encoder := json.NewEncoder(f)
+	encoder.SetIndent("", "    ")
+
+	if err = encoder.Encode(composer); err != nil {
+		return err
 	}
-	err = ioutil.WriteFile("composer.json", outJson, 0644)
-	return
+
+	if err = f.Close(); err != nil {
+		return err
+	}
+
+	return nil
 }

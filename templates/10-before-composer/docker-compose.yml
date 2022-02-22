@@ -1,21 +1,8 @@
-version: "2.4"
-
-x-app: &app
-  env_file:
-    - .env
-  environment:
-    DB_HOST: database
-    HTTPS: "true"
-    MAIL_HOST: mail
-    REDIS_HOST: redis
-  image: clevyr/{{ .AppSlug }}/app
-  restart: unless-stopped
-  volumes:
-    - .:/app
+version: "3.9"
 
 services:
   app:
-    <<: *app
+    image: clevyr/{{ .AppSlug }}/app
     build:
       args:
         INSTALL_XDEBUG: "true"
@@ -23,9 +10,19 @@ services:
       context: .
       dockerfile: docker/app/Dockerfile
       target: local-image
+    env_file:
+      - .env
+    environment:
+      DB_HOST: database
+      HTTPS: "true"
+      MAIL_HOST: mail
+      REDIS_HOST: redis
+    restart: unless-stopped
+    volumes:
+      - .:/app
 
   worker:
-    <<: *app
+    extends: app
     command: ["s6-svscan", "/etc/s6/worker"]
 
   proxy:
@@ -52,9 +49,9 @@ services:
 
   database_test:
     environment:
-        POSTGRES_USER: "$DB_USERNAME"
-        POSTGRES_PASSWORD: "$DB_PASSWORD"
-        POSTGRES_DB: "$DB_DATABASE"
+      POSTGRES_USER: "$DB_USERNAME"
+      POSTGRES_PASSWORD: "$DB_PASSWORD"
+      POSTGRES_DB: "$DB_DATABASE"
     image: postgres:12-alpine
     restart: unless-stopped
   {{- else if eq .Database "MariaDB" -}}
@@ -84,7 +81,7 @@ services:
   hot:
     build: docker/hot
     env_file:
-        - .env
+      - .env
     image: clevyr/{{ .AppSlug }}/hot-reloader
     restart: unless-stopped
     volumes:

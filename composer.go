@@ -2,17 +2,19 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
-
 	"github.com/clevyr/scaffold/appconfig"
 	"github.com/clevyr/scaffold/iexec"
+	"os/exec"
+	"sort"
 )
 
 func composerRequire(appConfig appconfig.AppConfig) (err error) {
 	var param, devParam []string
-	var postInstallCmds [][]string
 
-	for _, module := range appConfig.ComposerDeps {
+	slice := appConfig.ComposerDeps.Slice()
+	sort.Sort(&slice)
+
+	for _, module := range slice {
 		if module.Enabled && !composerInstalled(module.Name) {
 			var appParam string
 
@@ -27,10 +29,6 @@ func composerRequire(appConfig appconfig.AppConfig) (err error) {
 			} else {
 				param = append(param, appParam)
 			}
-
-			if len(module.PostInstallCmds) > 0 {
-				postInstallCmds = append(postInstallCmds, module.PostInstallCmds...)
-			}
 		}
 	}
 
@@ -42,9 +40,12 @@ func composerRequire(appConfig appconfig.AppConfig) (err error) {
 		err = iexec.Command("composer", append([]string{"require", "--dev"}, devParam...)...)
 	}
 
-	if len(postInstallCmds) > 0 {
-		for _, cmd := range postInstallCmds {
-			err = iexec.Command(cmd[0], cmd[1:]...)
+	for _, module := range slice {
+		for _, then := range module.Then {
+			err = then.Activate()
+			if err != nil {
+				return err
+			}
 		}
 	}
 

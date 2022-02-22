@@ -1,5 +1,4 @@
 *.md
-.clevyr-installer-config
 .dockerignore
 .editorconfig
 .env*

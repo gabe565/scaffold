@@ -1,15 +1,15 @@
-//go:generate pkger
 package main
 
 import (
 	"flag"
 	"fmt"
-	"os"
-	"path"
-
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/clevyr/scaffold/appconfig"
+	"os"
+	"path"
 )
+
+//go:generate go run internal/generators/template_embed.go
 
 func main() {
 	var err error
@@ -40,7 +40,6 @@ func main() {
 	}
 
 	appConfig := appconfig.Defaults
-	_ = appConfig.ImportFromFile()
 	err = askQuestions(&appConfig)
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
@@ -60,11 +59,6 @@ func main() {
 	}
 
 	err = initLaravel(appConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	err = appConfig.ExportToFile()
 	if err != nil {
 		panic(err)
 	}

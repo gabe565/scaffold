@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	commit = ""
+	commit  = ""
 	version = "next"
 )
 

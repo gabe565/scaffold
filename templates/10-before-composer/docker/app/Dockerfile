@@ -1,4 +1,5 @@
 ARG PHP_VERSION=8.0
+ARG NODE_VERSION=16
 {{- range $key, $module := .PhpModules }}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{- end }}
@@ -7,7 +8,7 @@ ARG PHP_POST_MAX_SIZE {{ .MaxUploadSize }}
 
 
 # Backend build
-FROM composer:2 as php-builder
+FROM composer:2.0 as php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock auth.json ./
@@ -30,7 +31,7 @@ RUN set -x \
 
 
 # Frontend build
-FROM node:lts-alpine as node-builder
+FROM node:$NODE_VERSION-alpine as node-builder
 WORKDIR /app
 
 RUN set -x \
