@@ -23,12 +23,7 @@ func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err er
 			return err
 		}
 
-		contents, err := templates.Open(filepath)
-		if err != nil {
-			return err
-		}
-
-		info, err := contents.Stat()
+		info, err := d.Info()
 		if err != nil {
 			return err
 		}
