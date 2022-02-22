@@ -22,8 +22,8 @@ func (module *Module) WriteAnswer(name string, value interface{}) error {
 
 // ActionsUnion Union class to hold different actions
 type ActionsUnion struct {
-	Run  *RunAction  `json:"run,omitempty"`
 	Copy *CopyAction `json:"copy,omitempty"`
+	Run  *RunAction  `json:"run,omitempty"`
 }
 
 func (then ActionsUnion) Activate() (err error) {

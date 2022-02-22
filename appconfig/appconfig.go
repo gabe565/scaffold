@@ -30,16 +30,19 @@ var Defaults = AppConfig{
 	MaxUploadSize: "64m",
 }
 
+const AppKeyPrefix = "base64:"
+const AppKeyBytes = 32
+
 func (appConfig *AppConfig) GenerateAppKey() (err error) {
 	if appConfig.AppKey != "" {
 		return
 	}
-	randomBytes := make([]byte, 32)
+	randomBytes := make([]byte, AppKeyBytes)
 	_, err = rand.Read(randomBytes)
 	if err != nil {
 		return
 	}
-	appConfig.AppKey = fmt.Sprintf("base64:%s", base64.StdEncoding.EncodeToString(randomBytes))
+	appConfig.AppKey = fmt.Sprintf("%s%s", AppKeyPrefix, base64.StdEncoding.EncodeToString(randomBytes))
 	return
 }
 
