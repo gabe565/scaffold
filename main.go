@@ -40,7 +40,6 @@ func main() {
 	}
 
 	appConfig := appconfig.Defaults
-	_ = appConfig.ImportFromFile()
 	err = askQuestions(&appConfig)
 	if err == terminal.InterruptErr {
 		fmt.Println("Interrupted")
@@ -60,11 +59,6 @@ func main() {
 	}
 
 	err = initLaravel(appConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	err = appConfig.ExportToFile()
 	if err != nil {
 		panic(err)
 	}

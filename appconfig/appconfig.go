@@ -30,8 +30,6 @@ var Defaults = AppConfig{
 	MaxUploadSize: "64m",
 }
 
-const configFilePath = ".clevyr-scaffold-config"
-
 func (appConfig *AppConfig) GenerateAppKey() (err error) {
 	if appConfig.AppKey != "" {
 		return
