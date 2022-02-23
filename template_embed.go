@@ -9,6 +9,7 @@ import "embed"
 //go:embed "templates/10-before-composer/.env"
 //go:embed "templates/10-before-composer/.env.example"
 //go:embed "templates/10-before-composer/.nvmrc"
+//go:embed "templates/10-before-composer/.psysh.php"
 //go:embed "templates/10-before-composer/nova-components/.gitkeep"
 var templates embed.FS
 
