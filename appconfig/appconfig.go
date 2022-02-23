@@ -60,15 +60,23 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 }
 
 func (appConfig *AppConfig) EnableSelectedJetstreamGen() {
-    for _, module := range (*appConfig).ComposerDeps {
-        if module.Name == "laravel/jetstream" {
-            switch appConfig.JetstreamGen {
-            case "No Teams":
-                // Do nothing
-            case "With Teams":
-                // Append Jetstream's post install command with the '--teams' modifier
-                module.PostInstallCmds[0] = append(module.PostInstallCmds[0], "--teams")
-            }
-        }
-    }
+	switch appConfig.JetstreamGen {
+	case "No Teams":
+		break
+	case "With Teams":
+		// Append Jetstream's post install command with the '--teams' modifier
+		jetstream, ok := appConfig.ComposerDeps["laravel/jetstream"]
+		if !ok {
+			panic(fmt.Errorf("%v: %s", module.ErrInvalidModule, "laravel/jetstream"))
+		}
+		for _, action := range jetstream.Then {
+			if action.Run != nil {
+				run := *action.Run
+				if len(run) > 3 && run[2] == "jetstream:install" {
+					*action.Run = append(*action.Run, "--teams")
+					break
+				}
+			}
+		}
+	}
 }
