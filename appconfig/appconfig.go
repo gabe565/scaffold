@@ -9,25 +9,25 @@ import (
 )
 
 type AppConfig struct {
-	InitLaravel   bool `json:"-"`
-	AppName       string
-	AppSlug       string `json:"-"`
-	AppKey        string
-	Database      string
-	PhpModules    module.Map
-	JetstreamGen  string
-	ComposerDeps  module.Map
-	NpmDeps       module.Map
-	MaxUploadSize string
+	InitLaravel    bool `json:"-"`
+	AppName        string
+	AppSlug        string `json:"-"`
+	AppKey         string
+	Database       string
+	PhpModules     module.Map
+	JetstreamTeams string
+	ComposerDeps   module.Map
+	NpmDeps        module.Map
+	MaxUploadSize  string
 }
 
 var Defaults = AppConfig{
-	Database:      "PostgreSQL",
-	PhpModules:    modules.Php(),
-	JetstreamGen:  "No Teams",
-	ComposerDeps:  modules.Composer(),
-	NpmDeps:       modules.Npm(),
-	MaxUploadSize: "64m",
+	Database:       "PostgreSQL",
+	PhpModules:     modules.Php(),
+	JetstreamTeams: "No Teams",
+	ComposerDeps:   modules.Composer(),
+	NpmDeps:        modules.Npm(),
+	MaxUploadSize:  "64m",
 }
 
 const AppKeyPrefix = "base64:"
@@ -59,8 +59,8 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 	}
 }
 
-func (appConfig *AppConfig) EnableSelectedJetstreamGen() {
-	switch appConfig.JetstreamGen {
+func (appConfig *AppConfig) EnableJetstreamTeams() {
+	switch appConfig.JetstreamTeams {
 	case "No Teams":
 		break
 	case "With Teams":

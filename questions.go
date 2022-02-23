@@ -60,20 +60,20 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		return
 	}
 
-	// Jetstream Gen
+	// Jetstream Teams
 	err = survey.AskOne(&survey.Select{
 		Message: "Do you want to use Jetstream with or without teams? 'Teams' are " +
 			"Jetstream's built-in single layer of tenancy. If you are unsure, " +
 			"then you likely don't need teams.",
 		Options: []string{"No Teams", "With Teams"},
-		Default: appConfig.JetstreamGen,
-	}, &appConfig.JetstreamGen)
+		Default: appConfig.JetstreamTeams,
+	}, &appConfig.JetstreamTeams)
 	if err != nil {
 		return
 	}
 
 	// Composer
-	appConfig.EnableSelectedJetstreamGen()
+	appConfig.EnableJetstreamTeams()
 
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose Composer dependencies to preinstall:",
