@@ -61,11 +61,10 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	}
 
 	// Jetstream Teams
-	err = survey.AskOne(&survey.Select{
-		Message: "Do you want to use Jetstream with or without teams? 'Teams' are " +
-			"Jetstream's built-in single layer of tenancy. If you are unsure, " +
-			"then you likely don't need teams.",
-		Options: []string{"No Teams", "With Teams"},
+	err = survey.AskOne(&survey.Confirm{
+		Message: "Do you want to use Jetstream with teams?",
+		Help: "'Teams' are Jetstream's built-in single layer of tenancy. " +
+			"If you are unsure, then you likely don't need teams.",
 		Default: appConfig.JetstreamTeams,
 	}, &appConfig.JetstreamTeams)
 	if err != nil {

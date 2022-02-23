@@ -15,7 +15,7 @@ type AppConfig struct {
 	AppKey         string
 	Database       string
 	PhpModules     module.Map
-	JetstreamTeams string
+	JetstreamTeams bool
 	ComposerDeps   module.Map
 	NpmDeps        module.Map
 	MaxUploadSize  string
@@ -24,7 +24,7 @@ type AppConfig struct {
 var Defaults = AppConfig{
 	Database:       "PostgreSQL",
 	PhpModules:     modules.Php(),
-	JetstreamTeams: "No Teams",
+	JetstreamTeams: false,
 	ComposerDeps:   modules.Composer(),
 	NpmDeps:        modules.Npm(),
 	MaxUploadSize:  "64m",
@@ -61,9 +61,9 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 
 func (appConfig *AppConfig) EnableJetstreamTeams() {
 	switch appConfig.JetstreamTeams {
-	case "No Teams":
+	case false:
 		break
-	case "With Teams":
+	case true:
 		// Append Jetstream's post install command with the '--teams' modifier
 		jetstream, ok := appConfig.ComposerDeps["laravel/jetstream"]
 		if !ok {

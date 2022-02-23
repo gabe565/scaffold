@@ -2,6 +2,7 @@ package appconfig
 
 import (
 	"encoding/base64"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -80,16 +81,16 @@ func TestAppConfig_EnableJetstreamTeams(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		input           string
+		input           bool
 		expectedLenDiff int
 	}{
-		{"No Teams", 0},
-		{"With Teams", 1},
+		{false, 0},
+		{true, 1},
 	}
 
 	for _, test := range tests {
 		test := test
-		t.Run(test.input, func(t *testing.T) {
+		t.Run(fmt.Sprintf("teams_%t", test.input), func(t *testing.T) {
 			t.Parallel()
 
 			appConfig := Defaults

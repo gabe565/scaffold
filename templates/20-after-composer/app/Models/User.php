@@ -9,7 +9,7 @@ use JoelButcher\Socialstream\HasConnectedAccounts;
 use JoelButcher\Socialstream\SetsProfilePhotoFromUrl;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
-{{- if eq .JetstreamTeams "With Teams" }}
+{{- if .JetstreamTeams }}
 use Laravel\Jetstream\HasTeams;
 {{- end }}
 use Laravel\Sanctum\HasApiTokens;
@@ -27,7 +27,7 @@ class User extends Authenticatable
     use HasProfilePhoto {
         getProfilePhotoUrlAttribute as getPhotoUrl;
     }
-    {{- if eq .JetstreamTeams "With Teams" }}
+    {{- if .JetstreamTeams }}
     use HasTeams;
     {{- end }}
     use HasConnectedAccounts;
