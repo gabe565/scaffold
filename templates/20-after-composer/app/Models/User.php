@@ -9,19 +9,27 @@ use JoelButcher\Socialstream\HasConnectedAccounts;
 use JoelButcher\Socialstream\SetsProfilePhotoFromUrl;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+{{- if .JetstreamTeams }}
 use Laravel\Jetstream\HasTeams;
+{{- end }}
 use Laravel\Sanctum\HasApiTokens;
+{{- if .ComposerDeps.ModuleEnabled "laravel/spark-paddle" }}
 use Spark\Billable;
+{{- end }}
 
 class User extends Authenticatable
 {
+    {{- if .ComposerDeps.ModuleEnabled "laravel/spark-paddle" }}
     use Billable;
+    {{- end }}
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto {
         getProfilePhotoUrlAttribute as getPhotoUrl;
     }
+    {{- if .JetstreamTeams }}
     use HasTeams;
+    {{- end }}
     use HasConnectedAccounts;
     use Notifiable;
     use SetsProfilePhotoFromUrl;

@@ -1,3 +1,4 @@
+{{- if .ComposerDeps.ModuleEnabled "ukfast/laravel-health-check" }}
 <?php
 
 return [
@@ -157,3 +158,4 @@ return [
      * accessing it via config('healthcheck.env') in your healthcheck class
      */
 ];
+{{- end }}

@@ -9,25 +9,25 @@ import (
 )
 
 type AppConfig struct {
-	InitLaravel   bool `json:"-"`
-	AppName       string
-	AppSlug       string `json:"-"`
-	AppKey        string
-	Database      string
-	PhpModules    module.Map
-	AdminGen      string
-	ComposerDeps  module.Map
-	NpmDeps       module.Map
-	MaxUploadSize string
+	InitLaravel    bool `json:"-"`
+	AppName        string
+	AppSlug        string `json:"-"`
+	AppKey         string
+	Database       string
+	PhpModules     module.Map
+	JetstreamTeams bool
+	ComposerDeps   module.Map
+	NpmDeps        module.Map
+	MaxUploadSize  string
 }
 
 var Defaults = AppConfig{
-	Database:      "PostgreSQL",
-	PhpModules:    modules.Php(),
-	AdminGen:      "Nova",
-	ComposerDeps:  modules.Composer(),
-	NpmDeps:       modules.Npm(),
-	MaxUploadSize: "64m",
+	Database:       "PostgreSQL",
+	PhpModules:     modules.Php(),
+	JetstreamTeams: false,
+	ComposerDeps:   modules.Composer(),
+	NpmDeps:        modules.Npm(),
+	MaxUploadSize:  "64m",
 }
 
 const AppKeyPrefix = "base64:"
@@ -59,15 +59,24 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 	}
 }
 
-func (appConfig *AppConfig) EnableSelectedAdminGen() {
-	var name string
-	switch appConfig.AdminGen {
-	case "Nova":
-		name = "laravel/nova"
-	case "Backpack":
-		name = "backpack/crud"
-	}
-	if m, ok := appConfig.ComposerDeps[name]; ok {
-		m.Enabled = true
+func (appConfig *AppConfig) EnableJetstreamTeams() {
+	switch appConfig.JetstreamTeams {
+	case false:
+		break
+	case true:
+		// Append Jetstream's post install command with the '--teams' modifier
+		jetstream, ok := appConfig.ComposerDeps["laravel/jetstream"]
+		if !ok {
+			panic(fmt.Errorf("%v: %s", module.ErrInvalidModule, "laravel/jetstream"))
+		}
+		for _, action := range jetstream.Then {
+			if action.Run != nil {
+				run := *action.Run
+				if len(run) > 3 && run[2] == "jetstream:install" {
+					*action.Run = append(*action.Run, "--teams")
+					break
+				}
+			}
+		}
 	}
 }
