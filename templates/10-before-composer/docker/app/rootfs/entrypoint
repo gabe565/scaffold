@@ -8,7 +8,9 @@ if [ "$APP_ENV" != "local" ]; then
 else
     composer install --ignore-platform-reqs --no-interaction --no-progress
     php artisan config:clear
+    {{- if .ComposerDeps.ModuleEnabled "laravel/nova" }}
     php artisan nova:publish
+    {{- end }}
     php artisan vendor:publish --tag=public
 fi
 

@@ -15,8 +15,10 @@ deployment/
 docker/
 !docker/app/rootfs/
 node_modules/
+{{- if .ComposerDeps.ModuleEnabled "laravel/nova" }}
 nova-components/**/node_modules/
 nova-components/**/vendor/
+{{- end }}
 vendor/
 storage/app/public
 storage/debugbar

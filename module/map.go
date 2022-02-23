@@ -1,6 +1,8 @@
 package module
 
 import (
+	"errors"
+	"fmt"
 	"gopkg.in/yaml.v3"
 	"sort"
 
@@ -68,4 +70,14 @@ func (modules Map) Slice() Slice {
 		result = append(result, module)
 	}
 	return result
+}
+
+var ErrInvalidModule = errors.New("unknown module")
+
+func (modules Map) ModuleEnabled(name string) bool {
+	module, ok := modules[name]
+	if !ok {
+		panic(fmt.Errorf("%v: %s", ErrInvalidModule, name))
+	}
+	return module.Enabled
 }

@@ -12,7 +12,9 @@ FROM composer:2.0 as php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock auth.json ./
+{{- if .ComposerDeps.ModuleEnabled "laravel/nova" }}
 COPY nova-components/ nova-components/
+{{- end }}
 RUN composer install \
         --ignore-platform-reqs \
         --no-autoloader \
@@ -26,7 +28,9 @@ RUN set -x \
     && composer dump-autoload \
         --classmap-authoritative \
         --no-interaction \
+    {{- if .ComposerDeps.ModuleEnabled "laravel/nova" }}
     && php artisan nova:publish \
+    {{- end }}
     && php artisan vendor:publish --tag=public
 
 

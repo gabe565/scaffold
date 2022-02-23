@@ -1,4 +1,4 @@
-{{- if .HasComposerDep "ukfast/laravel-health-check" }}
+{{- if .ComposerDeps.ModuleEnabled "ukfast/laravel-health-check" }}
 <?php
 
 return [

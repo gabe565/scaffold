@@ -13,13 +13,13 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 {{- end }}
 use Laravel\Sanctum\HasApiTokens;
-{{- if .HasComposerDep "laravel/spark-paddle" }}
+{{- if .ComposerDeps.ModuleEnabled "laravel/spark-paddle" }}
 use Spark\Billable;
 {{- end }}
 
 class User extends Authenticatable
 {
-    {{- if .HasComposerDep "laravel/spark-paddle" }}
+    {{- if .ComposerDeps.ModuleEnabled "laravel/spark-paddle" }}
     use Billable;
     {{- end }}
     use HasApiTokens;
