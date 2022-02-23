@@ -75,3 +75,31 @@ func TestAppConfig_EnableSelectedDatabase(t *testing.T) {
 		})
 	}
 }
+
+func TestAppConfig_EnableSelectedJetstreamGen(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		input           string
+		expectedLenDiff int
+	}{
+		{"No Teams", 0},
+		{"With Teams", 1},
+	}
+
+	for _, test := range tests {
+		test := test
+		t.Run(test.input, func(t *testing.T) {
+			t.Parallel()
+
+			appConfig := Defaults
+			appConfig.JetstreamGen = test.input
+			beforeLen := len(*appConfig.ComposerDeps["laravel/jetstream"].Then[0].Run)
+			appConfig.EnableSelectedJetstreamGen()
+			diff := len(*appConfig.ComposerDeps["laravel/jetstream"].Then[0].Run) - beforeLen
+			if diff != test.expectedLenDiff {
+				t.Errorf(`laravel/jetstream "--teams" flag not added. Expected len change of %d, got %d`, test.expectedLenDiff, diff)
+			}
+		})
+	}
+}
