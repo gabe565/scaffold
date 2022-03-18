@@ -27,7 +27,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			return
 		}
 
-		var composer map[string]interface{}
+		var composer map[string]any
 		composer, err = loadComposerJson()
 		if err != nil {
 			return
@@ -68,7 +68,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 	return
 }
 
-func loadComposerJson() (result map[string]interface{}, err error) {
+func loadComposerJson() (result map[string]any, err error) {
 	f, err := os.Open("composer.json")
 	if err != nil {
 		return result, err
@@ -84,7 +84,7 @@ func loadComposerJson() (result map[string]interface{}, err error) {
 	return result, nil
 }
 
-func saveComposerJson(composer map[string]interface{}) (err error) {
+func saveComposerJson(composer map[string]any) (err error) {
 	f, err := os.OpenFile("composer.json", os.O_WRONLY|os.O_TRUNC, 0644)
 	defer func(f *os.File) {
 		_ = f.Close()

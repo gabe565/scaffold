@@ -15,7 +15,7 @@ type Module struct {
 	Then     []ActionsUnion `json:"then,omitempty"`
 }
 
-func (module *Module) WriteAnswer(name string, value interface{}) error {
+func (module *Module) WriteAnswer(name string, value any) error {
 	module.Enabled = value.(bool)
 	return nil
 }

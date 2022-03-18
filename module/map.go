@@ -32,7 +32,7 @@ func (modules Map) ToDefaultSlice() []string {
 	return result
 }
 
-func (modules Map) WriteAnswer(name string, value interface{}) error {
+func (modules Map) WriteAnswer(name string, value any) error {
 	// Set all to false to prevent defaults from staying enabled
 	for _, module := range modules {
 		module.Enabled = false

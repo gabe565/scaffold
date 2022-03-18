@@ -101,7 +101,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 				"Supports the suffixes \"k\" (kilobytes), \"m\" (megabytes) and \"g\" (gigabytes).",
 		},
 		&appConfig.MaxUploadSize,
-		survey.WithValidator(func(val interface{}) error {
+		survey.WithValidator(func(val any) error {
 			if str, ok := val.(string); !ok || !validationRegex.MatchString(str) {
 				return errors.New("Make sure to enter a size followed by \"k\" (kilobytes), \"m\" (megabytes) or \"g\" (gigabytes).")
 			}
