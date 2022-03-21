@@ -41,10 +41,12 @@ func composerRequire(appConfig appconfig.AppConfig) (err error) {
 	}
 
 	for _, module := range slice {
-		for _, then := range module.Then {
-			err = then.Activate()
-			if err != nil {
-				return err
+		if module.Enabled {
+			for _, then := range module.Then {
+				err = then.Activate()
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
