@@ -2,7 +2,10 @@
 
 package templates
 
-import "embed"
+import (
+	"embed"
+	"os"
+)
 
 //go:embed "all:laravel-10-before-composer"
 var embedLaravel10BeforeComposer embed.FS
@@ -10,7 +13,7 @@ var embedLaravel10BeforeComposer embed.FS
 var Laravel10BeforeComposer = Template{
 	Name:  "laravel-10-before-composer",
 	Embed: embedLaravel10BeforeComposer,
-	Modes: map[string]int32{
+	Modes: map[string]os.FileMode{
 		"laravel-10-before-composer/docker/app/rootfs/entrypoint":                     0755,
 		"laravel-10-before-composer/docker/app/rootfs/etc/s6/app/nginx/run":           0755,
 		"laravel-10-before-composer/docker/app/rootfs/etc/s6/app/php-fpm/run":         0755,
@@ -27,5 +30,5 @@ var embedLaravel20AfterComposer embed.FS
 var Laravel20AfterComposer = Template{
 	Name:  "laravel-20-after-composer",
 	Embed: embedLaravel20AfterComposer,
-	Modes: map[string]int32{},
+	Modes: map[string]os.FileMode{},
 }

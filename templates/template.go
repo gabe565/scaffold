@@ -14,7 +14,7 @@ import (
 type Template struct {
 	Name  string
 	Embed embed.FS
-	Modes map[string]int32
+	Modes map[string]os.FileMode
 }
 
 func (t Template) Generate(appConfig appconfig.AppConfig) error {
@@ -48,12 +48,7 @@ func (t Template) Generate(appConfig appconfig.AppConfig) error {
 				return err
 			}
 
-			mode, ok := t.Modes[path]
-			if !ok {
-				mode = 0644
-			}
-
-			f, err := os.OpenFile(outputpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.FileMode(mode))
+			f, err := os.OpenFile(outputpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, t.GetMode(path))
 			if err != nil {
 				return err
 			}
@@ -69,4 +64,12 @@ func (t Template) Generate(appConfig appconfig.AppConfig) error {
 		return nil
 	})
 	return err
+}
+
+func (t Template) GetMode(path string) os.FileMode {
+	mode, ok := t.Modes[path]
+	if !ok {
+		return 0644
+	}
+	return mode
 }
