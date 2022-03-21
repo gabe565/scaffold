@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"github.com/Masterminds/sprig"
 	"github.com/huandu/xstrings"
 	"go/format"
 	"io"
@@ -82,11 +83,11 @@ import (
 var embed{{ .Slug }} embed.FS
 
 var {{ .Slug }} = Template{
-	Name: "{{ .Base }}",
+	Name: {{ .Base | quote }},
 	Embed: embed{{ .Slug }},
 	Modes: map[string]os.FileMode{
 	{{- range $path, $perm := .Perms }}
-		"{{ $path }}": {{ $perm }},
+		{{ $path | quote }}: {{ $perm }},
 	{{- end }}
 	},
 }
@@ -106,7 +107,7 @@ func main() {
 	}
 	defer out.Close()
 
-	tpl, err := template.New("output").Parse(OutputTemplate)
+	tpl, err := template.New("output").Funcs(sprig.TxtFuncMap()).Parse(OutputTemplate)
 	if err != nil {
 		panic(err)
 	}

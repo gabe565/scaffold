@@ -2,6 +2,7 @@ package templates
 
 import (
 	"embed"
+	"github.com/Masterminds/sprig"
 	"github.com/clevyr/scaffold/internal/appconfig"
 	"io/fs"
 	"log"
@@ -20,9 +21,7 @@ type Template struct {
 func (t Template) Generate(appConfig appconfig.AppConfig) error {
 	log.Println("Processing templates " + t.Name)
 
-	functions := template.FuncMap{
-		"upper": strings.ToUpper,
-	}
+	functions := sprig.TxtFuncMap()
 
 	err := fs.WalkDir(t.Embed, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
