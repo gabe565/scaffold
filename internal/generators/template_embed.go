@@ -67,7 +67,19 @@ func main() {
 		panic(err)
 	}
 
-	err = tpl.Execute(out, config)
+	var buf bytes.Buffer
+
+	err = tpl.Execute(io.Writer(&buf), config)
+	if err != nil {
+		panic(err)
+	}
+
+	formatted, err := format.Source(buf.Bytes())
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = out.Write(formatted)
 	if err != nil {
 		panic(err)
 	}
