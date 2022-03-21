@@ -1,4 +1,4 @@
-package main
+package laravel
 
 import (
 	"encoding/json"
@@ -39,7 +39,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		// Conditionally add Spark repository
 		sparkModules := []string{"laravel/spark-paddle", "laravel/spark-stripe"}
 		for _, moduleName := range sparkModules {
-			if module, ok := appConfig.ComposerDeps[moduleName]; ok && module.Enabled {
+			if module, ok := appConfig.ComposerDeps.Map[moduleName]; ok && module.Enabled {
 				log.Println("Add Spark repository")
 				repositories = append(repositories, map[string]string{
 					"type": "composer",
@@ -50,7 +50,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 		}
 
 		// Conditionally add Nova repository
-		if module, ok := appConfig.ComposerDeps["laravel/nova"]; ok && module.Enabled {
+		if module, ok := appConfig.ComposerDeps.Map["laravel/nova"]; ok && module.Enabled {
 			log.Println("Add Nova repository")
 			repositories = append(repositories, map[string]string{
 				"type": "composer",

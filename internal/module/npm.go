@@ -1,21 +1,23 @@
-package main
+package module
 
 import (
 	"fmt"
-	"github.com/clevyr/scaffold/internal/appconfig"
 	"github.com/clevyr/scaffold/internal/iexec"
 	"sort"
 )
 
-func npmInstall() (err error) {
-	err = iexec.Command("npm", "install")
-	return
+type NpmMap struct {
+	Map
 }
 
-func npmInstallDeps(appConfig appconfig.AppConfig) (err error) {
+func (NpmMap) Install() error {
+	return iexec.Command("npm", "install")
+}
+
+func (m NpmMap) InstallDeps() (err error) {
 	var param, devParam []string
 
-	slice := appConfig.NpmDeps.Slice()
+	slice := m.Slice()
 	sort.Sort(&slice)
 
 	for _, module := range slice {

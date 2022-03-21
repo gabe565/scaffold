@@ -16,8 +16,8 @@ type AppConfig struct {
 	Database       string
 	PhpModules     module.Map
 	JetstreamTeams bool
-	ComposerDeps   module.Map
-	NpmDeps        module.Map
+	ComposerDeps   module.ComposerMap
+	NpmDeps        module.NpmMap
 	MaxUploadSize  string
 }
 
@@ -65,7 +65,7 @@ func (appConfig *AppConfig) EnableJetstreamTeams() {
 		break
 	case true:
 		// Append Jetstream's post install command with the '--teams' modifier
-		jetstream, ok := appConfig.ComposerDeps["laravel/jetstream"]
+		jetstream, ok := appConfig.ComposerDeps.Map["laravel/jetstream"]
 		if !ok {
 			panic(fmt.Errorf("%v: %s", module.ErrInvalidModule, "laravel/jetstream"))
 		}

@@ -1,17 +1,24 @@
-package main
+package module
 
 import (
 	"fmt"
-	"github.com/clevyr/scaffold/internal/appconfig"
 	"github.com/clevyr/scaffold/internal/iexec"
 	"os/exec"
 	"sort"
 )
 
-func composerRequire(appConfig appconfig.AppConfig) (err error) {
+type ComposerMap struct {
+	Map
+}
+
+func (ComposerMap) Install() error {
+	return iexec.Command("composer", "install")
+}
+
+func (m ComposerMap) InstallDeps() (err error) {
 	var param, devParam []string
 
-	slice := appConfig.ComposerDeps.Slice()
+	slice := m.Slice()
 	sort.Sort(&slice)
 
 	for _, module := range slice {

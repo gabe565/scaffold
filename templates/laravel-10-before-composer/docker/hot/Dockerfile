@@ -20,6 +20,6 @@ RUN set -x \
         make \
         nasm
 
-COPY rootfs/ /
+COPY rootfs /
 
 CMD ["/entrypoint"]

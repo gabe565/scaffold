@@ -21,20 +21,20 @@ func unmarshalConfig(config []byte) (module.Map, error) {
 	return modules, err
 }
 
-func Composer() module.Map {
+func Composer() module.ComposerMap {
 	modules, err := unmarshalConfig(composer)
 	if err != nil {
 		panic(err)
 	}
-	return modules
+	return module.ComposerMap{Map: modules}
 }
 
-func Npm() module.Map {
+func Npm() module.NpmMap {
 	modules, err := unmarshalConfig(npm)
 	if err != nil {
 		panic(err)
 	}
-	return modules
+	return module.NpmMap{Map: modules}
 }
 
 func Php() module.Map {

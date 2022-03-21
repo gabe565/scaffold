@@ -3,24 +3,59 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
+	"github.com/huandu/xstrings"
+	"go/format"
+	"io"
 	"io/fs"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
 type GeneratorConfig struct {
-	Package      string
-	TemplatesDir string
-	TemplatesVar string
-	OutputFile   string
+	Package    string
+	RootDir    string
+	OutputFile string
 }
 
-func (config GeneratorConfig) Perms() map[string]string {
+func (config GeneratorConfig) Dirs() []DirEntry {
+	paths, err := ioutil.ReadDir(config.RootDir)
+	if err != nil {
+		panic(err)
+	}
+	dirs := make([]DirEntry, 0, len(paths))
+	for _, path := range paths {
+		if path.IsDir() {
+			dirs = append(dirs, DirEntry(filepath.Join(config.RootDir, path.Name())))
+		}
+	}
+	return dirs
+}
+
+type DirEntry string
+
+func (e DirEntry) Base() string {
+	return filepath.Base(string(e))
+}
+
+func (e DirEntry) Slug() string {
+	return xstrings.ToCamelCase(e.Base())
+}
+
+func (e DirEntry) Perms() map[string]string {
 	paths := map[string]string{}
-	err := filepath.Walk(config.TemplatesDir, func(path string, info fs.FileInfo, err error) error {
+	err := filepath.Walk(string(e), func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		path = strings.TrimPrefix(path, filepath.Dir(string(e))+"/")
+
 		if !info.IsDir() && info.Mode() != 0644 {
 			paths[path] = fmt.Sprintf("%#o", info.Mode().Perm())
 		}
@@ -38,22 +73,28 @@ package {{ .Package }}
 
 import "embed"
 
-//go:embed "all:{{ .TemplatesDir }}"
-var {{ .TemplatesVar }} embed.FS
+{{- range .Dirs }}
 
-var {{ .TemplatesVar }}Modes = map[string]int32{
-{{- range $path, $perm := .Perms }}
-  "{{ $path }}": {{ $perm }},
-{{- end }}
+//go:embed "all:{{ .Base }}"
+var embed{{ .Slug }} embed.FS
+
+var {{ .Slug }} = Template{
+	Name: "{{ .Base }}",
+	Embed: embed{{ .Slug }},
+	Modes: map[string]int32{
+	{{- range $path, $perm := .Perms }}
+		"{{ $path }}": {{ $perm }},
+	{{- end }}
+	},
 }
+{{- end }}
 `
 
 func main() {
 	var config GeneratorConfig
-	flag.StringVar(&config.Package, "package", "main", "Package name of output template")
-	flag.StringVar(&config.TemplatesDir, "templates", "templates", "Templates directory")
-	flag.StringVar(&config.TemplatesVar, "var", "templates", "Generated embed variable name")
-	flag.StringVar(&config.OutputFile, "output", "template_embed.go", "Output Go file path")
+	flag.StringVar(&config.Package, "package", "templates", "Package name of output template")
+	flag.StringVar(&config.RootDir, "templates", "templates", "Templates directory")
+	flag.StringVar(&config.OutputFile, "output", "templates/embed.go", "Output Go file path")
 	flag.Parse()
 
 	out, err := os.OpenFile(config.OutputFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
