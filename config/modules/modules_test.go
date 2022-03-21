@@ -1,7 +1,6 @@
 package modules
 
 import (
-	"github.com/clevyr/scaffold/internal/module"
 	"testing"
 )
 
@@ -10,11 +9,11 @@ func TestModuleFiles(t *testing.T) {
 
 	tests := []struct {
 		name string
-		fn   func() module.Map
+		fn   func() any
 	}{
-		{"php.yaml", Php},
-		{"composer.yaml", Composer},
-		{"npm.yaml", Npm},
+		{"php.yaml", func() any { return Php() }},
+		{"composer.yaml", func() any { return Composer() }},
+		{"npm.yaml", func() any { return Npm() }},
 	}
 
 	for _, test := range tests {

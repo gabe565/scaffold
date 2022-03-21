@@ -95,9 +95,9 @@ func TestAppConfig_EnableJetstreamTeams(t *testing.T) {
 
 			appConfig := Defaults
 			appConfig.JetstreamTeams = test.input
-			beforeLen := len(*appConfig.ComposerDeps["laravel/jetstream"].Then[0].Run)
+			beforeLen := len(*appConfig.ComposerDeps.Map["laravel/jetstream"].Then[0].Run)
 			appConfig.EnableJetstreamTeams()
-			diff := len(*appConfig.ComposerDeps["laravel/jetstream"].Then[0].Run) - beforeLen
+			diff := len(*appConfig.ComposerDeps.Map["laravel/jetstream"].Then[0].Run) - beforeLen
 			if diff != test.expectedLenDiff {
 				t.Errorf(`laravel/jetstream "--teams" flag not added. Expected len change of %d, got %d`, test.expectedLenDiff, diff)
 			}
