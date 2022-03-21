@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/clevyr/scaffold/internal/appconfig"
 	"io/fs"
 	"os"
 	"path"
 	"strings"
 	"text/template"
-
-	"github.com/clevyr/scaffold/appconfig"
 )
 
 func generateTemplate(appConfig appconfig.AppConfig, templateDir string) (err error) {

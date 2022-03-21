@@ -3,11 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/clevyr/scaffold/internal/appconfig"
 	"os"
 	"regexp"
 
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/clevyr/scaffold/appconfig"
 	"github.com/huandu/xstrings"
 )
 

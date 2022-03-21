@@ -1,7 +1,7 @@
 package module
 
 import (
-	"github.com/clevyr/scaffold/iexec"
+	"github.com/clevyr/scaffold/internal/iexec"
 	"path/filepath"
 )
 

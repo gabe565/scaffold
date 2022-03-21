@@ -2,7 +2,7 @@ package modules
 
 import (
 	_ "embed"
-	"github.com/clevyr/scaffold/module"
+	"github.com/clevyr/scaffold/internal/module"
 	"gopkg.in/yaml.v3"
 )
 

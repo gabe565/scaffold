@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/clevyr/scaffold/appconfig"
-	"github.com/clevyr/scaffold/iexec"
+	"github.com/clevyr/scaffold/internal/appconfig"
+	"github.com/clevyr/scaffold/internal/iexec"
 	"sort"
 )
 

@@ -5,7 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/clevyr/scaffold/config/modules"
-	"github.com/clevyr/scaffold/module"
+	"github.com/clevyr/scaffold/internal/module"
 )
 
 type AppConfig struct {
