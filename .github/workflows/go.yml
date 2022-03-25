@@ -70,9 +70,6 @@ jobs:
         with:
           go-version: ^${{ env.go_version }}
 
-      - name: Upgrade UPX
-        run: brew install upx
-
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
