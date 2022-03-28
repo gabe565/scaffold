@@ -33,7 +33,7 @@ func (modules Map) ToDefaultSlice() []string {
 }
 
 func (modules Map) WriteAnswer(name string, value any) error {
-	// Set all to false to prevent defaults from staying enabled
+	// Set all false to prevent defaults from staying enabled
 	for _, module := range modules {
 		module.Enabled = false
 	}
