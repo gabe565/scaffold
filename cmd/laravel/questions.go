@@ -63,20 +63,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		return
 	}
 
-	// Jetstream Teams
-	err = survey.AskOne(&survey.Confirm{
-		Message: "Do you want to use Jetstream with teams?",
-		Help: "'Teams' are Jetstream's built-in single layer of tenancy. " +
-			"If you are unsure, then you likely don't need teams.",
-		Default: appConfig.JetstreamTeams,
-	}, &appConfig.JetstreamTeams)
-	if err != nil {
-		return
-	}
-
 	// Composer
-	appConfig.EnableJetstreamTeams()
-
 	err = survey.AskOne(&survey.MultiSelect{
 		Message: "Choose Composer dependencies:",
 		Options: appConfig.ComposerDeps.ToOptionsSlice(),
@@ -84,6 +71,20 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	}, &appConfig.ComposerDeps)
 	if err != nil {
 		return
+	}
+
+	// Jetstream Teams
+	if appConfig.ComposerDeps.Map["laravel/jetstream"].Enabled {
+		err = survey.AskOne(&survey.Confirm{
+			Message: "Do you want to use Jetstream with teams?",
+			Help: "'Teams' are Jetstream's built-in single layer of tenancy. " +
+				"If you are unsure, then you likely don't need teams.",
+			Default: appConfig.JetstreamTeams,
+		}, &appConfig.JetstreamTeams)
+		if err != nil {
+			return
+		}
+		appConfig.EnableJetstreamTeams()
 	}
 
 	err = survey.AskOne(&survey.MultiSelect{
