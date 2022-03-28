@@ -41,10 +41,16 @@ func (m ComposerMap) InstallDeps() (err error) {
 
 	if len(param) > 0 {
 		err = iexec.Command("composer", append([]string{"require"}, param...)...)
+		if err != nil {
+			return err
+		}
 	}
 
 	if len(devParam) > 0 {
 		err = iexec.Command("composer", append([]string{"require", "--dev"}, devParam...)...)
+		if err != nil {
+			return err
+		}
 	}
 
 	for _, module := range slice {

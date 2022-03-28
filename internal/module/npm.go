@@ -40,10 +40,16 @@ func (m NpmMap) InstallDeps() (err error) {
 
 	if len(param) > 0 {
 		err = iexec.Command("npm", append([]string{"install", "--save"}, param...)...)
+		if err != nil {
+			return err
+		}
 	}
 
 	if len(devParam) > 0 {
 		err = iexec.Command("npm", append([]string{"install", "--save-dev"}, devParam...)...)
+		if err != nil {
+			return err
+		}
 	}
 
 	for _, module := range slice {
