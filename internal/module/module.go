@@ -46,7 +46,7 @@ func (then ActionsUnion) Activate() (err error) {
 type RunAction []string
 
 func (run RunAction) Activate() error {
-	return iexec.Command(run[0], run[1:]...)
+	return iexec.NewBuilder(run...).Run()
 }
 
 // CopyAction Copies a file or directory when activated
@@ -58,10 +58,10 @@ type CopyAction struct {
 func (copy CopyAction) Activate() error {
 	dir := filepath.Dir(copy.Dst)
 	if dir != "." {
-		err := iexec.Command("mkdir", "-p", filepath.Dir(copy.Dst))
+		err := iexec.NewBuilder("mkdir", "-p", filepath.Dir(copy.Dst)).Run()
 		if err != nil {
 			return err
 		}
 	}
-	return iexec.Command("cp", "-a", copy.Src, copy.Dst)
+	return iexec.NewBuilder("cp", "-a", copy.Src, copy.Dst).Run()
 }

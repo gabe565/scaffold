@@ -11,7 +11,7 @@ type NpmMap struct {
 }
 
 func (NpmMap) Install() error {
-	return iexec.Command("npm", "install")
+	return iexec.NewBuilder("npm", "install").Run()
 }
 
 func (m NpmMap) InstallDeps() (err error) {
@@ -39,14 +39,14 @@ func (m NpmMap) InstallDeps() (err error) {
 	}
 
 	if len(param) > 0 {
-		err = iexec.Command("npm", append([]string{"install", "--save"}, param...)...)
+		err = iexec.NewBuilder("npm", "install", "--save").Append(param...).Run()
 		if err != nil {
 			return err
 		}
 	}
 
 	if len(devParam) > 0 {
-		err = iexec.Command("npm", append([]string{"install", "--save-dev"}, devParam...)...)
+		err = iexec.NewBuilder("npm", "install", "--save-dev").Append(devParam...).Run()
 		if err != nil {
 			return err
 		}

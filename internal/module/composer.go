@@ -12,7 +12,7 @@ type ComposerMap struct {
 }
 
 func (ComposerMap) Install() error {
-	return iexec.Command("composer", "install")
+	return iexec.NewBuilder("composer", "install").Run()
 }
 
 func (m ComposerMap) InstallDeps() (err error) {
@@ -40,14 +40,14 @@ func (m ComposerMap) InstallDeps() (err error) {
 	}
 
 	if len(param) > 0 {
-		err = iexec.Command("composer", append([]string{"require"}, param...)...)
+		err := iexec.NewBuilder("composer", "require").Append(param...).Run()
 		if err != nil {
 			return err
 		}
 	}
 
 	if len(devParam) > 0 {
-		err = iexec.Command("composer", append([]string{"require", "--dev"}, devParam...)...)
+		err = iexec.NewBuilder("composer", "require", "--dev").Append(devParam...).Run()
 		if err != nil {
 			return err
 		}
