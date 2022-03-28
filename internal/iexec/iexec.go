@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func Command(name string, args ...string) (err error) {
+func Command(name string, args ...string) error {
 	cmd := exec.Command(name, args...)
 	fmt.Printf("+ %s\n", cmd)
 	// Disable Telescope by default
@@ -14,6 +14,5 @@ func Command(name string, args ...string) (err error) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	err = cmd.Run()
-	return
+	return cmd.Run()
 }
