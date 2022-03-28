@@ -42,6 +42,7 @@ func (t Template) Generate(appConfig appconfig.AppConfig) error {
 			}
 
 			outputpath := strings.TrimPrefix(path, t.Name+"/")
+			outputpath = strings.TrimSuffix(outputpath, ".tmpl")
 
 			if err = os.MkdirAll(filepath.Dir(outputpath), os.ModePerm); err != nil {
 				return err
