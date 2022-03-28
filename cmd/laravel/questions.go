@@ -6,6 +6,7 @@ import (
 	"github.com/clevyr/scaffold/internal/appconfig"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/huandu/xstrings"
@@ -16,7 +17,7 @@ var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
 func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	// App Name
 	err = survey.AskOne(&survey.Input{
-		Message: "Enter the application name that should be shown to the user.",
+		Message: "Enter the application name:",
 		Default: appConfig.AppName,
 		Help:    "Enter the application's name space-separated and capitalized. A slug will be generated to match.",
 	}, &appConfig.AppName, survey.WithValidator(survey.Required))
@@ -29,9 +30,11 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	_, err = os.Stat("composer.json")
 	if os.IsNotExist(err) {
 		wd, _ := os.Getwd()
+		home, _ := os.UserHomeDir()
+		wd = strings.Replace(wd, home, "~", 1)
 
 		err = survey.AskOne(&survey.Confirm{
-			Message: fmt.Sprintf("composer.json not found in the current directory. Initialize a Laravel app in \"%s/%s\"?", wd, appConfig.AppSlug),
+			Message: fmt.Sprintf("Initialize a Laravel app in \"%s/%s\"?", wd, appConfig.AppSlug),
 			Default: true,
 		}, &appConfig.InitLaravel)
 		if err != nil {
@@ -41,7 +44,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 
 	// Database
 	err = survey.AskOne(&survey.Select{
-		Message: "Choose which main database server to configure:",
+		Message: "Choose default database server:",
 		Options: []string{"PostgreSQL", "MariaDB"},
 		Default: appConfig.Database,
 	}, &appConfig.Database, survey.WithValidator(survey.Required))
@@ -52,7 +55,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	// Enabled PhpModules
 	appConfig.EnableSelectedDatabase()
 	err = survey.AskOne(&survey.MultiSelect{
-		Message: "Choose which PHP modules to enable:",
+		Message: "Choose PHP modules to enable:",
 		Options: appConfig.PhpModules.ToOptionsSlice(),
 		Default: appConfig.PhpModules.ToDefaultSlice(),
 	}, &appConfig.PhpModules)
@@ -75,7 +78,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	appConfig.EnableJetstreamTeams()
 
 	err = survey.AskOne(&survey.MultiSelect{
-		Message: "Choose Composer dependencies to preinstall:",
+		Message: "Choose Composer dependencies:",
 		Options: appConfig.ComposerDeps.ToOptionsSlice(),
 		Default: appConfig.ComposerDeps.ToDefaultSlice(),
 	}, &appConfig.ComposerDeps)
@@ -84,7 +87,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	}
 
 	err = survey.AskOne(&survey.MultiSelect{
-		Message: "Choose NPM dependencies to preinstall:",
+		Message: "Choose NPM dependencies:",
 		Options: appConfig.NpmDeps.ToOptionsSlice(),
 		Default: appConfig.NpmDeps.ToDefaultSlice(),
 	}, &appConfig.NpmDeps)
@@ -95,15 +98,15 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 	// Max Upload Size
 	err = survey.AskOne(
 		&survey.Input{
-			Message: "What is the maximum upload size that should be allowed?",
+			Message: "File upload size limit:",
 			Default: appConfig.MaxUploadSize,
-			Help: "Configures the maximum allowed upload size. " +
-				"Supports the suffixes \"k\" (kilobytes), \"m\" (megabytes) and \"g\" (gigabytes).",
+			Help: "Configures the maximum allowed upload file size. " +
+				"Supports suffixes \"k\" (kilobytes), \"m\" (megabytes) and \"g\" (gigabytes).",
 		},
 		&appConfig.MaxUploadSize,
 		survey.WithValidator(func(val any) error {
 			if str, ok := val.(string); !ok || !validationRegex.MatchString(str) {
-				return errors.New("Make sure to enter a size followed by \"k\" (kilobytes), \"m\" (megabytes) or \"g\" (gigabytes).")
+				return errors.New("please enter a size followed by \"k\" (kilobytes), \"m\" (megabytes) or \"g\" (gigabytes)")
 			}
 			return nil
 		}),
