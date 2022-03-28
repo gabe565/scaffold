@@ -62,10 +62,7 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 }
 
 func (appConfig *AppConfig) EnableJetstreamTeams() {
-	switch appConfig.JetstreamTeams {
-	case false:
-		break
-	case true:
+	if appConfig.JetstreamTeams {
 		// Append Jetstream's post install command with the '--teams' modifier
 		jetstream, ok := appConfig.ComposerDeps.Map["laravel/jetstream"]
 		if !ok {
