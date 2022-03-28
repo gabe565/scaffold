@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"bytes"
 	"embed"
 	"github.com/Masterminds/sprig"
 	"github.com/clevyr/scaffold/internal/appconfig"
@@ -22,8 +23,13 @@ func (t Template) Generate(appConfig appconfig.AppConfig) error {
 	log.Println("Processing templates " + t.Name)
 
 	functions := sprig.TxtFuncMap()
+	var buf bytes.Buffer
 
 	err := fs.WalkDir(t.Embed, ".", func(path string, d fs.DirEntry, err error) error {
+		defer func() {
+			buf.Reset()
+		}()
+
 		if err != nil {
 			return err
 		}
@@ -48,17 +54,27 @@ func (t Template) Generate(appConfig appconfig.AppConfig) error {
 				return err
 			}
 
-			f, err := os.OpenFile(outputpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, t.GetMode(path))
-			if err != nil {
+			if err = tmpl.ExecuteTemplate(&buf, basename, appConfig); err != nil {
 				return err
 			}
 
-			if err = tmpl.ExecuteTemplate(f, basename, appConfig); err != nil {
-				_ = f.Close()
-				return err
-			}
+			if len(bytes.TrimSpace(buf.Bytes())) > 0 {
+				f, err := os.OpenFile(outputpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, t.GetMode(path))
+				if err != nil {
+					return err
+				}
+				defer func(f *os.File) {
+					_ = f.Close()
+				}(f)
 
-			return f.Close()
+				_, err = f.Write(buf.Bytes())
+				if err != nil {
+					return err
+				}
+
+				return f.Close()
+			}
+			return nil
 		}
 
 		return nil
