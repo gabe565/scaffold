@@ -53,6 +53,8 @@ func (appConfig *AppConfig) EnableSelectedDatabase() {
 		name = "pgsql"
 	case "MariaDB":
 		name = "mysql"
+	default:
+		panic(fmt.Errorf("unknown database: %s", name))
 	}
 	if m, ok := appConfig.PhpModules[name]; ok {
 		m.Enabled = true
