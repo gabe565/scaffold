@@ -45,7 +45,8 @@ ukfast/laravel-health-check:
   enabled: false
   version: "1.13.0"
 
-superbalist/laravel-google-cloud-storage: {}
+spatie/laravel-google-cloud-storage:
+  enabled: true
 
 nunomaduro/larastan:
   enabled: true
