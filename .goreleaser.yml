@@ -34,14 +34,57 @@ brews:
       name: homebrew-tap
     folder: Formula
 dockers:
-  - dockerfile: Dockerfile.goreleaser
-    image_templates:
-      - ghcr.io/clevyr/{{ .ProjectName }}:latest
-      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}
-      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Major }}
-      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}
-      - clevyr/{{ .ProjectName }}:latest
-      - clevyr/{{ .ProjectName }}:{{ .Version }}
-      - clevyr/{{ .ProjectName }}:{{ .Major }}
-      - clevyr/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}
+  - image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-amd64
     use: buildx
+    dockerfile: Dockerfile.goreleaser
+    build_flag_templates:
+      - "--platform=linux/amd64"
+  - image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv6
+    use: buildx
+    goarch: arm
+    goarm: 6
+    dockerfile: Dockerfile.goreleaser
+    build_flag_templates:
+      - "--platform=linux/arm/v7"
+  - image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv7
+    use: buildx
+    goarch: arm
+    goarm: 7
+    dockerfile: Dockerfile.goreleaser
+    build_flag_templates:
+      - "--platform=linux/arm/v8"
+  - image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-arm64v8
+    use: buildx
+    goarch: arm64
+    dockerfile: Dockerfile.goreleaser
+    build_flag_templates:
+      - "--platform=linux/arm64/v8"
+docker_manifests:
+  - name_template: ghcr.io/clevyr/{{ .ProjectName }}:latest
+    image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-amd64
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv6
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv7
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-arm64v8
+  - name_template: ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}
+    image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-amd64
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv6
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv7
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-arm64v8
+  - name_template: ghcr.io/clevyr/{{ .ProjectName }}:{{ .Major }}
+    image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-amd64
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv6
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv7
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-arm64v8
+  - name_template: ghcr.io/clevyr/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}
+    image_templates:
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-amd64
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv6
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv7
+      - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-arm64v8
