@@ -37,7 +37,8 @@ laravel/spark-paddle:
     - run: ["php", "artisan", "spark:install"]
 
 clevyr/nova-page-builder:
-  enabled: false
+  enabled: true
+  version: "1.0.2"
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"]
 
