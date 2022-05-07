@@ -53,4 +53,3 @@ spatie/laravel-google-cloud-storage:
 nunomaduro/larastan:
   enabled: true
   dev: true
-  hidden: true

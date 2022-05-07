@@ -2,8 +2,9 @@ package module
 
 import (
 	"fmt"
-	"github.com/clevyr/scaffold/internal/iexec"
 	"sort"
+
+	"github.com/clevyr/scaffold/internal/iexec"
 )
 
 type NpmMap struct {

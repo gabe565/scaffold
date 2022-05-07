@@ -3,8 +3,9 @@ package module
 import (
 	"errors"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"sort"
+
+	"gopkg.in/yaml.v3"
 
 	"github.com/AlecAivazis/survey/v2/core"
 )
