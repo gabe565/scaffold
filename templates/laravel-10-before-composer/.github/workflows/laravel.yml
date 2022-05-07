@@ -1,0 +1,240 @@
+name: Laravel
+
+on: push
+
+env:
+  slug: laravel
+  php_version: "8.0"
+  node_version: "16.x"
+
+jobs:
+  test:
+    name: Laravel Tests
+    runs-on: ubuntu-latest
+    env:
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: redis
+      DB_CONNECTION: pgsql
+      DB_DATABASE: laravel
+      DB_HOST: localhost
+      DB_PASSWORD: password
+      DB_USERNAME: username
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: localhost
+      SESSION_DRIVER: redis
+    services:
+      postgres:
+        image: postgres:11-alpine
+        env:
+          POSTGRES_USER: username
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: laravel
+        ports:
+          - 5432/tcp
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: {{`${{ env.php_version }}`}}
+          extensions: bcmath, dom, fileinfo, gd, imagick, mbstring, pgsql, zip
+          coverage: xdebug
+          tools: composer, pecl
+      - uses: actions/setup-node@v2
+        with:
+          node-version: {{`${{ env.node_version }}`}}
+      - name: Get composer cache directory
+        id: composer-cache
+        run: |
+          printf '::set-output name=dir::%s' "$(composer config cache-files-dir)"
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: {{`${{ steps.composer-cache.outputs.dir }}`}}
+          key: {{`${{ runner.os }}`}}-composer-{{`${{ hashFiles('**/composer.lock') }}`}}
+          restore-keys: {{`${{ runner.os }}-composer-`}}
+      - name: Prepare the application
+        env:
+          DB_PORT: {{`${{ job.services.postgres.ports[5432] }}`}}
+          REDIS_PORT: {{`${{ job.services.redis.ports[6379] }}`}}
+        run: |
+          cp .env.testing .env
+          rm -f .env.testing
+          echo "DB_PORT=$DB_PORT" >> $GITHUB_ENV
+          echo "REDIS_PORT=$REDIS_PORT" >> $GITHUB_ENV
+      - name: Install Composer dependencies
+        run: |
+          composer config http-basic.spark.laravel.com {{`${{ secrets.SPARK_USERNAME }}`}} {{`${{ secrets.SPARK_API_TOKEN }}`}}
+          composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+        env:
+          COMPOSER_AUTH: {{`${{ secrets.NOVA_AUTH }}`}}
+      - name: Cache frontend dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: {{`${{ runner.os }}`}}-node-{{`${{ hashFiles('**/package-lock.json') }}`}}
+          restore-keys: |
+            {{`${{ runner.os }}-node-`}}
+      - name: Install npm dependencies
+        run: npm ci --prefer-offline
+      - name: Publish public assets
+        run: php artisan vendor:publish --tag=public
+      - name: Build frontend
+        run: npm run development
+      - name: Generate app key
+        run: php artisan key:generate
+      - name: Clear Config
+        run: php artisan config:clear
+      - name: Run Migration
+        run: php artisan migrate -v
+      - name: Test with phpunit
+        run: vendor/bin/phpunit --coverage-text
+
+  larastan:
+    name: Larastan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: {{`${{ env.php_version }}`}}
+          extensions: bcmath, dom, fileinfo, gd, imagick, mbstring, pgsql, zip
+          tools: composer, pecl
+      - name: Get composer cache directory
+        id: composer-cache
+        run: |
+          printf '::set-output name=dir::%s' "$(composer config cache-files-dir)"
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: {{`${{ steps.composer-cache.outputs.dir }}`}}
+          key: {{`${{ runner.os }}`}}-composer-{{`${{ hashFiles('**/composer.lock') }}`}}
+          restore-keys: {{`${{ runner.os }}`}}-composer-
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+        env:
+          COMPOSER_AUTH: {{`${{ secrets.NOVA_AUTH }}`}}
+      - name: PHP Lint
+        run: ./vendor/bin/phpstan analyse
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: {{`${{ env.node_version }}`}}
+      - name: Cache frontend dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: {{`${{ runner.os }}`}}-node-{{`${{ hashFiles('**/package-lock.json') }}`}}
+          restore-keys: |
+            {{`${{ runner.os }}`}}-node-
+      - name: Install npm dependencies
+        run: npm ci --prefer-offline
+      - name: Frontend Lint
+        run: npm run lint
+
+  stylelint:
+    name: Stylelint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: {{`${{ env.node_version }}`}}
+      - name: Cache frontend dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: {{`${{ runner.os }}`}}-node-{{`${{ hashFiles('**/package-lock.json') }}`}}
+          restore-keys: |
+            {{`${{ runner.os }}`}}-node-
+      - name: Install npm dependencies
+        run: npm ci --prefer-offline
+      - name: Stylelint run
+        run: npm run stylelint-lint
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build Docker Image
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Login to Nova
+        run: echo '{{`${{ secrets.NOVA_AUTH }}`}}' > auth.json
+      - name: Set current branch
+        id: branch
+        run: printf '::set-output name=short_ref::%s' $(echo -n "${GITHUB_REF##refs/*/}" | tr -Cs 'A-Za-z0-9._-' '_')
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to GCR
+        uses: docker/login-action@v1
+        with:
+          registry: us.gcr.io
+          username: _json_key
+          password: {{`${{ secrets.GCLOUD_KEY_FILE }}`}}
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: {{`${{ runner.os }}`}}-buildx-{{`${{ github.sha }}`}}
+          restore-keys: |
+            {{`${{ runner.os }}`}}-buildx-
+      - name: Build and Push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          pull: true
+          push: true
+          context: .
+          file: docker/app/Dockerfile
+          tags: |
+            us.gcr.io/{{`${{ env.slug }}`}}-motus/app:{{`${{ github.sha }}`}}
+            us.gcr.io/{{`${{ env.slug }}`}}-motus/app:{{`${{ steps.branch.outputs.short_ref }}`}}
+          build-args: ENV=ci
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+      - name: Move Cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [build, test, larastan, eslint, stylelint]
+    name: Deploy Development
+    if: github.ref == 'refs/heads/dev'
+    env:
+      tier: dev
+      name: Development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy
+        uses: clevyr/clevyrnetes-helm-deploy-action@master
+        env:
+          KUBE_NAMESPACE: {{`${{ env.slug }}`}}-{{`${{ env.tier }}`}}
+          REPO_TAG: {{`${{ github.sha }}`}}
+          GCLOUD_KEY_FILE: {{`${{ secrets.GCLOUD_KEY_FILE }}`}}
+          GITHUB_TOKEN: {{`${{ secrets.GITHUB_TOKEN }}`}}
+      - name: Post to Slack
+        uses: 8398a7/action-slack@v2
+        if: always()
+        with:
+          status: {{`${{ job.status }}`}}
+          author_name: {{`${{ env.name }}`}} Deploy Status
+        env:
+          SLACK_WEBHOOK_URL: {{`${{ secrets.SLACK_WEBHOOK }}`}}
