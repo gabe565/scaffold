@@ -68,5 +68,10 @@ func run(cmd *cobra.Command, args []string) (err error) {
 		return err
 	}
 
+	err = appConfig.NpmDeps.RunLintFix()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
