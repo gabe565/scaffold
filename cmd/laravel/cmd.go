@@ -2,11 +2,12 @@ package laravel
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/clevyr/scaffold/internal/appconfig"
 	"github.com/clevyr/scaffold/templates"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var Command = &cobra.Command{

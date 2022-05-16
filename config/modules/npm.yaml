@@ -1,1 +1,57 @@
 vuex: {}
+
+"@babel/cli":
+  enabled: true
+  dev: true
+"@babel/core":
+  enabled: true
+  dev: true
+"@babel/eslint-parser":
+  enabled: true
+  dev: true
+"@babel/preset-env":
+  enabled: true
+  dev: true
+"@vue/test-utils":
+  enabled: true
+  dev: true
+eslint:
+  enabled: true
+  dev: true
+  then:
+    - run: ["npm", "set-script", "lint", "eslint --ext .js,.vue resources/js"]
+    - run: ["npm", "set-script", "lint:fix", "npm run lint -- --fix"]
+    - run: ["npm", "run", "lint:fix"]
+eslint-config-google:
+  enabled: true
+  dev: true
+eslint-plugin-vue:
+  enabled: true
+  dev: true
+husky:
+  enabled: true
+  dev: true
+  then:
+    # - run: ["npm", "set-script", "prepare", "husky install"]
+    # - run: ["npm", "run", "prepare"]
+jest:
+  enabled: true
+  dev: true
+stylelint:
+  enabled: true
+  dev: true
+  then:
+    - run: ["npm", "set-script", "stylelint-lint", "npx stylelint 'resources/{css,scss}/**/*.{scss,css}' --custom-syntax postcss-scss"]
+    - run: ["npm", "set-script", "stylelint-lint:fix", "npm run stylelint-lint --fix"]
+stylelint-config-recommended-scss:
+  enabled: true
+  dev: true
+stylelint-webpack-plugin:
+  enabled: true
+  dev: true
+vue-eslint-parser:
+  enabled: true
+  dev: true
+vue3-jest:
+  enabled: true
+  dev: true
