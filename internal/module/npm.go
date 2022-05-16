@@ -66,7 +66,3 @@ func (m NpmMap) InstallDeps() (err error) {
 
 	return
 }
-
-func (NpmMap) RunLintFix() error {
-	return iexec.NewBuilder("npm", "run", "lint:fix").Run()
-}

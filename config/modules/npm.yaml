@@ -21,6 +21,7 @@ eslint:
   then:
     - run: ["npm", "set-script", "lint", "eslint --ext .js,.vue resources/js"]
     - run: ["npm", "set-script", "lint:fix", "npm run lint -- --fix"]
+    - run: ["npm", "run", "lint:fix"]
 eslint-config-google:
   enabled: true
   dev: true
