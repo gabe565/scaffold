@@ -71,7 +71,7 @@ jobs:
           echo "REDIS_PORT=$REDIS_PORT" >> $GITHUB_ENV
       - name: Install Composer dependencies
         run: |
-          composer config http-basic.spark.laravel.com {{`${{ secrets.SPARK_USERNAME }}`}} {{`${{ secrets.SPARK_API_TOKEN }}`}}
+          composer config http-basic.spark.laravel.com {{`${{ secrets.SPARK_USERNAME }}`}} {{`${{ secrets.SPARK_PASSWORD }}`}}
           composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
         env:
           COMPOSER_AUTH: {{`${{ secrets.NOVA_AUTH }}`}}
