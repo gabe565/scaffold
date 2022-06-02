@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.0
+ARG PHP_VERSION=8.1
 ARG NODE_VERSION=16
 {{- range $key, $module := .PhpModules }}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
