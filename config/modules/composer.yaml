@@ -42,7 +42,7 @@ clevyr/nova-page-builder:
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"]
     - run: ["php", "artisan", "vendor:publish", "--tag=filemanager-config"]
-    - run: ["php", "artisan", "vendor:publish", "--provider=\"Emilianotisato\\NovaTinyMCE\\FieldServiceProvider\""]
+    - run: ["php", "artisan", "vendor:publish", '--provider=Emilianotisato\NovaTinyMCE\FieldServiceProvider']
 
 clevyr/nova-blog:
   enabled: true
