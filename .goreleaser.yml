@@ -88,3 +88,6 @@ docker_manifests:
       - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv6
       - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-armv7
       - ghcr.io/clevyr/{{ .ProjectName }}:{{ .Version }}-arm64v8
+announce:
+  slack:
+    enabled: true
