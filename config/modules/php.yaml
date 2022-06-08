@@ -1,10 +1,13 @@
-bcmath: {}
+bcmath:
+  enabled: true
 
 calendar: {}
 
-exif: {}
+exif:
+  enabled: true
 
-gd: {}
+gd:
+  enabled: true
 
 imagick: {}
 
@@ -25,4 +28,5 @@ sqlsrv: {}
 xdebug:
   enabled: true
 
-zip: {}
+zip:
+  enabled: true

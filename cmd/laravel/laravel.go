@@ -20,7 +20,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			return
 		}
 
-		flags := []string{"create-project", "laravel/laravel:^9.0", ".", "--no-install", "--no-plugins", "--no-scripts"}
+		flags := []string{"create-project", "laravel/laravel:9.1.9", ".", "--no-install", "--no-plugins", "--no-scripts"}
 
 		err = iexec.NewBuilder("composer").Append(flags...).Run()
 		if err != nil {
@@ -58,7 +58,9 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			})
 		}
 
-		composer["repositories"] = repositories
+		if (len(repositories) > 0) {
+			composer["repositories"] = repositories
+		}
 
 		err = saveComposerJson(composer)
 		if err != nil {

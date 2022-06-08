@@ -1,6 +1,6 @@
 laravel/jetstream:
   enabled: true
-  version: "2.7.5"
+  version: "2.8.3"
   priority: 100
   then:
     - run: ["php", "artisan", "jetstream:install", "inertia"]
@@ -20,37 +20,38 @@ laravel/telescope:
 
 joelbutcher/socialstream:
   enabled: true
-  version: "3.4.2"
+  version: "3.5.0"
   then:
     - run: ["php", "artisan", "socialstream:install"]
 
 laravel/nova:
   enabled: true
-  version: "3.32.0"
+  version: "4.7.0"
   then:
     - run: ["php", "artisan", "nova:install"]
 
 laravel/spark-paddle:
   enabled: true
-  version: "2.1.0"
+  version: "2.1.2"
   then:
     - run: ["php", "artisan", "spark:install"]
 
 clevyr/nova-page-builder:
   enabled: true
-  version: "1.0.6"
+  version: "4.0.4"
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"]
     - run: ["php", "artisan", "vendor:publish", "--tag=filemanager-config"]
+    - run: ["php", "artisan", "vendor:publish", "--provider=\"Emilianotisato\\NovaTinyMCE\\FieldServiceProvider\""]
 
 clevyr/nova-blog:
   enabled: true
-  version: "1.0.6"
+  version: "4.0.3"
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-blog"]
 
 ukfast/laravel-health-check:
-  enabled: true
+  enabled: false
   version: "1.13.3"
 
 spatie/laravel-google-cloud-storage:
@@ -60,4 +61,4 @@ spatie/laravel-google-cloud-storage:
 nunomaduro/larastan:
   enabled: true
   dev: true
-  version: "2.1.4"
+  version: "2.1.8"
