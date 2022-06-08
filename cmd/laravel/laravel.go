@@ -58,7 +58,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			})
 		}
 
-		if (len(repositories) > 0) {
+		if len(repositories) > 0 {
 			composer["repositories"] = repositories
 		}
 
