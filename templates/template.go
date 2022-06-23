@@ -3,6 +3,7 @@ package templates
 import (
 	"bytes"
 	"embed"
+	"errors"
 	"github.com/Masterminds/sprig"
 	"github.com/clevyr/scaffold/internal/appconfig"
 	"io/fs"
@@ -17,6 +18,11 @@ type Template struct {
 	Name  string
 	Embed embed.FS
 	Modes map[string]os.FileMode
+}
+
+type TemplateData struct {
+	appconfig.AppConfig
+	ExistingData string
 }
 
 func (t Template) Generate(appConfig appconfig.AppConfig) error {
@@ -54,7 +60,17 @@ func (t Template) Generate(appConfig appconfig.AppConfig) error {
 				return err
 			}
 
-			if err = tmpl.ExecuteTemplate(&buf, basename, appConfig); err != nil {
+			existingData, err := os.ReadFile(outputpath)
+			if err != nil && !errors.Is(err, os.ErrNotExist) {
+				return err
+			}
+
+			d := TemplateData{
+				AppConfig:    appConfig,
+				ExistingData: string(bytes.Trim(existingData, "\n")),
+			}
+
+			if err = tmpl.ExecuteTemplate(&buf, basename, d); err != nil {
 				return err
 			}
 
