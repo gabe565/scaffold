@@ -55,3 +55,12 @@ vue-eslint-parser:
 vue3-jest:
   enabled: true
   dev: true
+
+browser-sync:
+  enabled: true
+  dev: true
+
+browser-sync-webpack-plugin:
+  enabled: true
+  dev: true
+  version: ^2.3.0

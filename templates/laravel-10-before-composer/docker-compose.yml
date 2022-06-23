@@ -84,6 +84,8 @@ services:
       - .env
     image: clevyr/{{ .AppSlug }}/hot-reloader
     restart: unless-stopped
+    ports:
+      - 127.0.0.1:3000:3000
     volumes:
       - .:/app
 
