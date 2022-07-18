@@ -10,13 +10,8 @@ services:
       context: .
       dockerfile: docker/app/Dockerfile
       target: local-image
-    env_file:
-      - .env
     environment:
-      DB_HOST: database
       HTTPS: "true"
-      MAIL_HOST: mail
-      REDIS_HOST: redis
     restart: unless-stopped
     volumes:
       - .:/app
@@ -80,8 +75,6 @@ services:
 
   hot:
     build: docker/hot
-    env_file:
-      - .env
     image: clevyr/{{ .AppSlug }}/hot-reloader
     restart: unless-stopped
     ports:
