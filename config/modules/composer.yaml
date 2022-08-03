@@ -36,6 +36,13 @@ laravel/spark-paddle:
   then:
     - run: ["php", "artisan", "spark:install"]
 
+laravel/horizon:
+  enabled: true
+  version: "5.9.10"
+  then:
+    - run: ["composer", "require", "laravel/horizon"]
+    - run: ["php", "artisan", "horizon:install"]
+
 clevyr/nova-page-builder:
   enabled: true
   version: "4.0.4"

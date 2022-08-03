@@ -18,6 +18,9 @@ mysql: {}
 opcache:
   enabled: true
 
+pcntl:
+  enabled: true
+
 pgsql: {}
 
 redis:
