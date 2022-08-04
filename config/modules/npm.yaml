@@ -37,6 +37,12 @@ husky:
 jest:
   enabled: true
   dev: true
+sass:
+  enabled: true
+  dev: true
+sass-loader:
+  enabled: true
+  dev: true
 stylelint:
   enabled: true
   dev: true

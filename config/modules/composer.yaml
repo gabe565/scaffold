@@ -36,6 +36,13 @@ laravel/spark-paddle:
   then:
     - run: ["php", "artisan", "spark:install"]
 
+clevyr/laravel-simple-feedback-form:
+  enabled: true
+  version: "0.2.0"
+  then:
+    - run: ["php", "artisan", "vendor:publish", "--tag=laravel-simple-feedback-form-config"]
+    - run: ["php", "artisan", "vendor:publish", "--provider=Clevyr\\FeedbackForm\\FeedbackFormServiceProvider"]
+
 clevyr/nova-page-builder:
   enabled: true
   version: "4.0.4"
