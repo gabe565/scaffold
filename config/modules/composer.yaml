@@ -62,3 +62,20 @@ nunomaduro/larastan:
   enabled: true
   dev: true
   version: "2.1.8"
+
+laravel/dusk:
+  enabled: true
+  dev: true
+  version: "6.25.1"
+  then:
+    - run: ["php", "artisan", "dusk:install"]
+
+pestphp/pest:
+  enabled: true
+  dev: true
+
+pestphp/pest-plugin-laravel:
+  enabled: true
+  dev: true
+  then:
+    - run: ["php", "artisan", "pest:install"]
