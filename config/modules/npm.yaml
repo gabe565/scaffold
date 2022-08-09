@@ -38,7 +38,7 @@ laravel-vite-plugin:
   enabled: true
   dev: true
   then:
-    - run: ["npm", "set-script", "watch", "vite build --watch"]
+    - run: ["npm", "set-script", "watch", "vite build --mode=dev --watch"]
 jest:
   enabled: true
   dev: true
