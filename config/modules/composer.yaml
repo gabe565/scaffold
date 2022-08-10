@@ -1,17 +1,17 @@
 laravel/jetstream:
   enabled: true
-  version: "2.8.3"
+  version: "2.10.3"
   priority: 100
   then:
     - run: ["php", "artisan", "jetstream:install", "inertia"]
 
 laravel/telescope:
   enabled: true
-  version: "4.9.0"
+  version: "4.9.1"
   then:
     - copy:
-       src: "vendor/laravel/telescope/stubs/TelescopeServiceProvider.stub"
-       dst: "app/Providers/TelescopeServiceProvider.php"
+      src: "vendor/laravel/telescope/stubs/TelescopeServiceProvider.stub"
+      dst: "app/Providers/TelescopeServiceProvider.php"
     - run: ["php", "artisan", "telescope:install"]
     - run: ["mkdir", "-p", "public/vendor/telescope"]
     - copy:
@@ -20,13 +20,13 @@ laravel/telescope:
 
 joelbutcher/socialstream:
   enabled: true
-  version: "3.5.0"
+  version: "3.7.0"
   then:
-    - run: ["php", "artisan", "socialstream:install"]
+    - run: ["php", "artisan", "socialstream:install", "inertia"]
 
 laravel/nova:
   enabled: true
-  version: "4.7.0"
+  version: "4.12.14"
   then:
     - run: ["php", "artisan", "nova:install"]
 
@@ -38,7 +38,7 @@ laravel/spark-paddle:
 
 clevyr/nova-page-builder:
   enabled: true
-  version: "4.0.4"
+  version: "4.1.0"
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"]
     - run: ["php", "artisan", "vendor:publish", "--tag=filemanager-config"]
@@ -50,9 +50,9 @@ clevyr/nova-blog:
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-blog"]
 
-ukfast/laravel-health-check:
+ans-group/laravel-health-check:
   enabled: false
-  version: "1.13.3"
+  version: "1.13.4"
 
 spatie/laravel-google-cloud-storage:
   enabled: true
@@ -61,4 +61,4 @@ spatie/laravel-google-cloud-storage:
 nunomaduro/larastan:
   enabled: true
   dev: true
-  version: "2.1.8"
+  version: "2.1.12"

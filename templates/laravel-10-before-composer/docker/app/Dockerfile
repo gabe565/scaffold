@@ -55,10 +55,10 @@ RUN set -x \
         make \
         nasm
 
-COPY artisan package.json package-lock.json webpack.mix.js ./
+COPY artisan package.json package-lock.json ./
 RUN npm ci
 
-COPY .eslintrc.js tailwind.config.js webpack.config.js .
+COPY .eslintrc.js tailwind.config.js vite.config.js ./
 COPY public/ public/
 COPY resources/ resources/
 
