@@ -8,7 +8,7 @@ ARG PHP_POST_MAX_SIZE {{ .MaxUploadSize }}
 
 
 # Backend build
-FROM composer:2.0 as php-builder
+FROM ghcr.io/clevyr/php:$PHP_VERSION-base as php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock auth.json ./
@@ -47,7 +47,7 @@ RUN npm run build
 
 
 # Local image
-FROM ghcr.io/clevyr/php:$PHP_VERSION as local-image
+FROM ghcr.io/clevyr/php:$PHP_VERSION-onbuild as local-image
 WORKDIR /app
 
 COPY --chown=root docker/app/rootfs /
