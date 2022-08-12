@@ -38,34 +38,12 @@ RUN set -x \
 FROM node:$NODE_VERSION-alpine as node-builder
 WORKDIR /app
 
-RUN set -x \
-    && apk add --no-cache \
-        autoconf \
-        automake \
-        bash \
-        g++ \
-        libc6-compat \
-        libjpeg-turbo \
-        libjpeg-turbo-dev \
-        libpng \
-        libpng-dev \
-        libtool \
-        libwebp \
-        libwebp-dev \
-        make \
-        nasm
-
-COPY artisan package.json package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY .eslintrc.js tailwind.config.js vite.config.js ./
-COPY public/ public/
-COPY resources/ resources/
-
+COPY --from=php-builder /app .
 ARG NODE_ENV=production
-ARG ENV=local
-
-RUN npm run production
+RUN npm run build
 
 
 # Local image
