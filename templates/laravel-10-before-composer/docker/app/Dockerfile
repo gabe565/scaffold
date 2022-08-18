@@ -3,8 +3,6 @@ ARG NODE_VERSION=16
 {{- range $key, $module := .PhpModules }}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{- end }}
-ARG PHP_UPLOAD_MAX_FILESIZE {{ .MaxUploadSize }}
-ARG PHP_POST_MAX_SIZE {{ .MaxUploadSize }}
 
 
 # Backend build
@@ -49,6 +47,9 @@ RUN npm run build
 # Local image
 FROM ghcr.io/clevyr/php:$PHP_VERSION-onbuild as local-image
 WORKDIR /app
+
+ENV PHP_UPLOAD_MAX_FILESIZE={{ .MaxUploadSize }}
+ENV PHP_POST_MAX_SIZE={{ .MaxUploadSize }}
 
 COPY --chown=root docker/app/rootfs /
 RUN crontab /etc/cron.d/scheduler
