@@ -3,12 +3,10 @@ ARG NODE_VERSION=16
 {{- range $key, $module := .PhpModules }}
 ARG INSTALL_{{ upper $key }}={{ $module.Enabled }}
 {{- end }}
-ARG PHP_UPLOAD_MAX_FILESIZE {{ .MaxUploadSize }}
-ARG PHP_POST_MAX_SIZE {{ .MaxUploadSize }}
 
 
 # Backend build
-FROM composer:2.0 as php-builder
+FROM ghcr.io/clevyr/php:$PHP_VERSION-base as php-builder
 WORKDIR /app
 
 COPY composer.json composer.lock auth.json ./
@@ -38,39 +36,20 @@ RUN set -x \
 FROM node:$NODE_VERSION-alpine as node-builder
 WORKDIR /app
 
-RUN set -x \
-    && apk add --no-cache \
-        autoconf \
-        automake \
-        bash \
-        g++ \
-        libc6-compat \
-        libjpeg-turbo \
-        libjpeg-turbo-dev \
-        libpng \
-        libpng-dev \
-        libtool \
-        libwebp \
-        libwebp-dev \
-        make \
-        nasm
-
-COPY artisan package.json package-lock.json webpack.mix.js ./
+COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY .eslintrc.js tailwind.config.js webpack.config.js .
-COPY public/ public/
-COPY resources/ resources/
-
+COPY --from=php-builder /app .
 ARG NODE_ENV=production
-ARG ENV=local
-
-RUN npm run production
+RUN npm run build
 
 
 # Local image
-FROM ghcr.io/clevyr/php:$PHP_VERSION as local-image
+FROM ghcr.io/clevyr/php:$PHP_VERSION-onbuild as local-image
 WORKDIR /app
+
+ENV PHP_UPLOAD_MAX_FILESIZE={{ .MaxUploadSize }}
+ENV PHP_POST_MAX_SIZE={{ .MaxUploadSize }}
 
 COPY --chown=root docker/app/rootfs /
 RUN crontab /etc/cron.d/scheduler

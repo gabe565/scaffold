@@ -34,6 +34,11 @@ husky:
   then:
     # - run: ["npm", "set-script", "prepare", "husky install"]
     # - run: ["npm", "run", "prepare"]
+laravel-vite-plugin:
+  enabled: true
+  dev: true
+  then:
+    - run: ["npm", "set-script", "watch", "vite build --mode=dev --watch"]
 jest:
   enabled: true
   dev: true
@@ -46,7 +51,7 @@ stylelint:
 stylelint-config-recommended-scss:
   enabled: true
   dev: true
-stylelint-webpack-plugin:
+vite-plugin-stylelint:
   enabled: true
   dev: true
 vue-eslint-parser:
@@ -55,12 +60,3 @@ vue-eslint-parser:
 vue3-jest:
   enabled: true
   dev: true
-
-browser-sync:
-  enabled: true
-  dev: true
-
-browser-sync-webpack-plugin:
-  enabled: true
-  dev: true
-  version: ^2.3.0
