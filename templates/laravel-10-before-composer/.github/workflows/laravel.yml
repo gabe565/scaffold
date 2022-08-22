@@ -4,7 +4,7 @@ on: push
 
 env:
   slug: laravel
-  php_version: "8.0"
+  php_version: "8.1"
   node_version: "16.x"
 
 jobs:
@@ -94,8 +94,8 @@ jobs:
         run: php artisan config:clear
       - name: Run Migration
         run: php artisan migrate -v
-      - name: Test with phpunit
-        run: vendor/bin/phpunit --coverage-text
+      - name: Test with pest
+        run: vendor/bin/pest
 
   larastan:
     name: Larastan
