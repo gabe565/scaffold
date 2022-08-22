@@ -22,3 +22,4 @@ nova-components/**/vendor/
 vendor/
 storage/app/public
 storage/debugbar
+public/build
