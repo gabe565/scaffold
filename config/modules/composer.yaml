@@ -52,7 +52,7 @@ clevyr/laravel-simple-feedback-form:
 
 clevyr/nova-page-builder:
   enabled: true
-  version: "4.1.0"
+  version: "4.1.1"
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-page-builder"]
     - run: ["php", "artisan", "vendor:publish", "--tag=filemanager-config"]
@@ -60,7 +60,7 @@ clevyr/nova-page-builder:
 
 clevyr/nova-blog:
   enabled: true
-  version: "4.0.4"
+  version: "4.0.6"
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-blog"]
 
