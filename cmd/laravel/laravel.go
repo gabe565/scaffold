@@ -20,7 +20,7 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			return
 		}
 
-		flags := []string{"create-project", "laravel/laravel:9.1.9", ".", "--no-install", "--no-plugins", "--no-scripts"}
+		flags := []string{"create-project", "laravel/laravel:9.3.2", ".", "--no-install", "--no-plugins", "--no-scripts"}
 
 		err = iexec.NewBuilder("composer").Append(flags...).Run()
 		if err != nil {
