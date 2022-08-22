@@ -32,7 +32,7 @@ husky:
   enabled: true
   dev: true
   then:
-    - run: ["npm", "set-script", "prepare", "husky install"]
+    # - run: ["npm", "set-script", "prepare", "husky install"]
     # - run: ["npm", "run", "prepare"]
 laravel-vite-plugin:
   enabled: true
