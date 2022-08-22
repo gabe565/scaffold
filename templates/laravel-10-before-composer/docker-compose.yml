@@ -92,5 +92,17 @@ services:
       - 127.0.0.1:25:25
     restart: unless-stopped
 
+  selenium:
+    image: selenium/standalone-chrome
+    depends_on:
+      - app
+    links:
+      - proxy:clevyr.run
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+
 volumes:
   database:

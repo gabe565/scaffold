@@ -30,6 +30,13 @@ laravel/nova:
   then:
     - run: ["php", "artisan", "nova:install"]
 
+laravel/horizon:
+  enabled: true
+  version: "5.9.10"
+  then:
+    - run: ["composer", "require", "laravel/horizon"]
+    - run: ["php", "artisan", "horizon:install"]
+
 laravel/spark-paddle:
   enabled: true
   version: "2.1.2"
@@ -69,3 +76,20 @@ nunomaduro/larastan:
   enabled: true
   dev: true
   version: "2.1.12"
+
+laravel/dusk:
+  enabled: true
+  dev: true
+  version: "6.25.1"
+  then:
+    - run: ["php", "artisan", "dusk:install"]
+
+pestphp/pest:
+  enabled: true
+  dev: true
+
+pestphp/pest-plugin-laravel:
+  enabled: true
+  dev: true
+  then:
+    - run: ["php", "artisan", "pest:install"]

@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+docker-compose exec -T hot npm run lint:fix
+docker-compose exec -T hot npm run stylelint-lint
+docker-compose exec -T app ./vendor/bin/pint
+docker-compose exec -T app ./vendor/bin/phpstan analyse --memory-limit=2G
+docker-compose exec -T app php artisan test
