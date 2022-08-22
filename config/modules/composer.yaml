@@ -38,7 +38,7 @@ laravel/spark-paddle:
 
 clevyr/laravel-simple-feedback-form:
   enabled: true
-  version: "0.2.0"
+  version: "0.2.1"
   then:
     - run: ["php", "artisan", "vendor:publish", "--tag=laravel-simple-feedback-form-config"]
     - run: ["php", "artisan", "vendor:publish", "--provider=Clevyr\\FeedbackForm\\FeedbackFormServiceProvider"]
