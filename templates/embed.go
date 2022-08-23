@@ -30,5 +30,7 @@ var embedLaravel20AfterComposer embed.FS
 var Laravel20AfterComposer = Template{
 	Name:  "laravel-20-after-composer",
 	Embed: embedLaravel20AfterComposer,
-	Modes: map[string]os.FileMode{},
+	Modes: map[string]os.FileMode{
+		"laravel-20-after-composer/.husky/pre-commit": 0755,
+	},
 }
