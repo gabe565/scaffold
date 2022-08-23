@@ -83,6 +83,9 @@ func loadComposerJson() (result map[string]any, err error) {
 
 func saveComposerJson(composer map[string]any) error {
 	f, err := os.OpenFile("composer.json", os.O_WRONLY|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
 	defer func(f *os.File) {
 		_ = f.Close()
 	}(f)
