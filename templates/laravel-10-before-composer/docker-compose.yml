@@ -15,6 +15,7 @@ services:
     restart: unless-stopped
     volumes:
       - .:/app
+      - ~/.composer/auth.json:/app/auth.json:ro
 
   worker:
     extends: app
