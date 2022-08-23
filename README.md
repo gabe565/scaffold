@@ -1,5 +1,7 @@
 # Clevyr Scaffold
 
+[![Build](https://github.com/clevyr/scaffold/actions/workflows/build.yml/badge.svg)](https://github.com/clevyr/scaffold/actions/workflows/build.yml)
+
 Scaffolds out our normal stack. Includes default config, Docker and Docker Compose stack, etc.
 
 When you run the scaffold, you will be asked some questions to determine the setup the templates, then config will be
