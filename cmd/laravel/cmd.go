@@ -1,10 +1,11 @@
 package laravel
 
 import (
+	"errors"
 	"fmt"
+	"github.com/AlecAivazis/survey/v2/terminal"
 	"os"
 
-	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/clevyr/scaffold/internal/appconfig"
 	"github.com/clevyr/scaffold/templates"
 	"github.com/spf13/cobra"
@@ -16,59 +17,51 @@ var Command = &cobra.Command{
 	RunE:  run,
 }
 
-func run(cmd *cobra.Command, args []string) (err error) {
+func run(cmd *cobra.Command, args []string) error {
 	cmd.SilenceUsage = true
 
 	appConfig := appconfig.Defaults
-	err = askQuestions(&appConfig)
-	if err == terminal.InterruptErr {
-		fmt.Println("Interrupted")
-		return nil
-	} else if err != nil {
+	if err := askQuestions(&appConfig); err != nil {
+		if errors.Is(err, terminal.InterruptErr) {
+			fmt.Println(err)
+			return nil
+		}
 		return err
 	}
 
-	err = os.Setenv("COMPOSER_MEMORY_LIMIT", "-1")
-	if err != nil {
+	if err := os.Setenv("COMPOSER_MEMORY_LIMIT", "-1"); err != nil {
 		return err
 	}
 
-	err = appConfig.GenerateAppKey()
-	if err != nil {
+	if err := appConfig.GenerateAppKey(); err != nil {
 		return err
 	}
 
-	err = initLaravel(appConfig)
-	if err != nil {
+	if err := initLaravel(appConfig); err != nil {
 		return err
 	}
 
-	if err = appConfig.SetPackageName(); err != nil {
+	if err := appConfig.SetPackageName(); err != nil {
 		return err
 	}
 
-	err = templates.Laravel10BeforeComposer.Generate(appConfig)
-	if err != nil {
+	if err := templates.Laravel10BeforeComposer.Generate(appConfig); err != nil {
 		return err
 	}
 
-	err = appConfig.ComposerDeps.InstallDeps()
-	if err != nil {
+	if err := appConfig.ComposerDeps.InstallDeps(); err != nil {
 		return err
 	}
 
-	err = appConfig.NpmDeps.InstallDeps()
-	if err != nil {
+	if err := appConfig.NpmDeps.InstallDeps(); err != nil {
 		return err
 	}
 
-	err = templates.Laravel20AfterComposer.Generate(appConfig)
-	if err != nil {
+	if err := templates.Laravel20AfterComposer.Generate(appConfig); err != nil {
 		return err
 	}
 
-	err = appConfig.NpmDeps.Install()
-	if err != nil {
+	if err := appConfig.NpmDeps.Install(); err != nil {
 		return err
 	}
 

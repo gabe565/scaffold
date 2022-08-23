@@ -39,10 +39,11 @@ func (appConfig *AppConfig) GenerateAppKey() (err error) {
 		return
 	}
 	randomBytes := make([]byte, AppKeyBytes)
-	_, err = rand.Read(randomBytes)
-	if err != nil {
+
+	if _, err = rand.Read(randomBytes); err != nil {
 		return
 	}
+
 	appConfig.AppKey = fmt.Sprintf("%s%s", AppKeyPrefix, base64.StdEncoding.EncodeToString(randomBytes))
 	return
 }

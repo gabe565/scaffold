@@ -9,28 +9,24 @@ import (
 	"os"
 )
 
-func initLaravel(appConfig appconfig.AppConfig) (err error) {
+func initLaravel(appConfig appconfig.AppConfig) error {
 	if appConfig.InitLaravel {
-		err = os.MkdirAll(appConfig.AppSlug, os.ModePerm)
-		if err != nil {
-			return
+		if err := os.MkdirAll(appConfig.AppSlug, os.ModePerm); err != nil {
+			return err
 		}
-		err = os.Chdir(appConfig.AppSlug)
-		if err != nil {
-			return
+		if err := os.Chdir(appConfig.AppSlug); err != nil {
+			return err
 		}
 
 		flags := []string{"create-project", "laravel/laravel:9.3.2", ".", "--no-install", "--no-plugins", "--no-scripts"}
 
-		err = iexec.NewBuilder("composer").Append(flags...).Run()
-		if err != nil {
-			return
+		if err := iexec.NewBuilder("composer").Append(flags...).Run(); err != nil {
+			return err
 		}
 
-		var composer map[string]any
-		composer, err = loadComposerJson()
+		composer, err := loadComposerJson()
 		if err != nil {
-			return
+			return err
 		}
 
 		composer["name"] = fmt.Sprintf("clevyr/%s", appConfig.AppSlug)
@@ -62,12 +58,11 @@ func initLaravel(appConfig appconfig.AppConfig) (err error) {
 			composer["repositories"] = repositories
 		}
 
-		err = saveComposerJson(composer)
-		if err != nil {
-			return
+		if err = saveComposerJson(composer); err != nil {
+			return err
 		}
 	}
-	return
+	return nil
 }
 
 func loadComposerJson() (result map[string]any, err error) {
@@ -80,13 +75,13 @@ func loadComposerJson() (result map[string]any, err error) {
 	}(f)
 
 	if err = json.NewDecoder(f).Decode(&result); err != nil {
-		return
+		return result, err
 	}
 
 	return result, nil
 }
 
-func saveComposerJson(composer map[string]any) (err error) {
+func saveComposerJson(composer map[string]any) error {
 	f, err := os.OpenFile("composer.json", os.O_WRONLY|os.O_TRUNC, 0644)
 	defer func(f *os.File) {
 		_ = f.Close()

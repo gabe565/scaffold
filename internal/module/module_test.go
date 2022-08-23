@@ -14,8 +14,7 @@ func TestModule_WriteAnswer(t *testing.T) {
 	module := Module{}
 
 	for _, test := range tests {
-		err := module.WriteAnswer("", test)
-		if err != nil {
+		if err := module.WriteAnswer("", test); err != nil {
 			t.Error(err)
 		}
 		if module.Enabled != test {
@@ -28,8 +27,7 @@ func TestRunAction_Activate(t *testing.T) {
 	t.Parallel()
 
 	action := RunAction{"echo", "success"}
-	err := action.Activate()
-	if err != nil {
+	if err := action.Activate(); err != nil {
 		t.Error(err)
 	}
 }
@@ -66,8 +64,7 @@ func TestCopyAction_Activate(t *testing.T) {
 		Src: srcPath,
 		Dst: dstPath,
 	}
-	err = action.Activate()
-	if err != nil {
+	if err = action.Activate(); err != nil {
 		t.Error(err)
 	}
 	// Remove copy on return
@@ -76,8 +73,7 @@ func TestCopyAction_Activate(t *testing.T) {
 	}(dstPath)
 
 	// Ensure temp file exists
-	_, err = os.Stat(dstPath)
-	if err != nil {
+	if _, err = os.Stat(dstPath); err != nil {
 		t.Error(err)
 	}
 }

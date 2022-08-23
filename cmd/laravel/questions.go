@@ -14,7 +14,9 @@ import (
 
 var validationRegex, _ = regexp.Compile("^[0-9]*[kmg]$")
 
-func askQuestions(appConfig *appconfig.AppConfig) (err error) {
+func askQuestions(appConfig *appconfig.AppConfig) error {
+	var err error
+
 	// App Name
 	err = survey.AskOne(&survey.Input{
 		Message: "Enter the application name:",
@@ -22,7 +24,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		Help:    "Enter the application's name space-separated and capitalized. A slug will be generated to match.",
 	}, &appConfig.AppName, survey.WithValidator(survey.Required))
 	if err != nil {
-		return
+		return err
 	}
 	appConfig.AppSlug = xstrings.ToKebabCase(appConfig.AppName)
 
@@ -38,7 +40,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 			Default: true,
 		}, &appConfig.InitLaravel)
 		if err != nil {
-			return
+			return err
 		}
 	}
 
@@ -49,7 +51,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		Default: appConfig.Database,
 	}, &appConfig.Database, survey.WithValidator(survey.Required))
 	if err != nil {
-		return
+		return err
 	}
 
 	// Enabled PhpModules
@@ -60,7 +62,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		Default: appConfig.PhpModules.ToDefaultSlice(),
 	}, &appConfig.PhpModules)
 	if err != nil {
-		return
+		return err
 	}
 
 	// Composer
@@ -70,7 +72,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		Default: appConfig.ComposerDeps.ToDefaultSlice(),
 	}, &appConfig.ComposerDeps)
 	if err != nil {
-		return
+		return err
 	}
 
 	// Jetstream Teams
@@ -82,7 +84,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 			Default: appConfig.JetstreamTeams,
 		}, &appConfig.JetstreamTeams)
 		if err != nil {
-			return
+			return err
 		}
 		appConfig.EnableJetstreamTeams()
 	}
@@ -93,7 +95,7 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		Default: appConfig.NpmDeps.ToDefaultSlice(),
 	}, &appConfig.NpmDeps)
 	if err != nil {
-		return
+		return err
 	}
 
 	// Max Upload Size
@@ -113,8 +115,8 @@ func askQuestions(appConfig *appconfig.AppConfig) (err error) {
 		}),
 	)
 	if err != nil {
-		return
+		return err
 	}
 
-	return
+	return err
 }

@@ -55,12 +55,11 @@ func preRun(cmd *cobra.Command, args []string) (err error) {
 
 	directory = filepath.Clean(directory)
 	if directory != "." {
-		err = os.MkdirAll(directory, 0755)
-		if err != nil {
+		if err = os.MkdirAll(directory, 0755); err != nil {
 			return err
 		}
-		err = os.Chdir(directory)
-		if err != nil {
+
+		if err = os.Chdir(directory); err != nil {
 			return err
 		}
 	}

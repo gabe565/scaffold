@@ -89,8 +89,7 @@ func TestMap_UnmarshalYAML(t *testing.T) {
 
 	input := `test: {}`
 	var mmap Map
-	err := yaml.Unmarshal([]byte(input), &mmap)
-	if err != nil {
+	if err := yaml.Unmarshal([]byte(input), &mmap); err != nil {
 		t.Error(err)
 	}
 	testModule, ok := mmap["test"]

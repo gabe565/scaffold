@@ -92,8 +92,7 @@ func main() {
 
 	var buf bytes.Buffer
 
-	err = tpl.Execute(io.Writer(&buf), config)
-	if err != nil {
+	if err = tpl.Execute(io.Writer(&buf), config); err != nil {
 		panic(err)
 	}
 
@@ -102,13 +101,11 @@ func main() {
 		panic(err)
 	}
 
-	_, err = out.Write(formatted)
-	if err != nil {
+	if _, err = out.Write(formatted); err != nil {
 		panic(err)
 	}
 
-	err = out.Close()
-	if err != nil {
+	if err = out.Close(); err != nil {
 		panic(err)
 	}
 }

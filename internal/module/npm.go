@@ -56,8 +56,7 @@ func (m NpmMap) InstallDeps() (err error) {
 	for _, module := range slice {
 		if module.Enabled {
 			for _, then := range module.Then {
-				err = then.Activate()
-				if err != nil {
+				if err = then.Activate(); err != nil {
 					return err
 				}
 			}

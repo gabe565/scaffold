@@ -28,14 +28,12 @@ type ActionsUnion struct {
 
 func (then ActionsUnion) Activate() (err error) {
 	if then.Copy != nil {
-		err = then.Copy.Activate()
-		if err != nil {
+		if err = then.Copy.Activate(); err != nil {
 			return err
 		}
 	}
 	if then.Run != nil {
-		err = then.Run.Activate()
-		if err != nil {
+		if err = then.Run.Activate(); err != nil {
 			return err
 		}
 	}
