@@ -43,6 +43,10 @@ func run(cmd *cobra.Command, args []string) (err error) {
 		return err
 	}
 
+	if err = appConfig.SetPackageName(); err != nil {
+		return err
+	}
+
 	err = templates.Laravel10BeforeComposer.Generate(appConfig)
 	if err != nil {
 		return err

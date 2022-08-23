@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/clevyr/scaffold/config/modules"
+	"github.com/clevyr/scaffold/internal/iexec"
 	"github.com/clevyr/scaffold/internal/module"
 )
 
@@ -78,4 +79,8 @@ func (appConfig *AppConfig) EnableJetstreamTeams() {
 			}
 		}
 	}
+}
+
+func (appConfig AppConfig) SetPackageName() error {
+	return iexec.NewBuilder("npm", "pkg", "set", "name="+appConfig.AppSlug).Run()
 }
