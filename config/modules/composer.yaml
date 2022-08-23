@@ -92,4 +92,4 @@ pestphp/pest-plugin-laravel:
   enabled: true
   dev: true
   then:
-    - run: ["php", "artisan", "pest:install"]
+    - run: ["php", "artisan", "pest:install", "--no-interaction"]
