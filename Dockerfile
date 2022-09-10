@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.18
+ARG GO_VERSION=1.19
 ARG PHP_VERSION=8.1
 
 FROM golang:$GO_VERSION-alpine as builder
