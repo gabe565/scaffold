@@ -3,7 +3,7 @@ module github.com/clevyr/scaffold
 go 1.19
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.5
+	github.com/AlecAivazis/survey/v2 v2.3.6
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/huandu/xstrings v1.3.2
 	github.com/spf13/cobra v1.5.0
