@@ -9,6 +9,28 @@ cp ~/.composer/auth.json .
 cp .env.example .env
 docker-compose up
 ```
+**Trusted Certificate issues?**
+
+##### *macOS*
+
+If you are running having trusted certificate issues execute the following command to add local development trusted certs to your local keychain.
+
+```
+security add-trusted-cert -r trustRoot -k ~/Library/Keychains/login.keychain-db ~/.config/caddy/caddy/pki/authorities/local/root.crt
+```
+
+**Running in Firefox and still having issues?** 
+
+If you are having issues with loading try setting the following flag.
+
+The following flag toggles the feature that prevents certificate authorities (CAs) 
+
+1. Type **about:config** in the address bar and press `` Return``
+2. Type **enterprise** in the *Search* field.
+3. *Toggle* the preference **security.enterprise_roots.enabled**
+
+
+
 
 ## Linting
 ```
