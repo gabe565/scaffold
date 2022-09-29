@@ -87,7 +87,7 @@ jobs:
       - name: Publish public assets
         run: php artisan vendor:publish --tag=public
       - name: Build frontend
-        run: npm run development
+        run: npm run build
       - name: Generate app key
         run: php artisan key:generate
       - name: Clear Config
