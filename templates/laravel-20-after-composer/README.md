@@ -19,6 +19,13 @@ If you are running having trusted certificate issues execute the following comma
 security add-trusted-cert -r trustRoot -k ~/Library/Keychains/login.keychain-db ~/.config/caddy/caddy/pki/authorities/local/root.crt
 ```
 
+You may also need to navigate to the following URLs to accept the cert for the
+first time:
+```
+https://clevyr.run
+https://hot.clevyr.run
+```
+
 **Running in Firefox and still having issues?** 
 
 If you are having issues with loading try setting the following flag.
@@ -28,9 +35,6 @@ The following flag toggles the feature that prevents certificate authorities (CA
 1. Type **about:config** in the address bar and press `` Return``
 2. Type **enterprise** in the *Search* field.
 3. *Toggle* the preference **security.enterprise_roots.enabled**
-
-
-
 
 ## Linting
 ```
