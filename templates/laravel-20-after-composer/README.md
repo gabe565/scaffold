@@ -49,7 +49,7 @@ docker-compose exec hot npm run stylelint-lint
 ## [Laravel Pint](https://laravel.com/docs/9.x/pint)
 Laravel Pint is an opinionated PHP code style fixer for minimalists.
 ```
-./vendor/bin/pint
+docker-compose exec app ./vendor/bin/pint
 ```
 
 ## Testing
