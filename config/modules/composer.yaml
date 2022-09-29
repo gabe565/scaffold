@@ -22,7 +22,7 @@ joelbutcher/socialstream:
   enabled: true
   version: "3.8.0"
   then:
-    - run: ["php", "artisan", "socialstream:install", "inertia"]
+    - run: ["php", "artisan", "socialstream:install", "--stack=inertia"]
 
 laravel/nova:
   enabled: true
