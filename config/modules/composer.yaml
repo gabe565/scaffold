@@ -1,13 +1,13 @@
 laravel/jetstream:
   enabled: true
-  version: "2.10.3"
+  version: "2.12.3"
   priority: 100
   then:
     - run: ["php", "artisan", "jetstream:install", "inertia"]
 
 laravel/telescope:
   enabled: true
-  version: "4.9.1"
+  version: "4.9.3"
   then:
     - copy:
       src: "vendor/laravel/telescope/stubs/TelescopeServiceProvider.stub"
@@ -20,26 +20,26 @@ laravel/telescope:
 
 joelbutcher/socialstream:
   enabled: true
-  version: "3.7.0"
+  version: "3.8.0"
   then:
     - run: ["php", "artisan", "socialstream:install", "inertia"]
 
 laravel/nova:
   enabled: true
-  version: "4.12.14"
+  version: "4.15.2"
   then:
     - run: ["php", "artisan", "nova:install"]
 
 laravel/horizon:
   enabled: true
-  version: "5.9.10"
+  version: "5.10.2"
   then:
     - run: ["composer", "require", "laravel/horizon"]
     - run: ["php", "artisan", "horizon:install"]
 
 laravel/spark-paddle:
   enabled: true
-  version: "2.1.2"
+  version: "2.1.10"
   then:
     - run: ["php", "artisan", "spark:install"]
 
@@ -70,17 +70,17 @@ ans-group/laravel-health-check:
 
 spatie/laravel-google-cloud-storage:
   enabled: true
-  version: "2.0.3"
+  version: "2.0.5"
 
 nunomaduro/larastan:
   enabled: true
   dev: true
-  version: "2.1.12"
+  version: "2.2.0"
 
 laravel/dusk:
   enabled: true
   dev: true
-  version: "6.25.1"
+  version: "7.1.1"
   then:
     - run: ["php", "artisan", "dusk:install"]
 
