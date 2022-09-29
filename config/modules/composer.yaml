@@ -43,6 +43,18 @@ laravel/spark-paddle:
   then:
     - run: ["php", "artisan", "spark:install"]
 
+clevyr/laravel-geocoder:
+  enabled: true
+  version: "0.1.1"
+  then:
+    - run: ["php", "artisan", "vendor:publish", "--provider=Clevyr\\LaravelGeocoder\\LaravelGeocoderServiceProvider"]
+
+clevyr/laravel-twilio-channel:
+  enabled: true
+  version: "0.2.0"
+  then:
+    - run: ["php", "artisan", "vendor:publish", "--provider=Clevyr\\LaravelTwilioChannel\\LaravelTwilioChannelServiceProvider"]
+
 clevyr/laravel-simple-feedback-form:
   enabled: true
   version: "0.2.1"
