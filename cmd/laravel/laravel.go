@@ -65,6 +65,10 @@ func initLaravel(appConfig appconfig.AppConfig) error {
 	return nil
 }
 
+func runLaravelPint() error {
+	return iexec.NewBuilder("./vendor/bin/pint").Run()
+}
+
 func loadComposerJson() (result map[string]any, err error) {
 	f, err := os.Open("composer.json")
 	if err != nil {
