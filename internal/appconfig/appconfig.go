@@ -89,7 +89,7 @@ func (appConfig AppConfig) SetPackageName() error {
 }
 
 func (appConfig AppConfig) CreateGitCommit() error {
-	if err := iexec.NewBuilder("git", "init").Run(); err != nil {
+	if err := iexec.NewBuilder("git", "init", "--initial-branch=main").Run(); err != nil {
 		return err
 	}
 
@@ -97,5 +97,5 @@ func (appConfig AppConfig) CreateGitCommit() error {
 		return err
 	}
 
-	return iexec.NewBuilder("git", "commit", "-m", "\"Initial Commit\"").Run()
+	return iexec.NewBuilder("git", "commit", "-m", "Initial Commit").Run()
 }
