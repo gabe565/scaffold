@@ -7,7 +7,6 @@ parameters:
     level: 5
     ignoreErrors:
         - '#is not covariant with PHPDoc type#'
-        - '#Access to an undefined property#'
     excludePaths:
         - ./app/Actions/Socialstream/*
         - ./app/Models/ConnectedAccount.php

@@ -61,8 +61,18 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	if err := runLaravelPint(); err != nil {
+		return err
+	}
+
 	if err := appConfig.NpmDeps.Install(); err != nil {
 		return err
+	}
+
+	if appConfig.GitCommit {
+		if err := appConfig.CreateGitCommit(); err != nil {
+			return err
+		}
 	}
 
 	return nil

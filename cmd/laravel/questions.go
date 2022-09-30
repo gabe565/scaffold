@@ -118,5 +118,13 @@ func askQuestions(appConfig *appconfig.AppConfig) error {
 		return err
 	}
 
+	err = survey.AskOne(&survey.Confirm{
+		Message: "Do you want to create an initial Git commit?",
+		Default: appConfig.GitCommit,
+	}, &appConfig.GitCommit)
+	if err != nil {
+		return err
+	}
+
 	return err
 }

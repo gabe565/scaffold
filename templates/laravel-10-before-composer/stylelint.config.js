@@ -23,7 +23,7 @@ module.exports = {
 			4,
 			{ 'ignore': ['blockless-at-rules', 'pseudo-classes'] },
 		],
-		'at-rule-no-unknown': [
+		'scss/at-rule-no-unknown': [
 			true,
 			{
 				ignoreAtRules: [
