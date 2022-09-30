@@ -38,7 +38,7 @@ laravel/horizon:
     - run: ["php", "artisan", "horizon:install"]
 
 laravel/spark-paddle:
-  enabled: true
+  enabled: false
   version: "2.1.10"
   then:
     - run: ["php", "artisan", "spark:install"]
@@ -77,7 +77,7 @@ clevyr/nova-blog:
     - run: ["php", "artisan", "vendor:publish", "--tag=clevyr-nova-blog"]
 
 ans-group/laravel-health-check:
-  enabled: false
+  enabled: true
   version: "1.13.4"
 
 spatie/laravel-google-cloud-storage:
