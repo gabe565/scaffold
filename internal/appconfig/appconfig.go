@@ -17,6 +17,7 @@ type AppConfig struct {
 	Database       string
 	PhpModules     module.Map
 	JetstreamTeams bool
+	GitCommit      bool
 	ComposerDeps   module.ComposerMap
 	NpmDeps        module.NpmMap
 	MaxUploadSize  string
@@ -26,6 +27,7 @@ var Defaults = AppConfig{
 	Database:       "PostgreSQL",
 	PhpModules:     modules.Php(),
 	JetstreamTeams: false,
+	GitCommit: true,
 	ComposerDeps:   modules.Composer(),
 	NpmDeps:        modules.Npm(),
 	MaxUploadSize:  "64m",
@@ -84,4 +86,16 @@ func (appConfig *AppConfig) EnableJetstreamTeams() {
 
 func (appConfig AppConfig) SetPackageName() error {
 	return iexec.NewBuilder("npm", "pkg", "set", "name="+appConfig.AppSlug).Run()
+}
+
+func (appConfig AppConfig) CreateGitCommit() error {
+	if err := iexec.NewBuilder("git", "init").Run(); err != nil {
+		return err
+	}
+
+	if err := iexec.NewBuilder("git", "add", "--all").Run(); err != nil {
+		return err
+	}
+
+	return iexec.NewBuilder("git", "commit", "-m", "\"Initial Commit\"").Run()
 }
