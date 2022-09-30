@@ -75,7 +75,5 @@ func run(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-
-
 	return nil
 }
