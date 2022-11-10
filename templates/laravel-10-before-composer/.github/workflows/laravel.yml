@@ -39,7 +39,7 @@ jobs:
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -47,7 +47,7 @@ jobs:
           extensions: bcmath, dom, fileinfo, gd, imagick, mbstring, pgsql, zip
           coverage: xdebug
           tools: composer, pecl
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: {{`${{ env.node_version }}`}}
       - name: Get composer cache directory
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -131,8 +131,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: {{`${{ env.node_version }}`}}
       - name: Cache frontend dependencies
@@ -152,8 +152,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: {{`${{ env.node_version }}`}}
       - name: Cache frontend dependencies
