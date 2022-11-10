@@ -87,7 +87,7 @@ spatie/laravel-google-cloud-storage:
 nunomaduro/larastan:
   enabled: true
   dev: true
-  version: "2.2.0"
+  version: "2.2.9"
 
 laravel/dusk:
   enabled: true
