@@ -1,3 +1,4 @@
+project_name: scaffold
 before:
   hooks:
     - go mod download
