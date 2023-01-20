@@ -2,9 +2,6 @@ name: Build
 
 on: push
 
-env:
-  go_version: "1.19"
-
 jobs:
   lint:
     name: Lint
@@ -16,7 +13,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ~${{ env.go_version }}
+          go-version-file: go.mod
 
       - name: Lint
         uses: golangci/golangci-lint-action@v3
@@ -30,7 +27,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ~${{ env.go_version }}
+          go-version-file: go.mod
       - uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
@@ -66,7 +63,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ~${{ env.go_version }}
+          go-version-file: go.mod
 
       - name: Set build variables
         id: vars
